@@ -1,0 +1,51 @@
+@import '../../../../variables.scss';
+
+.company .section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+
+  h1 {
+    color: white;
+    background-color: $primary-theme-dark;
+    padding: 30px 60px;
+    border-radius: 4px;
+  }
+
+  .content {
+    width: 80%;
+    padding: 60px 0;
+
+    h2 {
+      color: white;
+      font-size: 40px !important;
+    }
+
+    h3 {
+      color: white;
+      font-size: 26px;
+    }
+
+    p {
+      color: white;
+      font-size: 16px !important;
+    }
+  }
+}
+
+.parallax {
+  background-size: cover;
+  background-position: center;
+  background-image: url('../../../../assets/images/mockup.jpg');
+}
+
+.static {
+  background: $primary-theme-dark;
+}
+
+.blue {
+  min-height: auto !important;
+}

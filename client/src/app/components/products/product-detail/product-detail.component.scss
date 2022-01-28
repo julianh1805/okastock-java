@@ -1,0 +1,168 @@
+@import '../../../../variables.scss';
+
+
+label {
+  color: $primary-text;
+}
+
+.user-image {
+  width: 36px;
+  height: 36px;
+  -o-object-fit: cover;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.info {
+  h2 {
+    font-weight: 500;
+
+  }
+
+  .price p {
+    display: inline;
+    color: $primary-theme;
+    font-size: 20px;
+    margin-right: 3px;
+    font-weight: 500;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  span {
+    color: $primary-theme;
+    font-size: 12px;
+  }
+
+  .quantity {
+    input {
+      border-radius: 4px;
+      border: 1px solid $secondary-text;
+      margin-left: 8px;
+      height: 24px;
+      font-size: 14px;
+      color: $primary-text;
+      width: 50px;
+      text-align: center;
+      font-weight: 200;
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(226, 232, 235, .25) !important;
+      }
+    }
+
+    span {
+      margin-left: 11px;
+      background-color: $primary-theme;
+      color: white;
+      border-radius: 4px;
+      padding: 1px 10px;
+    }
+  }
+
+  .description {
+    word-break: break-word;
+  }
+
+  .p-date {
+    display: inline;
+  }
+
+  #description-desktop {
+    display: none;
+
+    p {
+      margin-bottom: 6px;
+    }
+  }
+
+  button#button.cart {
+    padding: 0.65rem 0.75rem !important
+  }
+
+  button.button-shop-disabled {
+    &:hover {
+      background-color: $primary-theme !important;
+      border-color: $primary-theme !important;
+      cursor: initial;
+    }
+  }
+
+  button.button-wish-disabled {
+    &:hover {
+      background-color: $primary-theme-dark !important;
+      border-color: $primary-theme-dark !important;
+      cursor: initial;
+    }
+  }
+
+  .d-flex {
+    button {
+      width: 49%;
+      font-size: 11px !important;
+      padding: 5px !important;
+    }
+  }
+
+  .user {
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    .info {
+      margin-left: 5px;
+    }
+
+    img {
+      width: 36px;
+      height: 36px;
+    }
+
+    h3 {
+      color: $primary-text;
+      font-weight: 500;
+      font-size: 16px;
+      margin-bottom: 0px;
+    }
+
+    p {
+      margin-bottom: 0px;
+      font-size: 12px;
+    }
+  }
+}
+
+.date-product {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.alert-stock {
+  font-size: 11px;
+  color: white;
+  position: absolute;
+  border-radius: 0px 5px 5px 0px;
+  padding: 1px 5px 1px 7px;
+  left: 0px;
+  top: -28%;
+  background-color: #01c1c1;
+  font-weight: 500;
+}
+
+.createdAt {
+
+  p {
+    margin: 0;
+    display: inline;
+  }
+}
+
+.products {
+  margin-bottom: 15px;
+}
+
+
+.desktop-date {
+  display: none;
+}

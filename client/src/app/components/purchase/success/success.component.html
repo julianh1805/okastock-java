@@ -1,0 +1,21 @@
+<section class="success-payment">
+    <div *ngIf="isLoading" class="isloading text-center mt-4">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div *ngIf="!isLoading" class="container">
+        <div class="row my-4">
+            <div class="col-12 col-md-7">
+                <span class="fa-stack fa-2x has-badge">
+                    <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                    <i style="" class="fa fa-shopping-cart fa-stack-2x red-cart"></i>
+                </span>
+                <h3 class="my-3">Merci de votre achat !</h3>
+                <p>Vous êtes arrivé à la fin de la demo. Dans la prochain version j'intrégrerai la possibilité de payer
+                    (toujours sur un plateforme fictive).</p>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn principal" routerLink="/produits">Revenir à l'accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

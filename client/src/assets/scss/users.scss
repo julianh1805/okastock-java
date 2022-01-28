@@ -1,0 +1,156 @@
+@import '../../variables.scss';
+
+.userdata,
+.business {
+
+  .nav {
+    border-bottom: 1px solid $secondary-text;
+    margin-left: 9px;
+    margin-bottom: 20px;
+
+    .nav-a {
+      font-size: 14px;
+      color: $primary-text;
+      transition: border-bottom 0.2s;
+
+      &:hover {
+        border-bottom: 3px solid $primary-theme-dark;
+        text-decoration: none;
+      }
+    }
+
+    .active {
+      padding-bottom: 10px;
+      border-bottom: 3px solid $primary-theme-dark;
+    }
+  }
+
+  .content {
+    border: 1px solid $secondary-text;
+    border-radius: 4px;
+    padding: 30px 10px;
+
+    img {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h4 {
+      font-size: 20px;
+      color: $primary-text;
+      text-align: center;
+      margin: 12px 0px 0px 0px;
+    }
+
+    p {
+      font-size: 14px;
+      color: $primary-text;
+      text-align: center;
+      margin: 16px 0px;
+    }
+
+    .blue {
+      color: $primary-theme;
+      margin-bottom: 0px;
+      ;
+    }
+  }
+
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+}
+
+.card-box {
+  &:hover {
+    box-shadow: none !important;
+    border: 1px solid $secondary-text;
+
+    #options-product {
+      display: flex !important;
+    }
+  }
+
+  #options-product {
+    display: flex;
+    position: absolute;
+    left: 8px;
+    top: 8px;
+
+    div {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      color: white;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-icon {
+      background-color: $edit-color;
+      transition: 0.15s;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $edit-color-hover;
+
+      }
+
+      i {
+        margin-top: -1px;
+        font-size: 11px;
+      }
+    }
+
+    .delete-icon {
+      background-color: $delete-color;
+      transition: 0.15s;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $delete-color-hover;
+
+      }
+    }
+
+    a {
+      margin: 0 0 !important;
+    }
+  }
+}
+
+.company-card {
+  position: relative;
+}
+
+@media screen and (min-width: 1140px) {
+  .company-card {
+    height: 303px !important;
+    width: calc(25% - 8px) !important;
+
+    .card-div,
+    .card-box {
+      height: 100% !important;
+    }
+  }
+}
+
+@media screen and (min-width: 1240px) {
+  .company-card {
+    height: 323px !important;
+    width: calc(25% - 8px) !important;
+
+    .card-div,
+    .card-box {
+      height: 100% !important;
+    }
+  }
+}

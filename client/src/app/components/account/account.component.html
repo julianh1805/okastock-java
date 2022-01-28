@@ -1,0 +1,121 @@
+<div *ngIf="isLoading" class="isloading text-center mt-4">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!isLoading" class="container users my-4">
+    <section class="business">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div *ngIf="!editing" class="content">
+                    <img [src]="user.logo">
+                    <h4>{{user.name | titlecase}}</h4>
+                    <p class="mt-0">{{user.city  | titlecase}} ({{user.postalCode}})</p>
+                    <p><i class="fas fa-globe"></i> {{user.website}} | <i class="fas fa-phone-alt"></i>
+                        {{user.telephone}}</p>
+                    <p class="blue">{{productsLength}} produit(s) - Depuis {{user.createdAt | date:'yyyy'}}</p>
+                </div>
+                <div *ngIf="editing" id="editing" class="content">
+                    <div *ngIf="editIsLoading" class="isloading editload text-center mt-4">
+                        <app-loading-spinner></app-loading-spinner>
+                    </div>
+                    <form *ngIf="!editIsLoading" [formGroup]="editForm">
+                        <div class="form-group file mb-3">
+                            <img class="user-image" [src]="newLogo === null ? user.logo : newLogo">
+                            <input id="file" class="input-file" type="file" (change)="onSelectedFile($event)"
+                                accept="image/x-png,image/jpg,image/jpeg">
+                            <label for="file" class="mt-1 label-file">Changer
+                                image</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="text" placeholder="Entreprise*"
+                                formControlName="name"
+                                [ngClass]="{ 'is-invalid': submitted && !editForm.controls.name.valid }">
+                            <small *ngIf="editForm.controls.name.value == '' && submitted" id="form-help"
+                                class="form-text text-muted">Ce champ est obligatoire.</small>
+                        </div>
+                        <div class="row flex-col mb-3">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Ville*" formControlName="city"
+                                    [ngClass]="{ 'is-invalid': submitted && !editForm.controls.city.valid }">
+                                <small *ngIf="editForm.controls.city.value == '' && submitted" id="form-help"
+                                    class="form-text text-muted">Ce champ est obligatoire.</small>
+                                <small
+                                    *ngIf="editForm.controls.city.value !== '' && !editForm.controls.city.valid && submitted"
+                                    id="form-help" class="form-text text-muted">La ville doit contenir uniquement des
+                                    caracteres.</small>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control float-right" placeholder="Code postal*"
+                                    maxlength="5" formControlName="postalCode"
+                                    [ngClass]="{ 'is-invalid': submitted && !editForm.controls.postalCode.valid }">
+                                <small *ngIf="editForm.controls.postalCode.value == '' && submitted" id="form-help"
+                                    class="form-text text-muted">Ce champ est obligatoire.</small>
+                                <small
+                                    *ngIf="editForm.controls.postalCode.value !== '' && !editForm.controls.postalCode.valid && submitted && editForm.value.postalCode.length < 5"
+                                    id="form-help" class="form-text text-muted">Le code postal doit contenir 5
+                                    chiffres.</small>
+                                <small
+                                    *ngIf="editForm.controls.postalCode.value !== '' && !editForm.controls.postalCode.valid && submitted && editForm.value.postalCode.length == 5"
+                                    id="form-help" class="form-text text-muted">Le code postal doit contenir uniquement
+                                    des
+                                    chiffres et peut pas commencer par 00.</small>
+                            </div>
+                        </div>
+                        <div class="row flex-col mb-3">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Téléphone*" maxlength="10"
+                                    formControlName="telephone"
+                                    onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37? true : !isNaN(Number(event.key))"
+                                    [ngClass]="{ 'is-invalid': submitted && !editForm.controls.telephone.valid }">
+                                <small *ngIf="editForm.controls.telephone.value == '' && submitted" id="form-help"
+                                    class="form-text text-muted">Ce champ est obligatoire.</small>
+                                <small
+                                    *ngIf="editForm.controls.telephone.value !== '' && !editForm.controls.telephone.valid && submitted && editForm.value.telephone.length < 10"
+                                    id="form-help" class="form-text text-muted">Le téléphone doit être composé de 10
+                                    chiffres.</small>
+                                <small
+                                    *ngIf="editForm.controls.telephone.value !== '' && !editForm.controls.telephone.valid && submitted && editForm.value.telephone.length == 10"
+                                    id="form-help" class="form-text text-muted">Le téléphone doit contenir uniquement
+                                    des chiffres au format
+                                    06, 02 ou 07XXXXXXXX.</small>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control float-right" placeholder="Site web*"
+                                    formControlName="website"
+                                    [ngClass]="{ 'is-invalid': submitted && !editForm.controls.website.valid }">
+                                <small *ngIf="editForm.controls.website.value == '' && submitted" id="form-help"
+                                    class="form-text text-muted">Ce champ est obligatoire.</small>
+                                <small
+                                    *ngIf="editForm.controls.website.value !== '' && !editForm.controls.website.valid && submitted"
+                                    id="form-help" class="form-text text-muted">Veuillez indiquer un site web
+                                    valide.</small>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-switch mt-3">
+                            <input type="checkbox" class="custom-control-input" id="custom-switch"
+                                formControlName="rgpd"
+                                [ngClass]="{ 'is-invalid': submitted && !editForm.controls.rgpd.valid }">
+                            <label class="custom-control-label" for="custom-switch">J’accepte la <a
+                                    href="https://okastock.herokuapp.com/a-propos/mentions-legales"
+                                    target="_blank">politique de
+                                    confidentialité*</a></label>
+                        </div>
+                        <small *ngIf="!editForm.controls.rgpd.valid && submitted" id="form-help"
+                            class="form-text text-muted">Vous devez
+                            accepter la politique de confidentialité.</small>
+                    </form>
+                </div>
+                <div *ngIf="!editing" class="actions mt-3">
+                    <button (click)="edit()" class="btn edit mr-1">Editer</button>
+                    <button (click)="deleteUser()" class="btn delete ml-1">Supprimer</button>
+                </div>
+                <div *ngIf="editing" class="actions mt-3">
+                    <button (click)="edit()" class="btn secondary mr-1">Annuler</button>
+                    <button type="submit" (click)="onSubmit(editForm)" class="btn principal ml-1">Sauvegarder</button>
+                </div>
+            </div>
+            <div id="business-products" class="col-12 col-md-8 mt-4">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </section>
+</div>

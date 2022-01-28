@@ -1,0 +1,112 @@
+.principal {
+  color: white !important;
+  background-color: $primary-theme !important;
+  border-color: $primary-theme !important;
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(41, 151, 151, .25) !important;
+  }
+
+  &:hover {
+    background-color: #01a5a5 !important;
+    border-color: #01a5a5 !important;
+  }
+}
+
+.secondary {
+  color: $primary-text !important;
+  background-color: $secondary-text !important;
+  border-color: $secondary-text;
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(200, 205, 207, 0.25) !important;
+  }
+
+  &:hover {
+    border-color: 0 0 0 0.2rem rgb(200, 205, 207) !important;
+    background-color: rgb(200, 205, 207) !important;
+  }
+}
+
+
+.dark {
+  color: white !important;
+  background-color: $primary-theme-dark !important;
+  border-color: $primary-theme-dark !important;
+
+  &:hover {
+    border-color: 0 0 0 0.2rem rgb(2, 73, 87) !important;
+    background-color: rgb(2, 73, 87) !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 84, 99, 0.25) !important;
+  }
+}
+
+.delete {
+  color: white !important;
+  background-color: $delete-color !important;
+  border-color: $delete-color !important;
+
+  &:hover {
+    border-color: $delete-color-hover !important;
+    background-color: $delete-color-hover !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(179, 31, 46, 0.308) !important;
+  }
+}
+
+.edit {
+  color: white !important;
+  background-color: $edit-color !important;
+  border-color: $edit-color !important;
+
+  &:hover {
+    border-color: $edit-color-hover !important;
+    background-color: $edit-color-hover !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, .5) !important;
+  }
+}
+
+.light {
+  color: $primary-text !important;
+  border-color: $secondary-text !important;
+  background-color: white !important;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.filter {
+  color: white !important;
+  border-color: $primary-text !important;
+  background-color: $primary-text !important;
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(53, 67, 75, 0.25) !important;
+  }
+
+  &:hover {
+    background-color: rgb(78, 93, 100) !important;
+    border-color: rgb(78, 93, 100) !important;
+  }
+}
+
+
+button {
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  padding: 0.55rem .75rem !important;
+  font-weight: 300 !important;
+
+  &:hover {
+    cursor: grab;
+  }
+}

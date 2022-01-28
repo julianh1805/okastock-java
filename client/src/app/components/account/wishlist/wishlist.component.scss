@@ -1,0 +1,35 @@
+.products {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+.message-cta {
+    margin-left: 9px;
+}
+
+#options-product {
+    div {
+        background-color: rgb(255, 55, 88);
+
+        &:hover {
+            background-color: rgb(211, 54, 80);
+        }
+
+        i {
+            font-size: 14px;
+            padding-left: 1px;
+        }
+    }
+}
+
+.alert-stock {
+    color: white;
+    position: absolute;
+    border-radius: 0px 5px 5px 0px;
+    padding: 1px 5px 1px 7px;
+    left: 0px;
+    font-size: 13px !important;
+    top: -32px;
+    background-color: #01c1c1;
+    font-weight: 500;
+}

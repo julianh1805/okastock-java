@@ -1,0 +1,99 @@
+<section class="annonce mt-4">
+  <div class="container">
+    <div class="row col-12 col-lg-9">
+      <div *ngIf="isLoading" class="isloading text-center mt-4">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+      <form *ngIf="!isLoading" [formGroup]="productForm" (ngSubmit)="onSubmit(productForm)">
+        <h2>{{editing ? 'Editer une annonce' : 'Déposer une annonce'}}</h2>
+        <div class="form-group mt-3">
+          <label for="ad-image">Ajouter des photos</label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="ad-image" (change)="onFileChange($event)" multiple
+              [disabled]="images.length >= 5" placement="top" ngbTooltip="Maximum 5 photos"
+              accept="image/x-png,image/jpg,image/jpeg">
+            <label class="custom-file-label" for="ad-image"
+              [ngClass]="{ 'is-invalid': submitted && !productForm.controls.images.valid }"><i
+                class="fas fa-cloud-upload-alt"></i></label>
+            <small
+              *ngIf="!productForm.controls.images.valid && submitted && productForm.controls.images.value.length === 0"
+              id="form-help" class="form-text text-muted">Une photo par produit est obligatoire.</small>
+          </div>
+          <div class="images">
+            <div *ngFor="let image of images; let i = index" class="image">
+              <div id="options-product">
+                <div class="delete-icon" (click)="deleteImage(i)"><i class="fas fa-times"></i></div>
+              </div>
+              <img [src]="image">
+            </div>
+          </div>
+          <small class="mt-0"
+            *ngIf="!productForm.controls.images.valid && submitted && productForm.controls.images.value.length > 5"
+            id="form-help" class="form-text text-muted">Maximum 5 photos par produit.</small>
+        </div>
+        <div class="form-group">
+          <label for="ad-title">Titre</label>
+          <input type="text" class="form-control" id="ad-title" placeholder="Qu’est-ce que vous voulez vendre ?"
+            formControlName="title" [ngClass]="{ 'is-invalid': submitted && !productForm.controls.title.valid }">
+          <small *ngIf="!productForm.controls.title.valid && submitted && productForm.controls.title.value == null"
+            id="form-help" class="form-text text-muted">Ce champ est obligatoire.</small>
+          <small *ngIf="!productForm.controls.title.valid && submitted && productForm.controls.title.value !== null"
+            id="form-help" class="form-text text-muted">Le titre est trop long. Maximum 120 caractères.</small>
+        </div>
+        <div class="form-group">
+          <label for="ad-description">Description</label>
+          <textarea class="form-control" id="ad-description" rows="3"
+            placeholder="Décrivez votre produit comme la couleur, taille…" formControlName="description"
+            [ngClass]="{ 'is-invalid': submitted && !productForm.controls.description.valid }"></textarea>
+          <small
+            *ngIf="!productForm.controls.description.valid && submitted && productForm.controls.description.value == null"
+            id="form-help" class="form-text text-muted">Ce champ est obligatoire.</small>
+          <small
+            *ngIf="!productForm.controls.description.valid && submitted && productForm.controls.description.value !== null"
+            id="form-help" class="form-text text-muted">La description est trop longue. Maximum 255 caractères.</small>
+        </div>
+        <div class="form-group">
+          <label for="ad-category">Catégorie</label>
+          <select class="form-control" id="ad-category" formControlName="category"
+            [ngClass]="{ 'is-invalid': submitted && !productForm.controls.category.valid }">
+            <option selected value="">Choisissez une catégorie</option>
+            <option *ngFor="let categorie of categoriesArray" value="{{categorie.value}}">{{categorie.nom | titlecase}}
+            </option>
+          </select>
+          <small *ngIf="!productForm.controls.category.valid && submitted" id="form-help"
+            class="form-text text-muted">Ce
+            champ est obligatoire.</small>
+        </div>
+        <div class="form row justify-content-between">
+          <div class="col-6">
+            <label for="ad-price">Prix (par unité)</label>
+            <div class="d-flex justify-content-between ad-price">
+              <input type="text" class="form-control" id="ad-price" formControlName="price" (blur)="priceChange()"
+                [ngClass]="{ 'is-invalid': submitted && !productForm.controls.price.valid }"
+                onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 188 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37 ? true : !isNaN(Number(event.key))"><span
+                id="my-suffix">€</span>
+            </div>
+            <small *ngIf="!productForm.controls.price.valid && submitted && !productForm.controls.price.value"
+              id="form-help" class="form-text text-muted">Ce
+              champ est obligatoire.</small>
+            <small *ngIf="!productForm.controls.price.valid && submitted && productForm.controls.price.value"
+              id="form-help" class="form-text text-muted">Le prix doit contenir maximum deux chiffres
+              décimals.</small>
+          </div>
+          <div class="col-6">
+            <label for="ad-quantity">Quantité</label>
+            <input type="number" class="form-control" id="ad-quantity" formControlName="quantity"
+              [ngClass]="{ 'is-invalid': submitted && !productForm.controls.quantity.valid }"
+              onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37 ? true : !isNaN(Number(event.key))">
+            <small *ngIf="!productForm.controls.quantity.valid && submitted && !productForm.controls.quantity.value"
+              id="form-help" class="form-text text-muted">Ce
+              champ est obligatoire.</small>
+          </div>
+        </div>
+        <div class="text-center my-5">
+          <button type="submit" class="btn principal">Déposer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

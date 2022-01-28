@@ -1,0 +1,43 @@
+.actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+}
+
+#editing {
+    img {
+        width: 86px;
+        height: 86px;
+        -o-object-fit: cover;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.form-group.file {
+    display: block;
+
+    .user-image {
+        width: 86px;
+        height: 86px;
+        -o-object-fit: cover;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .label-file {
+        display: block;
+        text-align: center;
+    }
+}
+
+.editload {
+    height: 135px;
+}

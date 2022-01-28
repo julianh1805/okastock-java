@@ -1,0 +1,54 @@
+@import '../../../variables.scss';
+
+button {
+  font-size: 14px !important;
+}
+
+#map {
+  display: none;
+  margin-bottom: 45px;
+}
+
+select {
+  border-radius: 4px !important;
+  font-size: 12px;
+}
+
+.contact {
+  margin-bottom: 25px;
+
+  .card {
+    background-color: $secondary-text;
+    border-color: $secondary-text;
+    padding: 40px 10px;
+    height: 185px;
+    max-width: 300px;
+    margin-bottom: 40px;
+
+    i {
+      color: $primary-theme;
+      text-align: center;
+      font-size: 32px;
+    }
+
+    .text {
+      text-align: center;
+      width: 80%;
+      margin: 20px auto 0px;
+    }
+
+
+    a {
+      color: $primary-text;
+    }
+  }
+}
+
+.isloading {
+  min-height: 120px;
+}
+
+#response-text {
+  font-size: 16px;
+  margin-top: 35px;
+}

@@ -1,0 +1,23 @@
+.container .products {
+    margin-left: -7px !important;
+}
+
+@media screen and (min-width: 510px) {
+    img#card-img-business {
+        width: 253px !important;
+
+    }
+}
+
+@media screen and (min-width: 768px) {
+    img#card-img-business {
+        width: 157px !important;
+
+    }
+}
+
+@media screen and (min-width: 510px) {
+    .container .products {
+        margin-left: 0px !important;
+    }
+}

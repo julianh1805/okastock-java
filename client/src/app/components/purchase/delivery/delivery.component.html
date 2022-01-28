@@ -1,0 +1,99 @@
+<section class="payment mt-4">
+  <div class="container">
+    <h2>Panier - </h2>
+    <h2 class="active">Livraison</h2>
+    <h2> - Paiement</h2>
+    <div *ngIf="isLoading" class="isloading text-center mt-4">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form *ngIf="!isLoading" class="mt-4" [formGroup]="deliveryForm" (ngSubmit)="onSubmit(deliveryForm)">
+      <div class="row">
+        <div class="form-box col-12 col-lg-9">
+          <p id="label">Adresse de livraison</p>
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Destinataire (nom/entreprise)*"
+              formControlName="recipient"
+              [ngClass]="{ 'is-invalid': submitted && !deliveryForm.controls.recipient.valid }">
+            <small *ngIf="deliveryForm.controls.recipient.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+          </div>
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Adresse*" formControlName="address"
+              [ngClass]="{ 'is-invalid': submitted && !deliveryForm.controls.address.valid }">
+            <small *ngIf="deliveryForm.controls.address.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Complément d'adresse"
+              formControlName="complementAddress">
+          </div>
+          <div class="row flex-col mb-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Ville*" formControlName="city"
+                [ngClass]="{ 'is-invalid': submitted && !deliveryForm.controls.city.valid }">
+              <small *ngIf="deliveryForm.controls.city.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small *ngIf="deliveryForm.controls.city.value !== '' && !deliveryForm.controls.city.valid && submitted"
+                id="form-help" class="form-text text-muted">La ville doit contenir uniquement des caracteres.</small>
+            </div>
+            <div class="col postal-code">
+              <input type="text" class="form-control float-right" placeholder="Code postal*" maxlength="5"
+                formControlName="postalCode"
+                onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37? true : !isNaN(Number(event.key))"
+                [ngClass]="{ 'is-invalid': submitted && !deliveryForm.controls.postalCode.valid }">
+              <br>
+              <small *ngIf="deliveryForm.controls.postalCode.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="deliveryForm.controls.postalCode.value !== '' && !deliveryForm.controls.postalCode.valid && submitted && deliveryForm.value.postalCode.length < 5"
+                id="form-help" class="form-text text-muted">Le code postal doit contenir 5 chiffres.</small>
+              <small
+                *ngIf="deliveryForm.controls.postalCode.value !== '' && !deliveryForm.controls.postalCode.valid && submitted && deliveryForm.value.postalCode.length == 5"
+                id="form-help" class="form-text text-muted">Le code postal doit contenir uniquement
+                des
+                chiffres et peut pas commencer par 00.</small>
+            </div>
+          </div>
+          <div class="form-group mb-0">
+            <input type="text" class="form-control" placeholder="Téléphone*" maxlength="10" formControlName="telephone"
+              [ngClass]="{ 'is-invalid': submitted && !deliveryForm.controls.telephone.valid }"
+              onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37 ? true : !isNaN(Number(event.key))">
+            <small *ngIf="deliveryForm.controls.telephone.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+            <small
+              *ngIf="deliveryForm.controls.telephone.value !== '' && !deliveryForm.controls.telephone.valid && submitted && deliveryForm.value.telephone.length < 10"
+              id="form-help" class="form-text text-muted">Le téléphone doit être composé de 10 chiffres.</small>
+            <small
+              *ngIf="deliveryForm.controls.telephone.value !== '' && !deliveryForm.controls.telephone.valid && submitted && deliveryForm.value.telephone.length == 10"
+              id="form-help" class="form-text text-muted">Le téléphone doit contenir uniquement
+              des chiffres au format
+              06, 02 ou 07XXXXXXXX.</small>
+          </div>
+        </div>
+        <div class="payment-box h-100 col-12 col-lg-3">
+          <div class="content">
+            <h3 class="mb-2">Adresse</h3>
+            <p>{{deliveryForm.value.recipient ? deliveryForm.value.recipient : 'Destinataire'}}</p>
+            <p>{{deliveryForm.value.address ? deliveryForm.value.address : 'Adresse'}}
+              {{deliveryForm.value.complementAddress}}</p>
+            <p>{{deliveryForm.value.city ? deliveryForm.value.city : 'Ville'}}
+              {{deliveryForm.value.postalCode ? '(' + deliveryForm.value.postalCode + ')' : '(XXXXX)'}}</p>
+            <p>{{deliveryForm.value.telephone ? deliveryForm.value.telephone : 'Téléphone'}}</p>
+          </div>
+          <hr>
+          <div class="content content-table">
+            <table>
+              <tr>
+                <td><b>TOTAL (TVA incluse)</b></td>
+                <td class="text-right">{{cartPrice}}€</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!isLoading" class="text-center">
+        <button type="submit" class="btn principal">Passer au paiement</button>
+      </div>
+    </form>
+  </div>
+</section>

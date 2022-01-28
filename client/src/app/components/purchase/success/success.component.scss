@@ -1,0 +1,15 @@
+@import '../../../../variables.scss';
+
+.row {
+    justify-content: center;
+    text-align: center;
+}
+
+.fa-circle {
+    color: $primary-theme-dark;
+}
+
+.red-cart {
+    color: $primary-theme-dark;
+    background: white;
+}

@@ -1,0 +1,132 @@
+@import '../../variables.scss';
+
+.products {
+  display: flex;
+  -webkit-box-align: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: calc(-4px);
+  width: 103%;
+  margin-left: -9px !important;
+
+  .category-card {
+    width: calc(50% - 11px);
+    margin: 0 2px 0 9px !important;
+    padding: 8px 0 !important;
+
+    .text {
+      height: 100%;
+      word-wrap: break-word;
+      background-color: $primary-theme;
+      border: 1px solid $primary-theme;
+      border-radius: 4px;
+      position: relative;
+
+
+      p {
+        color: white;
+        position: absolute;
+        width: 80%;
+        text-align: center;
+        top: 43%;
+        left: 10%;
+        font-size: 22px;
+        font-weight: 500;
+        line-height: 27px;
+      }
+    }
+  }
+
+  #card-href {
+    text-decoration: none;
+  }
+
+
+  a {
+    width: calc(50% - 8px);
+    margin: 4px !important;
+  }
+
+  .card-div {
+    .card-box {
+      border-radius: 4px !important;
+      border: 1px solid $secondary-text;
+      width: 100%;
+      height: auto;
+      margin: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: border 0.1s;
+
+      &:hover {
+        box-shadow: 2px 4px 10px #00000072;
+      }
+
+      img#card-img-business {
+        object-fit: cover;
+      }
+
+      .card-body {
+        min-height: 126px;
+        padding: 13px 11px;
+        position: relative;
+      }
+
+      .card-title {
+        font-weight: 500;
+        color: $primary-theme-dark;
+        margin-bottom: 7px;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .card-price {
+        color: $primary-theme;
+        font-weight: 400;
+        margin-bottom: 7px;
+        font-size: 14px;
+      }
+
+      .card-text {
+        color: $primary-text;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        font-size: 12px;
+        line-height: 18px;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+ngb-pagination {
+  display: block;
+  margin-top: 12px;
+  margin-left: 8px !important;
+
+  .pagination {
+    border-radius: 4px;
+  }
+
+  .page-item.active .page-link {
+    background-color: $primary-theme;
+    border-color: $primary-theme;
+  }
+
+  .page-link {
+    color: $primary-theme;
+
+    &:hover {
+      color: $primary-theme;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(13, 189, 192, 0.589) !important;
+
+    }
+  }
+}

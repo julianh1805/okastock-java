@@ -1,0 +1,25 @@
+<section class="validation modal-style">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 modal-container">
+        <div class="content">
+          <h2 *ngIf="userName">Supprimer compte</h2>
+          <p class="my-4 text-center" *ngIf="userName">Êtes-vous sur de vouloir supprimer votre compte
+            <b>{{userName}}</b> ? <b>Vos produits</b> ainsi que <b>toutes vos informations</b> seront supprimées pour
+            toujours. Cette action est <b>irreversible</b>.</p>
+          <h2 *ngIf="productTitle">Supprimer produit</h2>
+          <p class="my-4 text-center" *ngIf="productTitle">Êtes-vous sur de vouloir supprimer le produit
+            <b>{{productTitle}}</b> ? <b>Votre produit</b> sera supprimé pour toujours. Cette action est
+            <b>irreversible</b>.</p>
+          <h2 *ngIf="productCartTitle">Supprimer produit du panier</h2>
+          <p class="my-4 text-center" *ngIf="productCartTitle">Voulez-vous supprimer le produit
+            <b>{{productCartTitle}}</b> de votre panier ?</p>
+          <div class="actions">
+            <button class="btn secondary" (click)="delete(false)">Annuler</button>
+            <button class="btn principal" (click)="delete(true)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,17 @@
+@import '../../../../variables.scss';
+
+.products {
+    width: 100% !important;
+}
+
+.message-cta {
+    margin-left: 9px;
+}
+
+div.empty-quantity {
+    border-color: $delete-color !important
+}
+
+p.empty-quantity {
+    color: $delete-color !important
+}

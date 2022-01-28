@@ -1,0 +1,88 @@
+<div *ngIf="isLoading" class="isloading text-center mt-4">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+<div class="container mt-4" *ngIf="!isLoading">
+  <section class="mb-4">
+    <div class="category-box">
+      <h2 class="category-title mb-3" *ngIf="categorySelected.value == 'categorie' && !searchTerm">
+        {{categorySelected.nom}}</h2>
+      <h2 class="category-title mb-3" *ngIf="categorySelected.value !== 'categorie' && !searchTerm">
+        {{categorySelected.nom | titlecase}}</h2>
+      <h2 class="category-title mb-3" *ngIf="searchTerm">
+        Recherche par term "{{searchTerm}}"</h2>
+      <p class="catégory-text" *ngIf="!searchTerm">{{categorySelected.description}}</p>
+      <p class="catégory-text" *ngIf="searchTerm">Tous les produits dont leur titre ou description contient vos
+        mots-clés
+        "{{searchTerm}}".</p>
+    </div>
+    <div class="no-products mt-5" *ngIf="products.length == 0">
+      <p>Nous sommes désolés, vos critéres répondent à aucun produit.</p>
+      <p><a routerLink="/produits" class="blue text-center">Recharger la page</a></p>
+    </div>
+    <div class="filter-box" *ngIf="products.length !== 0">
+      <div ngbDropdown class="d-inline-block mr-2">
+        <button class="btn btn-outline secondary" id="dropdown" ngbDropdownToggle>Trier par</button>
+        <div class="dropdown-list" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem class="blue" (click)="removeSort()" *ngIf="filteredSort">Supprimer filtre</button>
+          <button ngbDropdownItem (click)="sort('lowest_price')">Moins chères</button>
+          <button ngbDropdownItem (click)="sort('highest_price')">Plus chères</button>
+          <button ngbDropdownItem (click)="sort('oldest_date')">Plus anciens</button>
+          <button ngbDropdownItem (click)="sort('newest_date')">Plus récents</button>
+        </div>
+      </div>
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline secondary" id="dropdown" ngbDropdownToggle>Prix</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" id="dropdown2" class="dropdown-list">
+          <div class="form-row justify-content-between px-3">
+            <button ngbDropdownItem class="pl-0 blue" (click)="removePrice()" *ngIf="filteredPrice">Supprimer
+              filtre</button>
+            <div class="form-group col-md-5">
+              <label>De</label>
+              <input type="number" class="form-control" value="100" #minValue>
+            </div>
+            <div class="form-group col-md-1">
+              <span>-</span>
+            </div>
+            <div class="form-group col-md-5">
+              <label>jusqu'à</label>
+              <input type="number" class="form-control" value="1000" #maxValue>
+            </div>
+            <button ngbDropdownItem id="apply" class="text-center btn principal w-100"
+              (click)="sortInterval(minValue, maxValue)">Appliquer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mb-5" *ngIf="products.length !== 0">
+    <div class="products">
+      <div class="category-card">
+        <div class="text" *ngIf="categorySelected.value == 'categorie'">
+          <p>{{categorySelected.nom}}</p>
+        </div>
+        <div class="text" *ngIf="categorySelected.value !== 'categorie'">
+          <p id="spec">{{categorySelected.nom | titlecase}}</p>
+        </div>
+      </div>
+      <a [routerLink]="['/produits', product._id]" id="card-href" *ngFor="let product of products">
+        <div class="card-div">
+          <div class="card-box">
+            <img id="card-img" src="https://static.cnews.fr/sites/default/files/violences_conjuguales_5e96efe7a6b00.jpg" alt="Card image cap">
+            <div class="card-body">
+              <div class="alert-stock" *ngIf="50 >= product.quantite">Dernières unités</div>
+              <h5 class="card-title">{{product.nom}}</h5>
+              <p class="card-price">{{product.prix}}€</p>
+              <p class="card-text">{{product.description}}</p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="text-center my-5">
+      <button type="submit" *ngIf="products.length == 5 && showMore || products.length > 5 && showMore"
+        class="btn principal" (click)="limit()">Voir
+        plus</button>
+    </div>
+  </section>
+</div>
+<app-banniere *ngIf="!isLoading"></app-banniere>

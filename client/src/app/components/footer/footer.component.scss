@@ -1,0 +1,50 @@
+@import '../../../variables.scss';
+.footer {
+  overflow: hidden;
+  // position: absolute;
+  //   bottom: 0;
+  //   width: 100%;
+
+  .end {
+    p {
+      text-align: left;
+      font-size: 14px;
+      font-weight: bold;
+      color: $primary-theme-dark;
+    }
+
+    li {
+      list-style: none;
+      margin-bottom: 13px;
+    }
+
+    a {
+      text-align: left;
+      font-size: 14px;
+      color: $primary-text;
+    }
+
+    .badges {
+      img {
+        width: 115px !important;
+      }
+    }
+
+    .logo {
+      text-align: start;
+
+      .text-a {
+        text-align: left;
+        font-size: 14px;
+        color: $primary-text;
+        font-weight: lighter;
+      }
+
+      img {
+        width: 140px !important;
+      }
+    }
+
+
+  }
+}

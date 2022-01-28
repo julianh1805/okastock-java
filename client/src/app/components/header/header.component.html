@@ -1,0 +1,92 @@
+<div class="fixed-top">
+  <nav class="navbar navbar-expand-lg mb-0">
+    <div id="toasts" *ngIf="notifications">
+      <ngb-toast *ngFor="let notification of notifications" [ngClass]="{
+      'success':notification.type === 'success',
+      'alert':notification.type === 'alert',
+      'danger':notification.type === 'danger'
+      }">
+        {{notification.message}}
+      </ngb-toast>
+    </div>
+    <div class="d-flex align-items-baseline">
+      <a class="navbar-brand" (click)="goHome()">
+        <img src="assets/images/logo.png" width="30px" alt="Logo Okastock">
+      </a>
+      <div>
+        <div class="input-group search-bar">
+          <div class="input-group-prepend">
+            <select (change)="changeCategorie(selectField.value);" [(ngModel)]="selectValue" #selectField
+              class="form-control dark">
+              <option value="">Catégories</option>
+              <option *ngFor="let categorie of categoriesArray" value="{{categorie.value}}">
+                {{categorie.nom | titlecase}}</option>
+            </select>
+          </div>
+          <input id="input" type="text" class="form-control light" [(ngModel)]="searchBarInput"
+            placeholder="Rechercher..." aria-label="Text input with dropdown button">
+          <div class="d-inline search-icon" (click)="searchBy(searchBarInput)">
+            <i class="fas fa-search mr-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form ngbDropdown class="form-inline">
+      <i routerLink="/recherche" class="fas fa-search xs mr-2"></i>
+      <button routerLink="/deposer-une-annonce" class="btn principal mr-2 button-resp"><span
+          class="fas fa-camera"></span> Déposer une annonce</button>
+      <button class="btn secondary auth mr-2 button-resp" type="button" (click)="conexion()" *ngIf="!userConnected">Se
+        connecter</button>
+      <button class="btn secondary button-resp" type="button" ngbDropdownToggle *ngIf="!userConnected">
+        <span class="dotted">. . .</span>
+      </button>
+      <a class="cart-menu" *ngIf="userConnected" routerLink="/panier/recapitulatif">
+        <i class="fa" style="font-size:24px">&#xf07a;</i>
+        <span class="badge badge-warning" id="lblCartCount">{{cartProductsLength}}</span>
+      </a>
+      <div ngbDropdownToggle *ngIf="userConnected" class="connecteduser-mobile">
+        <img class="user-image" [src]="userConnected.logo">
+      </div>
+      <div ngbDropdownToggle *ngIf="userConnected" class="connecteduser-desktop">
+        <img class="user-image" [src]="userConnected.logo">
+        <span>{{userConnected.name}}</span>
+        <i class="fas fa-sort-down"></i>
+      </div>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="!userConnected">
+        <div class="dropdown-list">
+          <a class="close-x" ngbDropdownToggle>
+            <img src="assets/images/close.png" width="20px" alt="Logo Okastock">
+          </a>
+          <a ngbDropdownItem (click)="inscription()">S'inscrire</a>
+          <a ngbDropdownItem (click)="conexion()">Se connecter</a>
+          <hr>
+          <a ngbDropdownItem routerLink="/contact">Nous contacter</a>
+          <a ngbDropdownItem routerLink="/a-propos/qui-sommes-nous">Qui sommes-nous ?</a>
+          <a ngbDropdownItem routerLink="/a-propos/condition-generales-de-vente">CGV</a>
+          <a ngbDropdownItem routerLink="/a-propos/mentions-legales">Mentions légales</a>
+        </div>
+      </div>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="userConnected">
+        <div class="dropdown-list">
+          <a class="close-x" ngbDropdownToggle>
+            <img src="assets/images/close.png" width="20px" alt="Logo Okastock">
+          </a>
+          <a ngbDropdownItem routerLink="/panier/recapitulatif">Panier <span
+              class="badge badge-primary badge-pill">{{cartProductsLength}}</span>
+          </a>
+          <a ngbDropdownItem routerLink="/mon-compte/produits">Mes produits</a>
+          <a ngbDropdownItem routerLink="/mon-compte/favoris">Liste des favoris</a>
+          <a ngbDropdownItem (click)="logout()">Se déconnecter</a>
+          <hr>
+          <a ngbDropdownItem routerLink="/contact">Nous contacter</a>
+          <a ngbDropdownItem routerLink="/a-propos/qui-sommes-nous">Qui sommes-nous ?</a>
+          <a ngbDropdownItem routerLink="/a-propos/condition-generales-de-vente">CGV</a>
+          <a ngbDropdownItem routerLink="/a-propos/mentions-legales">Mentions légales</a>
+        </div>
+      </div>
+    </form>
+  </nav>
+</div>
+<div class="spacer">
+  &nbsp;
+</div>

@@ -1,0 +1,23 @@
+.btn {
+  font-size: 12px !important;
+  height: 100%;
+}
+
+#search {
+
+  button,
+  input,
+  select {
+    height: 38px;
+  }
+
+  .d-flex {
+    input {
+      border-radius: 4px 0 0 4px !important;
+    }
+
+    button {
+      border-radius: 0 4px 4px 0 !important;
+    }
+  }
+}

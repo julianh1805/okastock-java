@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    env_file:
+      - env/dev/.env-postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev:/data/postgres
+    networks:
+      - postgres_dev
+    restart: unless-stopped
+    #pgadmin:
+    #image: dpage/pgadmin4
+    #container_name: pgadmin
+    #env_file:
+    #- env/dev/.env-pgadmin
+    #ports:
+    #- "5050:80"
+    #volumes:
+    #- pgadmin_dev:/data/lib/pgadmin
+    #networks:
+    #- postgres_dev
+networks:
+  postgres_dev:
+    driver: bridge
+volumes:
+  postgres_dev: #pgadmin_dev:

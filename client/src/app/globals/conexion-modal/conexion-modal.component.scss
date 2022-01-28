@@ -1,0 +1,18 @@
+.blue {
+  font-size: 12px;
+  color: #31b4b5;
+
+  &:hover {
+    color: #01a5a5;
+  }
+}
+
+.isloading {
+  height: 135px
+}
+
+a {
+  &:hover {
+    text-decoration: underline !important;
+  }
+}

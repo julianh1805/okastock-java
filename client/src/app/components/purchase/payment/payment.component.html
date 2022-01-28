@@ -1,0 +1,93 @@
+<section class="payment mt-4">
+  <div class="container">
+    <h2>Panier - </h2>
+    <h2>Livraison - </h2>
+    <h2 class="active">Paiement</h2>
+    <div *ngIf="isLoading" class="isloading text-center mt-4">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form *ngIf="!isLoading" class="mt-4" [formGroup]="payementForm" (ngSubmit)="onSubmit(payementForm)">
+      <div class="row">
+        <div class="form-box col-12 col-lg-9">
+          <p id="label">Votre carte bancaire</p>
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Titulaire*" formControlName="holder"
+              [ngClass]="{ 'is-invalid': submitted && !payementForm.controls.holder.valid }">
+            <small *ngIf="payementForm.controls.holder.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+            <small *ngIf="payementForm.controls.holder.value !== '' && submitted && !payementForm.controls.holder.valid"
+              id="form-help" class="form-text text-muted">Le titulaire doit contenir uniquement des caracteres.</small>
+          </div>
+          <div class="form-group">
+            <input placement="top"
+              ngbTooltip="Les informations de la carte ne seront dans aucun enrengistrées. Néanmoins, utilisez quand même une carte bleue fictive."
+              class="form-control" type="text" placeholder="Numéro de la carte*" formControlName="cartNumber"
+              [ngClass]="{ 'is-invalid': submitted && !payementForm.controls.cartNumber.valid }" maxlength="16"
+              (change)="cartSpaces($event)"
+              onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 37 || event.keyCode === 39 ? true : !isNaN(Number(event.key))">
+            <small *ngIf="payementForm.controls.cartNumber.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+            <small
+              *ngIf="payementForm.controls.cartNumber.value !== '' && submitted && !payementForm.controls.cartNumber.valid"
+              id="form-help" class="form-text text-muted">Le numéro de la carte doit contenir 16 chiffres.</small>
+          </div>
+          <div class="row flex-col">
+            <div class="col-sm-5 col-6 expiration">
+              <select formControlName="cartExpirationMonth" [(ngModel)]="cartExpirationMonthValue">
+                <option *ngFor="let month of expirationMonth" [value]="month">{{month}}</option>
+              </select>
+              <p>/</p>
+              <select formControlName="cartExpirationYear" [(ngModel)]="cartExpirationYearValue">
+                <option *ngFor="let year of expirationYear" [value]="year">{{year}}</option>
+              </select>
+            </div>
+            <div class="col-sm-7 col-6 crypto">
+              <input formControlName="cartCode" type="text" maxlength="3" class="form-control float-right"
+                placeholder="Cryptogramme*"
+                [ngClass]="{ 'is-invalid': submitted && !payementForm.controls.cartCode.valid }"
+                onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 37 || event.keyCode === 39? true : !isNaN(Number(event.key))">
+              <small *ngIf="payementForm.controls.cartCode.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="payementForm.controls.cartCode.value !== '' && submitted && !payementForm.controls.cartCode.valid"
+                id="form-help" class="form-text text-muted">Le cryptogramme doit contenir 3
+                chiffres.</small>
+            </div>
+          </div>
+        </div>
+        <div class="payment-box h-100 col-12 col-lg-3">
+          <div class="content">
+            <h3 class="mb-3">Carte bancaire</h3>
+            <div class="cb d-flex justify-content-start">
+              <div class="img">
+                <img src="assets/images/credit-card.png">
+              </div>
+              <div class="text">
+                <p>{{payementForm.value.holder ? payementForm.value.holder : 'Titulaire'}}</p>
+                <p>{{ngCartNumber ? ngCartNumber : 'XXXX XXXX XXXX XXXX'}}</p>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="content content-table">
+            <table>
+              <tr>
+                <td><b>TOTAL (TVA incluse)</b></td>
+                <td class="text-right">{{cartPrice}}€</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <p class="text-center cgv">En validant ma commande, je déclare avoir pris connaissance et accepté sans
+        réserve :
+        les
+        <a target="_blank" href="/a-propos/condition-generales-de-vente"><b>CGV</b></a> et la <a
+          href="/a-propos/mentions-legales" target="_blank"><b>politique de confidentialité</b></a>
+      </p>
+      <div class="text-center">
+        <button type="submit" class="btn principal">Passer au paiement</button>
+      </div>
+    </form>
+  </div>
+</section>

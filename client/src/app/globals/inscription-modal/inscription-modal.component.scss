@@ -1,0 +1,41 @@
+a {
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+.isloading {
+  height: 135px
+}
+
+.col,
+.col-6 {
+  padding: 0 !important;
+  margin-left: 0 !important;
+  width: 96% !important;
+}
+
+// .flex-col .col input {
+//   width: 100% !important;
+// }
+
+.postalCode,
+.website,
+.confirmation {
+  margin-left: 30px;
+
+  input {
+    float: right;
+  }
+
+  small {
+    margin: 40px 0 0 4.5%;
+  }
+}
+
+@media screen and (max-width: 350px) and (min-width: 320px) {
+  #form-help {
+    font-size: 11px;
+  }
+
+}

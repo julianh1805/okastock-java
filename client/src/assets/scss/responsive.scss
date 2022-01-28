@@ -1,0 +1,751 @@
+@media screen and (min-width: 320px) {
+
+  .navbar {
+    max-width: 540px;
+    margin: auto !important;
+  }
+
+  img#card-img {
+    width: 100% !important;
+    height: 153.33px !important;
+    object-fit: cover;
+  }
+
+  img#card-img-business {
+    width: 100% !important;
+    height: 137px !important;
+  }
+}
+
+@media screen and (min-width: 380px) {
+
+  .products {
+    width: 102% !important;
+  }
+
+  .cart-menu {
+    margin: 4px 6px 0 3px !important;
+
+  }
+}
+
+@media screen and (min-width: 539px) {
+  .close-x {
+    display: none;
+  }
+
+  .product-detail {
+    .images img {
+      width: 60px !important;
+      height: 60px !important;
+      margin-right: 10px !important;
+    }
+  }
+
+  img#card-img {
+    width: 251px !important;
+    height: 251px !important;
+  }
+
+  img#card-img-business {
+    width: 246px !important;
+    height: 246px !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .cart-menu {
+    margin: 2px 7px 0 3px !important;
+  }
+
+  .notfound {
+    iframe {
+      width: 90% !important;
+    }
+  }
+
+  ngb-toast {
+    font-size: 14px !important;
+    width: 100% !important;
+    float: none !important;
+    margin-right: 0px !important
+  }
+
+  .product-detail {
+    .carrousel {
+      padding-right: 15px !important;
+    }
+
+    .desktop-date {
+      display: initial !important;
+      margin-top: 10 !important;
+      margin-bottom: 15px;
+
+      div,
+      p {
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  .navbar {
+    max-width: 720px;
+    margin: auto;
+    padding: 8px 0px !important;
+  }
+
+  .connecteduser-mobile,
+  #table-m {
+    display: none !important;
+  }
+
+  #dropdown2 {
+    .col-md-1 {
+      display: flex !important;
+    }
+  }
+
+  #table-td {
+
+    .body,
+    .head {
+      width: 100% !important;
+    }
+  }
+
+  .products {
+    a {
+      width: calc(33.3333% - 8px) !important;
+    }
+
+    img#card-img {
+      width: 236px !important;
+      height: 236px !important;
+    }
+
+    img#card-img-business {
+      width: 144px !important;
+      height: 144px !important;
+    }
+
+    .category-card {
+      width: calc(33.3333% - 11px) !important;
+    }
+  }
+
+  .company {
+    margin-bottom: -29px;
+  }
+
+  .company-card {
+    height: 276px !important;
+
+    .card-div,
+    .card-box {
+      height: 100% !important;
+    }
+  }
+
+  button {
+    font-size: 14px !important;
+  }
+
+  .business {
+    #business-products {
+      padding-left: 20px !important;
+      margin-top: 0px !important;
+
+    }
+
+    .content {
+      margin-top: 9px;
+    }
+  }
+
+  .userdata {
+    #user-products {
+      padding-left: 20px !important;
+      margin-top: 0px !important;
+
+    }
+
+    .content {
+      margin-top: 9px;
+    }
+  }
+
+  #map {
+    display: initial !important;
+  }
+
+  .contact {
+    .card {
+      margin-bottom: 0px !important;
+    }
+  }
+
+  .form-row {
+    input {
+      width: 96%;
+    }
+  }
+
+  .price {
+    margin-top: 15px;
+    margin-bottom: 8px;
+
+    p {
+      font-size: 32px !important;
+    }
+  }
+
+  #description-mobile {
+    display: none;
+  }
+
+  #description-desktop {
+    display: initial !important;
+  }
+
+  .products {
+    margin-top: 0 !important;
+  }
+
+  .date-product {
+    margin-top: 5px !important;
+  }
+
+  .buttons button {
+    font-size: 14px !important;
+  }
+
+  .category-box {
+    width: 50%;
+  }
+
+  img.mockup {
+    width: 73% !important;
+  }
+
+  .container {
+    padding: 0 !important;
+  }
+
+  .navbar-brand img {
+    width: 42px !important;
+  }
+
+  .fa-search {
+    font-size: 20px;
+  }
+
+  #search {
+
+    button,
+    input,
+    select {
+      font-size: 14px !important;
+      height: 41px !important;
+    }
+  }
+
+  #button2 {
+    font-size: 12px !important;
+  }
+
+
+  select.form-control.dark {
+    max-width: 121px;
+    font-size: 15px !important;
+    text-overflow: ellipsis;
+  }
+
+  .logo {
+    text-align: end !important;
+
+    .text-a {
+      text-align: right !important;
+    }
+
+    img {
+      width: 140px !important;
+    }
+  }
+
+  .card-box {
+    height: 363.98px !important;
+  }
+
+  .card-box#business-card {
+    height: 273.98px !important;
+  }
+
+}
+
+@media screen and (min-width: 960px) {
+  .navbar {
+    max-width: 928px;
+    margin: auto;
+  }
+
+  .cart-menu {
+    margin: 0px 11px 0 7px !important;
+  }
+
+  .cart-menu .fa {
+    font-size: 28px !important;
+    margin-top: 3px;
+  }
+
+  #table-td {
+
+    .body,
+    .head {
+      width: 100% !important;
+    }
+  }
+
+  .company-card {
+    height: 276px !important;
+    width: calc(25% - 8px) !important;
+
+    .card-div,
+    .card-box {
+      height: 100% !important;
+    }
+  }
+
+  .products {
+
+    a {
+      width: calc(25% - 8px) !important;
+    }
+
+    .category-card {
+      width: calc(25% - 11px) !important;
+    }
+
+    .card-title {
+      font-size: 17px !important;
+
+    }
+
+    .card-price {
+      font-size: 16px !important;
+
+    }
+
+    .card-text {
+      font-size: 14px !important;
+    }
+
+    img#card-img {
+      width: 228px !important;
+      height: 228px !important;
+    }
+
+    img#card-img-business {
+      width: 141px !important;
+      height: 141px !important;
+    }
+
+    .alert-stock {
+      font-size: 12px !important;
+    }
+  }
+
+  .company {
+
+    p,
+    li {
+      font-size: 14px !important;
+    }
+
+  }
+
+
+  .button-resp,
+  #input {
+    font-size: 16px !important;
+  }
+
+  #button2 {
+    font-size: 14px !important;
+  }
+
+  img.mockup {
+    width: 60% !important;
+    margin-right: 50px !important;
+  }
+
+  .container {
+    max-width: initial !important;
+    width: 960px !important;
+    padding: 0 1rem !important;
+  }
+
+  i.fas.fa-search.xs {
+    display: none !important;
+  }
+
+  .search-bar {
+    width: 380px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-expand-lg {
+    justify-content: space-between !important;
+  }
+
+  #table-td {
+
+    .body,
+    .head {
+      width: 95% !important;
+    }
+  }
+
+  .payment {
+    .form-box {
+      margin-bottom: 12px !important;
+    }
+  }
+
+  .card-box {
+    height: 357px !important;
+  }
+
+  img#card-img {
+    width: 222px !important;
+    height: 222px !important;
+  }
+
+  .payment {
+    .form-box {
+      padding-right: 46px !important;
+    }
+
+  }
+
+  .modal-style {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+
+    .modal-container {
+      background-color: white;
+      margin: auto;
+      margin-top: 8%;
+    }
+
+    form {
+      padding: 15px 20px;
+    }
+
+    .modal-x {
+      margin-top: 0 !important;
+    }
+  }
+}
+
+@media screen and (min-width: 1140px) {
+  .navbar {
+    max-width: 1108px;
+    margin: auto;
+  }
+
+  .products {
+    a {
+      width: calc(20% - 8px) !important;
+    }
+
+    a.business-card {
+      width: calc(25% - 8px) !important;
+    }
+
+    .category-card {
+      width: calc(20% - 11px) !important;
+    }
+
+    .card-box {
+      height: 346.59px !important;
+    }
+
+    img#card-img {
+      width: 217px !important;
+      height: 217px !important;
+    }
+
+    img#card-img-business {
+      width: 171.33px !important;
+      height: 171.33px !important;
+    }
+
+    .card-box#business-card {
+      height: 301.98px !important;
+    }
+  }
+
+  .company-card {
+    height: 276px !important;
+    width: calc(25% - 8px) !important;
+
+    .card-div,
+    .card-box {
+      height: 100% !important;
+    }
+  }
+
+  img.mockup {
+    width: 50% !important;
+  }
+
+  .container {
+    max-width: initial !important;
+    width: 1140px !important;
+    padding: 0 1rem !important;
+  }
+
+  .search-bar {
+    width: 450px !important;
+  }
+
+  #options-product {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 1240px) {
+  .navbar {
+    max-width: 1208px;
+    margin: auto;
+  }
+
+  .business,
+  .userdata {
+    .products {
+      .card-box {
+        height: 224.328px !important;
+      }
+    }
+  }
+
+  .products {
+
+    img#card-img {
+      width: 199px !important;
+      height: 199px !important;
+    }
+
+    img#card-img-business {
+      width: 148.33px !important;
+      height: 148.33px !important;
+    }
+  }
+
+  .cart-menu {
+    margin: 0px 21px 0 19px !important;
+  }
+
+  .container {
+    max-width: initial !important;
+    width: 1240px !important;
+    padding: 0 1rem !important;
+  }
+
+  .search-bar {
+    width: 500px !important;
+  }
+
+  .products {
+    a {
+      width: calc(16.6666% - 8px) !important;
+    }
+
+    a.business-card {
+      width: calc(20% - 8px) !important;
+    }
+
+    .category-card {
+      width: calc(16.6666% - 11px) !important;
+    }
+
+    .card-box {
+      height: 324.328px !important;
+    }
+
+    .card-box#business-card {
+      height: 281.98px !important;
+    }
+
+  }
+}
+
+
+@media screen and (max-width: 767px) and (min-width: 320px) {
+
+  .navbar,
+  .container {
+    max-width: 540px;
+    margin: auto;
+  }
+
+  .company {
+    margin-bottom: -20px;
+
+    .section {
+      padding: 36px 0;
+    }
+  }
+
+  .connecteduser-desktop {
+    display: none !important;
+  }
+
+  .spacer {
+    height: 60px !important;
+  }
+
+  div.app-banniere {
+    display: none;
+  }
+
+  .end {
+    li {
+      margin-bottom: 7px !important;
+    }
+
+    p {
+      margin-bottom: 8px !important;
+    }
+
+    .col-md-3.col-xs-12 {
+      margin-bottom: 30px;
+    }
+  }
+
+  .card-div {
+    height: calc(100% - 8px) !important;
+
+    .card-box {
+      height: 100% !important;
+    }
+  }
+
+}
+
+
+@media screen and (max-width: 959px) and (min-width: 320px) {
+  div.input-group.search-bar {
+    display: none;
+  }
+
+  .navbar-brand {
+    margin-right: 0 !important;
+  }
+
+}
+
+@media screen and (max-width: 787px) and (min-width: 320px) {
+  #business-products {
+    margin-left: -2px;
+  }
+}
+
+@media screen and (max-width: 991px) and (min-width: 320px) {
+  .payment {
+    .form-box {
+      margin-bottom: 40px !important;
+    }
+  }
+
+  .modal-dialog {
+    overflow-y: initial !important;
+    margin: 0 !important
+  }
+
+  .modal-backdrop {
+    height: auto !important;
+    overflow-y: initial !important
+  }
+
+  ngb-modal-window,
+  .modal-open {
+    background-color: white;
+  }
+
+}
+
+
+@media screen and (max-width: 539px) and (min-width: 320px) {
+
+  .dropdown-menu {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    margin: 0px !important;
+    border: 0px;
+    width: 100vw !important;
+
+    .dropdown-list {
+      width: 85%;
+      margin: auto;
+      height: 100vh;
+
+      .close-x {
+        float: right;
+        margin-top: 10px;
+        margin-right: 12px;
+        margin-bottom: 20px;
+        font-size: 26px;
+        color: $primary-text;
+      }
+
+      .dropdown-item {
+        color: $primary-text;
+        margin-bottom: 10px;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .filter-box {
+    div.dropdown-list.dropdown-menu.show {
+      will-change: transform !important;
+      transform: translate(0px, 231px) !important;
+    }
+  }
+
+}
+
+@media screen and (max-width: 420px) and (min-width: 320px) {
+  button.button-resp.btn.secondary.auth {
+    display: none;
+  }
+
+  .cart-menu {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 969px) and (min-width: 959px) {
+  .container-fluid {
+    width: 104% !important;
+  }
+}
+
+@media screen and (max-width: 460px) and (min-width: 320px) {
+  .category-card p {
+    font-size: 18px !important;
+    line-height: 22px !important;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  #table-td {
+    display: none !important;
+  }
+
+  .contact {
+    margin-bottom: 0 !important;
+  }
+}

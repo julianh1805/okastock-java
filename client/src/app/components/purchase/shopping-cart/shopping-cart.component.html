@@ -1,0 +1,90 @@
+<section class="payment my-4">
+  <div class="container">
+    <h2 class="active">Panier</h2>
+    <h2> - Livraison</h2>
+    <h2> - Paiement</h2>
+    <div *ngIf="isLoading" class="isloading text-center mt-4">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div *ngIf="!isLoading" class="row mt-4">
+      <div class="message-cta" *ngIf="!products || notProducts">
+        <p>Vous n'avez pas de produits dans votre panier. Visitez une page détail d'un produit et cliquez sur "Ajouter
+          au
+          panier".</p>
+        <button class="btn principal" routerLink="/produits">Voir des produits</button>
+      </div>
+      <div *ngIf="!notProducts" id="table-td" class="col-12 col-lg-9 mb-4">
+        <div class="head">
+          <div class="row">
+            <div class="col-2">Produit</div>
+            <div class="col-3"></div>
+            <div class="col-2">Prix</div>
+            <div class="col-2">Quantité</div>
+            <div class="col-2">Prix total</div>
+            <div class="col-1"></div>
+          </div>
+        </div>
+        <div class="body" *ngFor="let product of products; index as i">
+          <div class="row">
+            <div class="col-2 img"><img [src]="product.images[0]"></div>
+            <div class="col-3 title">{{product.title}}</div>
+            <div class="col-2">{{product.unityPrice}}€</div>
+            <div class="col-2">{{product.quantity === 1 ? product.quantity + ' unité' : product.quantity + ' unités' }}
+            </div>
+            <div class="col-2">{{product.totalPrice}}€</div>
+            <div class="col-1">
+              <div class="delete-icon"
+                (click)="deleteProduct(product.title, product._id, i, product.quantity, product.price, deliveryCost)"><i
+                  class="fas fa-times"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!notProducts" id="table-m" class="col-12 mb-4">
+        <div class="body" *ngFor="let product of products; index as i">
+          <div class="row">
+            <div class="col-3 img"><img [src]="product.images[0]"></div>
+            <div class="col-5 title">
+              <p>{{product.title}}</p>
+            </div>
+            <div class="col-4 info">
+              <div class="delete-icon"
+                (click)="deleteProduct(product.title, product._id, i, product.quantity, product.price, deliveryCost)"><i
+                  class="fas fa-times"></i></div>
+              <div id="p">
+                <p>({{product.quantity === 1 ? product.quantity + ' unité' : product.quantity + ' unités' }})</p>
+                <p>{{product.price * product.quantity}}€</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!notProducts" class="payment-box h-100 col-12 col-lg-3">
+        <div class="content">
+          <h3 class="mb-3">Récapitulatif</h3>
+          <table id="table-price">
+            <tr>
+              <td><b>SOUS-TOTAL</b></td>
+              <td class="text-right">{{totalPrice}}€</td>
+            </tr>
+            <tr>
+              <td>Frais de livraison en
+                <select id="select" [(ngModel)]="deliveryCost" (change)="onChange(deliveryCost)">
+                  <option *ngFor="let option of deliveryOptions" [value]="option.value">
+                    {{option.type}}</option>
+                </select></td>
+              <td class="text-right">{{deliveryCost}}€</td>
+            </tr>
+            <tr>
+              <td><b>TOTAL (TVA comprise)</b></td>
+              <td class="text-right">{{totalCartPrice}}€</td>
+            </tr>
+          </table>
+          <div *ngIf="!isLoading" class="text-center mt-3">
+            <button type="submit" class="btn principal" (click)="validCart(deliveryCost)">Valider le panier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

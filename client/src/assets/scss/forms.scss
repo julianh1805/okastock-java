@@ -1,0 +1,98 @@
+form,
+.form-row {
+  .form-control {
+    border-radius: 4px;
+    color: $primary-text !important;
+    border-color: $secondary-text !important;
+    font-size: 12px !important;
+    font-weight: 300 !important;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(226, 232, 235, .25) !important;
+    }
+  }
+
+  label {
+    font-size: 14px;
+    color: $primary-theme-dark;
+  }
+
+  .message {
+    min-height: 100px;
+  }
+
+  select {
+    height: 32px;
+  }
+
+  .custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: $primary-theme-dark;
+    background-color: $primary-theme-dark;
+    box-shadow: 0 0 0 0.2rem rgba(0, 84, 99, .25) !important;
+  }
+
+  .custom-switch label {
+    color: $primary-text;
+    font-size: 12px;
+    padding-top: 3px;
+  }
+
+  .file {
+    label {
+      color: $primary-text;
+      font-size: 12px;
+      margin-right: 4px;
+    }
+
+    #upload-photo {}
+
+    input {
+      color: $primary-text;
+      font-size: 12px;
+    }
+  }
+
+  .text-muted {
+    color: red !important;
+    font-weight: 200;
+  }
+
+  .is-invalid {
+    border: 1px solid red !important;
+  }
+
+  .user-image {
+    width: 36px;
+    height: 36px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .form-group.file {
+    display: flex;
+    align-items: center;
+
+    .label-file {
+      cursor: pointer;
+      color: $primary-theme;
+      margin-bottom: 0 !important;
+    }
+
+    .label-file:hover {
+      color: $secondary-theme;
+    }
+
+    .input-file {
+      display: none;
+    }
+  }
+
+  .custom-control-label {
+    a {
+      color: $primary-theme-dark;
+      text-decoration: none;
+    }
+  }
+}

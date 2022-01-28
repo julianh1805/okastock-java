@@ -1,0 +1,151 @@
+<section class="inscription modal-style">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 modal-container">
+        <div *ngIf="isLoading" class="isloading text-center mt-4">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+        <form *ngIf="!isLoading" [formGroup]="inscriptionForm" (ngSubmit)="onSubmit(inscriptionForm)">
+          <div class="text-right mt-3 modal-x">
+            <img (click)="close()" src="assets/images/close.png" width="20px" alt="Logo Okastock">
+          </div>
+          <div class="modal-out">
+            <p>Déjà inscrit ? </p><a class="font-weight-normal" (click)="switchToConnexion()">Connectez-vous</a>
+          </div>
+          <hr>
+          <h2>S'inscrire</h2>
+          <div class="form-group">
+            <input type="text" class="form-control" id="text" placeholder="Entreprise*" formControlName="name"
+              [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.name.valid }">
+            <small *ngIf="inscriptionForm.controls.name.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="number" placeholder="Siret*" maxlength="14"
+              formControlName="siret"
+              [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.siret.valid || siretError }"
+              onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37 ? true : !isNaN(Number(event.key))">
+            <small *ngIf="inscriptionForm.controls.siret.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+            <small
+              *ngIf="inscriptionForm.controls.siret.value !== '' && !inscriptionForm.controls.siret.valid && submitted && inscriptionForm.value.siret.length < 14"
+              id="form-help" class="form-text text-muted">Le Siret doit contenir 14 chiffres.</small>
+            <small
+              *ngIf="inscriptionForm.controls.siret.value !== '' && !inscriptionForm.controls.siret.valid && submitted && inscriptionForm.value.siret.length == 14"
+              id="form-help" class="form-text text-muted">Le Siret doit contenir uniquement des chiffres et peut pas
+              commencer par le nombre 0.</small>
+            <small *ngIf="siretError" id="form-help" class="form-text text-muted">{{ siretError }}</small>
+          </div>
+          <div class="row flex-col mb-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Ville*" formControlName="city"
+                [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.city.valid }">
+              <small *ngIf="inscriptionForm.controls.city.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="inscriptionForm.controls.city.value !== '' && !inscriptionForm.controls.city.valid && submitted"
+                id="form-help" class="form-text text-muted">La ville doit contenir uniquement des caracteres.</small>
+            </div>
+            <div class="col postalCode">
+              <input type="text" class="form-control" placeholder="Code postal*" maxlength="5"
+                formControlName="postalCode"
+                onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37 ? true : !isNaN(Number(event.key))"
+                [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.postalCode.valid }">
+              <small *ngIf="inscriptionForm.controls.postalCode.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="inscriptionForm.controls.postalCode.value !== '' && !inscriptionForm.controls.postalCode.valid && submitted && inscriptionForm.value.postalCode.length < 5"
+                id="form-help" class="form-text text-muted">Le code postal doit contenir 5 chiffres.</small>
+              <small
+                *ngIf="inscriptionForm.controls.postalCode.value !== '' && !inscriptionForm.controls.postalCode.valid && submitted && inscriptionForm.value.postalCode.length == 5"
+                id="form-help" class="form-text text-muted">Le code postal doit contenir uniquement des
+                chiffres et peut pas commencer par 00.</small>
+            </div>
+          </div>
+          <div class="row flex-col mb-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Téléphone*" maxlength="10"
+                formControlName="telephone"
+                [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.telephone.valid }"
+                onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 9 || event.keyCode === 39 || event.keyCode === 37? true : !isNaN(Number(event.key))">
+              <small *ngIf="inscriptionForm.controls.telephone.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="inscriptionForm.controls.telephone.value !== '' && !inscriptionForm.controls.telephone.valid && submitted && inscriptionForm.value.telephone.length < 10"
+                id="form-help" class="form-text text-muted">Le téléphone doit être composé de 10 chiffres.</small>
+              <small
+                *ngIf="inscriptionForm.controls.telephone.value !== '' && !inscriptionForm.controls.telephone.valid && submitted && inscriptionForm.value.telephone.length === 10"
+                id="form-help" class="form-text text-muted">Le téléphone doit contenir uniquement des chiffres au format
+                06, 02 ou 07XXXXXXXX.</small>
+            </div>
+            <div class="col website">
+              <input type="text" class="form-control" placeholder="Site web*" formControlName="website"
+                [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.website.valid }">
+              <small *ngIf="inscriptionForm.controls.website.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="inscriptionForm.controls.website.value !== '' && !inscriptionForm.controls.website.valid && submitted"
+                id="form-help" class="form-text text-muted">Veuillez indiquer un site web valide.</small>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" id="email" placeholder="Email*" formControlName="email"
+              [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.email.valid || emailError}">
+            <small *ngIf="inscriptionForm.controls.email.value == '' && submitted" id="form-help"
+              class="form-text text-muted">Ce champ est obligatoire.</small>
+            <small
+              *ngIf="inscriptionForm.controls.email.value !== '' && !inscriptionForm.controls.email.valid && submitted"
+              id="form-help" class="form-text text-muted">Veuillez indiquer un email valide.</small>
+            <small *ngIf="emailError" id="form-help" class="form-text text-muted">{{ emailError }}</small>
+          </div>
+          <div class="row flex-col mb-3">
+            <div class="col">
+              <input type="password" class="form-control" placeholder="Mot de passe*"
+                appConfirmPasswordValidator="password" formControlName="password"
+                [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.password.valid }">
+              <small *ngIf="inscriptionForm.controls.password.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="inscriptionForm.controls.password.value !== '' && !inscriptionForm.controls.password.valid && submitted"
+                id="form-help" class="form-text text-muted">Le mot de passe doit faire au moins 6 caracteres.</small>
+              <app-pw-strength [passwordToCheck]="inscriptionForm.value.password"></app-pw-strength>
+            </div>
+            <div class="col confirmation">
+              <input type="password" class="form-control" placeholder="Confirmation*" formControlName="confirmPassword"
+                [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.confirmPassword.valid }">
+              <small *ngIf="inscriptionForm.controls.confirmPassword.value == '' && submitted" id="form-help"
+                class="form-text text-muted">Ce champ est obligatoire.</small>
+              <small
+                *ngIf="inscriptionForm.controls.confirmPassword.errors?.MatchPassword && submitted && inscriptionForm.controls.confirmPassword.value !== ''"
+                id="form-help" class="form-text text-muted">Les mots de passe ne sont pas identiques</small>
+            </div>
+          </div>
+          <div class="form-group file mb-0">
+            <label class="mb-0" for="upload-photo">Logo* :</label>
+            <label *ngIf="!userImage" for="file" class="label-file">Choisir une image</label>
+            <input id="file" class="input-file" type="file" (change)="onSelectedFile($event)"
+              accept="image/x-png,image/jpg,image/jpeg">
+            <img class="user-image" *ngIf="userImage" [src]="userImage">
+            <label *ngIf="userImage" for="file" class="ml-1 label-file">Changer image</label>
+          </div>
+          <small *ngIf="!inscriptionForm.controls.logo.valid && submitted" id="form-help"
+            class="form-text text-muted mt-0">Veuillez importer une photo de profil</small>
+          <small *ngIf="logoError" id="form-help" class="form-text text-muted mt-0">{{ logoError }}</small>
+          <div class="custom-control custom-switch mt-3">
+            <input type="checkbox" class="custom-control-input" id="custom-switch" formControlName="rgpd"
+              [ngClass]="{ 'is-invalid': submitted && !inscriptionForm.controls.rgpd.valid }">
+            <label class="custom-control-label" for="custom-switch">J’accepte la <a
+                href="https://okastock.herokuapp.com/#/a-propos/mentions-legales" target="_blank">politique de
+                confidentialité et les mentions légales</a> pour la sauvegarde de mes informations*</label>
+          </div>
+          <small *ngIf="!inscriptionForm.controls.rgpd.valid && submitted" id="form-help"
+            class="form-text text-muted">Vous devez
+            accepter la politique de confidentialité.</small>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn principal">S'inscrire</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,34 @@
+<div class="nav">
+  <a class="nav-a" routerLink="/mon-compte/produits">Produits</a>
+  <a class="nav-a ml-4 active">Favoris</a>
+</div>
+<div *ngIf="isLoading" class="isloading text-center mt-4">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+<div class="message-cta" *ngIf="!isLoading && !products || notProducts">
+  <p>Vous n'avez pas ajouté de produits aux favoris. Visitez une page détail d'un produit et cliquez sur "Ajouter aux
+    favoris".</p>
+  <button class="btn principal" routerLink="/produits">Voir des produits</button>
+</div>
+<div *ngIf="!isLoading && products || !notProducts" class="products">
+  <a id="card-href" class="business-card"
+    *ngFor="let product of products | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; index as i">
+    <div class="card-div">
+      <div id="business-card" class="card-box position-relative">
+        <div id="options-product">
+          <div (click)="updateOnWishlist(i)"><i class="fas fa-heart-broken"></i></div>
+        </div>
+        <img id="card-img-business" [src]="product.images[0]" alt="Card image cap">
+        <div class="card-body">
+          <div class="alert-stock" *ngIf="50 >= product.quantity">Dernières unités</div>
+          <h5 class="card-title">{{product.title}}</h5>
+          <p class="card-price">{{product.price}}€</p>
+          <p id="business-card" class="card-text">{{product.description}}</p>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<ngb-pagination *ngIf="!isLoading && productsLength != 0 || !notProducts" [(page)]="page" [pageSize]="pageSize"
+  [collectionSize]="productsLength">
+</ngb-pagination>

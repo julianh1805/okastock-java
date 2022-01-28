@@ -1,0 +1,68 @@
+@media screen and (min-width: 960px) {
+  #label {
+    font-size: 14px !important;
+    padding: 8px 12px !important;
+  }
+}
+
+#label {
+  padding: 6px 12px;
+}
+
+.row.flex-col {
+
+  .expiration {
+    padding: 0;
+    display: flex;
+    align-items: baseline;
+
+    select {
+      width: 42%;
+      height: 100%;
+    }
+
+    p {
+      margin: 0 5px;
+    }
+  }
+
+  .crypto {
+    padding: 0;
+
+    #form-help {
+      padding-top: 37px;
+    }
+  }
+
+}
+
+form {
+  select {
+    border-radius: 4px;
+    border: 1px solid #E2E8EB;
+    background-color: white;
+    font-size: 14px;
+    color: #6C828C;
+    text-align: center;
+    font-weight: 200;
+    height: 35px;
+    max-height: 35px;
+  }
+
+  .cgv {
+    margin: 30px 0;
+  }
+}
+
+a {
+  color: #005463;
+
+  &:hover {
+    color: #005463;
+    text-decoration: none !important;
+  }
+}
+
+.content-table {
+  padding-bottom: 8px !important
+}

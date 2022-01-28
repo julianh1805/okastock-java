@@ -1,0 +1,36 @@
+  <div class="nav">
+    <a class="nav-a active">Produits</a>
+    <a class="nav-a ml-4" routerLink="/mon-compte/favoris">Favoris</a>
+  </div>
+  <div class="message-cta" *ngIf="notProducts">
+    <p>Vous n'avez ajouté aucun produit à votre pour l'instant.</p>
+    <button class="btn principal" routerLink="/deposer-une-annonce">Ajouter un produit</button>
+  </div>
+  <div *ngIf="products || !notProducts" class="products ml-0">
+    <a id="card-href" class="business-card"
+      *ngFor="let product of products | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+      <div class="card-div">
+        <div id="business-card" class="card-box position-relative" [ngClass]="{
+          'empty-quantity':product.quantity === 0
+        }">
+          <div id="options-product">
+            <div (click)="editProduct(product._id)" class="edit-icon"><i class="fas fa-pen"></i></div>
+            <div (click)="deleteProduct(product)" class="delete-icon ml-1"><i class="fas fa-times"></i></div>
+          </div>
+          <img id="card-img-business" [src]="product.images[0]" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{{product.title}}</h5>
+            <p class="card-price" [ngClass]="{
+              'empty-quantity':product.quantity === 0
+            }">
+              {{product.quantity === 1 ? product.quantity + ' unité' : product.quantity + ' unités' }}
+            </p>
+            <p id="business-card" class="card-text">{{product.description}}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <ngb-pagination *ngIf="productsLength != 0 || !notProducts" [(page)]="page" [pageSize]="pageSize"
+    [collectionSize]="productsLength">
+  </ngb-pagination>

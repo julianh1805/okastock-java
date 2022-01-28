@@ -1,0 +1,124 @@
+@import '../../../variables.scss';
+
+form {
+  width: 100%;
+}
+
+.isloading {
+  margin: auto;
+}
+
+.col-lg-9 {
+  margin: auto !important;
+}
+
+.form.row {
+  .col-6 {
+    padding: 0px;
+    max-width: 48% !important;
+  }
+}
+
+.annonce {
+  .custom-file {
+    height: 80px;
+
+    input,
+    label {
+      height: 100%;
+    }
+
+    .custom-file-label {
+      color: #005463;
+      text-align: center;
+      border-style: dashed;
+      border-color: #005463;
+
+      &::after {
+        display: none
+      }
+
+      i {
+        font-size: 30px;
+        margin-top: 19px;
+      }
+    }
+  }
+
+  .images {
+    margin-top: 10px;
+
+    .image {
+      position: relative;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      display: inline-block;
+
+      #options-product {
+        position: absolute;
+        left: 6px;
+        top: 6px;
+
+        div {
+          width: 17px;
+          height: 17px;
+          border-radius: 3px;
+          color: white;
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .delete-icon {
+          background-color: $delete-color;
+          transition: 0.15s;
+          font-size: 13px;
+          cursor: pointer;
+
+          &:hover {
+            transition: 0.15s;
+            background-color: $delete-color-hover;
+
+          }
+        }
+
+      }
+
+      img {
+        width: 56px;
+        height: 56px;
+        border-radius: 4px;
+        object-fit: cover;
+
+      }
+
+      &:hover {
+        #options-product {
+          display: flex !important;
+        }
+      }
+    }
+  }
+
+  .ad-price {
+    input {
+      margin-right: 5px;
+
+    }
+
+    span {
+      margin-top: 4px;
+      color: #6C828C;
+    }
+  }
+}
+
+#options-product {
+  position: absolute;
+  left: 6px;
+  top: 4px;
+
+  img {
+    width: 20px;
+  }
+}
