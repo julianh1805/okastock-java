@@ -26,7 +26,7 @@ class CategorieControllerTest {
     @Sql("/categorie-data.sql")
     void getCategoryByNom() throws Exception {
         String categorie = "meubles";
-        mockMvc.perform(get(this.URI + "/" + categorie))
+        mockMvc.perform(get(URI + "/" + categorie))
                 .andExpect(jsonPath("$.nom", is(categorie)));
     }
 }
