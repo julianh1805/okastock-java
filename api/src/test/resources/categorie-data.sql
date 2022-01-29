@@ -1,0 +1,1 @@
+insert into categorie (nom, id) values ('meubles', default);
