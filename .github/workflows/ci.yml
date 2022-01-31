@@ -9,7 +9,7 @@ on:
 jobs:
   build-angular:
     name: Build front (Angular app)
-    runs-on: ubuntu latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node_version: [12.x]
@@ -19,7 +19,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node_version }}
-      - name: npm install and npm run build
+      - name: npm install and npm run build (dev)
         run: |
+          cd client
           npm install
           npm run build
