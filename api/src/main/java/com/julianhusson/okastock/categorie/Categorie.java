@@ -18,11 +18,11 @@ import java.util.UUID;
 public class Categorie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     @ColumnDefault("random_uuid()")
+    @Column(unique = true)
     @Type(type = "uuid-char")
     private UUID id;
 
-    @Column(name = "nom")
+    @Column(unique = true, updatable = false)
     private String nom;
 }
