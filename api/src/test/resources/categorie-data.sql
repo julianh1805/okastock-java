@@ -1,1 +1,1 @@
-insert into categorie (nom, id) values ('meubles', default);
+insert into categorie (nom) values ('meubles');
