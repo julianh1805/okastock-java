@@ -2,10 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - develop
-  pull_request:
-    branches:
-      - master
+      - feature/*
 jobs:
   build:
     name: Build app
@@ -34,18 +31,3 @@ jobs:
           cd client
           npm install
           npm run build
-          - uses: actions/checkout@master
-      - if: success()
-        name: Send success notification to Discord
-        uses: appleboy/discord-action@master
-        with:
-          webhook_id: ${{ secrets.WEBHOOK_ID }}
-          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          args: COOL ! La compilation a été un succès.
-      - if: failure()
-        name: Send failure notification to Discord
-        uses: appleboy/discord-action@master
-        with:
-          webhook_id: ${{ secrets.WEBHOOK_ID }}
-          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          args: AY ! Une erreur est survenue pendant la compilation.      
