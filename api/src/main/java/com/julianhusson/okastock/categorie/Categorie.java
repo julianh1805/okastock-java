@@ -1,28 +1,35 @@
 package com.julianhusson.okastock.categorie;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.julianhusson.okastock.produit.Produit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "categorie")
 public class Categorie implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ColumnDefault("random_uuid()")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator")
     @Column(unique = true)
-    @Type(type = "uuid-char")
+    @Type(type="org.hibernate.type.UUIDCharType")
     private UUID id;
 
     @Column(unique = true, updatable = false)
     private String nom;
+
+    @OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("categorie")
+    private Set<Produit> produits = new HashSet<>();
 }
