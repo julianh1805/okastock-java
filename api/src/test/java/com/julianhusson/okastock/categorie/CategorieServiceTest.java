@@ -1,13 +1,13 @@
 package com.julianhusson.okastock.categorie;
 
 import com.julianhusson.okastock.exception.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ class CategorieServiceTest {
     void itShouldFindByNom() {
         //Given
         String categorieName = "meubles";
-        Categorie categorie = new Categorie(UUID.randomUUID(), categorieName);
+        Categorie categorie = new Categorie(UUID.randomUUID(), categorieName, new HashSet<>());
         given(categorieRepository.findByNom(categorieName)).willReturn(Optional.of(categorie));
         //When
         Categorie categorie1 = underTest.findByNom(categorieName);
