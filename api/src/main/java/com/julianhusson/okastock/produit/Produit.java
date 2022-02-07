@@ -1,10 +1,9 @@
 package com.julianhusson.okastock.produit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.julianhusson.okastock.categorie.Categorie;
 import com.julianhusson.okastock.utils.Auditable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -14,7 +13,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,6 +45,7 @@ public class Produit extends Auditable implements Serializable{
     private int quantite;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "categorie_id")
+    @JsonIgnoreProperties("produits")
     private Categorie categorie;
 }

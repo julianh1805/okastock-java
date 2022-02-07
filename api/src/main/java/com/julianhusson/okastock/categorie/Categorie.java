@@ -1,5 +1,7 @@
 package com.julianhusson.okastock.categorie;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.julianhusson.okastock.produit.Produit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Entity
@@ -26,4 +28,8 @@ public class Categorie implements Serializable {
 
     @Column(unique = true, updatable = false)
     private String nom;
+
+    @OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("categorie")
+    private Set<Produit> produits = new HashSet<>();
 }

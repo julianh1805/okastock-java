@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-class ProduitControllerTest {
+class CategorieControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -24,9 +24,10 @@ class ProduitControllerTest {
 
     @Test
     @Sql("/categorie-data.sql")
-    void getCategoryByNom() throws Exception {
+    void itShouldGetCategoryByNom() throws Exception {
         String categorie = "meubles";
         mockMvc.perform(get(URI + "/" + categorie))
-                .andExpect(jsonPath("$.nom", is(categorie)));
+                .andExpect(jsonPath("$.nom").value(categorie))
+                .andExpect(jsonPath("$.produits").isArray());
     }
 }

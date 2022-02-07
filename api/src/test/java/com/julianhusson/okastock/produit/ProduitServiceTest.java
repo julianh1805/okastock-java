@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ class ProduitServiceTest {
         UUID produitId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
         given(produitRepository.findById(produitId)).willReturn(
                 Optional.of(new Produit(produitId, "Titre", "Petite description", 10.27, 8,
-                        new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles"))));
+                        new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles",new HashSet<>()))));
         //When
         Produit produit = underTest.getById(produitId);
         //Then
@@ -61,10 +62,11 @@ class ProduitServiceTest {
     @Test
     void itShouldAdd() {
         //Given
+        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>());
         Produit produitToAdd = new Produit(UUID.randomUUID(), null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles"));
+                categorie);
         //When
-        underTest.add(produitToAdd);
+        underTest.add(produitToAdd, categorie.getNom());
         //Then
         ArgumentCaptor<Produit> produitArgumentCaptor =
                 ArgumentCaptor.forClass(Produit.class);
@@ -75,12 +77,13 @@ class ProduitServiceTest {
     @Test
     void itShouldThrowExceptionIfNotFindByCategorieWhenAdd() {
         //Given
+        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meuble moisi", new HashSet<>());
         Produit produitToAdd = new Produit(UUID.randomUUID(), null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meuble moisi"));
+                categorie);
         given(categorieService.findByNom(produitToAdd.getCategorie().getNom())).willThrow(
                 new NotFoundException("Aucune catégorie " + produitToAdd.getCategorie().getNom() + " n'existe."));
         //Then
-        assertThatThrownBy(() -> underTest.add(produitToAdd))
+        assertThatThrownBy(() -> underTest.add(produitToAdd, categorie.getNom()))
                 .hasMessageContaining("Aucune catégorie " + produitToAdd.getCategorie().getNom() + " n'existe.")
                 .isInstanceOf(NotFoundException.class);
         verify(produitRepository, never()).save(any());
@@ -91,7 +94,7 @@ class ProduitServiceTest {
         //Given
         UUID productId = UUID.randomUUID();
         Produit produitToUpdate = new Produit(productId, null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles"));
+                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>()));
         given(produitRepository.existsById(productId)).willReturn(true);
         //When
         underTest.update(produitToUpdate);
@@ -107,7 +110,7 @@ class ProduitServiceTest {
         //Given
         UUID fakeProduitId = UUID.randomUUID();
         Produit produitToUpdate = new Produit(fakeProduitId, null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles"));
+                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>()));
         given(produitRepository.existsById(fakeProduitId)).willThrow(
                 new NotFoundException("Aucun produit n'existe avec l'id " + fakeProduitId + "."));
         //Then
@@ -121,7 +124,7 @@ class ProduitServiceTest {
         //Given
         UUID productId = UUID.randomUUID();
         Produit produitToUpdate = new Produit(productId, null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meuble moisi"));
+                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meuble moisi",new HashSet<>()));
         given(produitRepository.existsById(productId)).willReturn(true);
         given(categorieService.findByNom(produitToUpdate.getCategorie().getNom())).willThrow(
                 new NotFoundException("Aucune catégorie " + produitToUpdate.getCategorie().getNom() + " n'existe."));
