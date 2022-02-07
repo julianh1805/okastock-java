@@ -1,29 +1,38 @@
 package com.julianhusson.okastock.produit;
 
+import com.julianhusson.okastock.mapstruct.dtos.ProduitDTO;
+import com.julianhusson.okastock.mapstruct.dtos.ProduitPostDTO;
+import com.julianhusson.okastock.mapstruct.mappers.ProduitMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/produits")
-public record ProduitController(ProduitService produitService) {
+@RequestMapping("api/v1/products")
+public record ProduitController(ProduitService produitService, ProduitMapper produitMapper) {
 
     @GetMapping
-    public ResponseEntity<List<Produit>> getProducts(){
-        return new ResponseEntity<>(this.produitService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<ProduitDTO>> getProducts(){
+        List<Produit> produits = this.produitService.getAll();
+        return new ResponseEntity<>(
+                produits.stream().map(produitMapper::produitToProduitDTO).toList(),
+                HttpStatus.OK);
     }
 
     @GetMapping("{produitId}")
-    public ResponseEntity<Produit> getProduct(@PathVariable UUID produitId){
-        return new ResponseEntity<>(this.produitService.getById(produitId), HttpStatus.OK);
+    public ResponseEntity<ProduitDTO> getProduct(@PathVariable UUID produitId){
+        return new ResponseEntity<>(
+                produitMapper.produitToProduitDTO(this.produitService.getById(produitId)),
+                HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity addProduct(@RequestBody Produit produit){
-        this.produitService.add(produit);
+    public ResponseEntity addProduct(@Valid @RequestBody ProduitPostDTO produitPostDTO){
+        this.produitService.add(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.getCategorie());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

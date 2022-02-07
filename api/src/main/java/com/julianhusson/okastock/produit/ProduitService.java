@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public record ProduitService(ProduitRepository produitRepository,
-                             CategorieService categorieService) {
+public record ProduitService(ProduitRepository produitRepository, CategorieService categorieService) {
 
     private static final String notFoundProduitError = "Aucun produit n'existe avec l'id ";
 
@@ -23,9 +22,8 @@ public record ProduitService(ProduitRepository produitRepository,
                 new NotFoundException(notFoundProduitError + productId + "."));
     }
 
-    public void add(Produit produit) {
-        Categorie categorie = categorieService.findByNom(produit.getCategorie().getNom());
-        produit.setCategorie(categorie);
+    public void add(Produit produit, String categorieName) {
+        produit.setCategorie(categorieService.findByNom(categorieName));
         produitRepository.save(produit);
     }
 
@@ -33,7 +31,7 @@ public record ProduitService(ProduitRepository produitRepository,
         if(produitRepository.existsById(produit.getId())){
             produit.setCategorie(categorieService.findByNom(produit.getCategorie().getNom()));
             produitRepository.save(produit);
-        } else{
+        } else {
             throw new NotFoundException(notFoundProduitError + produit.getId() + ".");
         }
     }

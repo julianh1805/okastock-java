@@ -20,7 +20,7 @@ public abstract class Auditable {
 
     @LastModifiedDate
     @Temporal(TemporalType.DATE)
-    private Date updateAt;
+    private Date updatedAt;
 
     @PrePersist
     public void prePersist(){
@@ -29,6 +29,6 @@ public abstract class Auditable {
 
     @PreUpdate
     public void preUpdate(){
-        this.updateAt = new Date();
+        this.updatedAt = new Date();
     }
 }
