@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
@@ -29,15 +31,15 @@ public class Produit extends Auditable implements Serializable{
     private UUID id;
 
     @Column
-    @NotNull(message = "Un titre est obligatoire.")
+    @NotBlank(message = "Un titre est obligatoire pour créer un produit.")
     private String titre;
 
     @Column
-    @NotNull(message = "Une description est obligatoire.")
+    @NotBlank(message = "Une description est obligatoire pour créer un produit.")
     private String description;
 
     @Column
-    @ColumnDefault("0.00")
+    @DecimalMin(value = "0.01", message = "Le prix doit être égale ou supérieur à 1 centime.")
     private double prix;
 
     @Column

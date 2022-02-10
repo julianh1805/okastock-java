@@ -8,12 +8,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class CategorieProduitDTO {
+public class CategorieProduitDTO extends AuditableDTO{
     private UUID id;
     private String titre;
     private String description;
     private double prix;
     private int quantite;
-    private Date createdAt;
-    private Date updatedAt;
 }

@@ -29,7 +29,7 @@ public class Categorie implements Serializable {
     @Column(unique = true, updatable = false)
     private String nom;
 
-    @OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("categorie")
     private Set<Produit> produits = new HashSet<>();
 }
