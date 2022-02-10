@@ -8,7 +8,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ProduitPostDTO {
-    private UUID id;
     private String titre;
     private String description;
     private double prix;
