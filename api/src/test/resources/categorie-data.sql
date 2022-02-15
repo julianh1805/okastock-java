@@ -1,1 +1,1 @@
-insert into categorie (id, nom) values ('e59ed17d-db7c-4d24-af6c-5154b3f72df0','meubles');
+INSERT INTO categorie VALUES ('e59ed17d-db7c-4d24-af6c-5154b3f72dff', 'meubles');

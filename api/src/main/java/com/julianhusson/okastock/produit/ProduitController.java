@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,14 +30,16 @@ public record ProduitController(ProduitService produitService, ProduitMapper pro
     }
 
     @PostMapping
-    public ResponseEntity addProduct(@Valid @RequestBody ProduitPostDTO produitPostDTO){
-        this.produitService.add(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.getCategorie());
+    public ResponseEntity addProduct(@RequestBody ProduitPostDTO produitPostDTO){
+        this.produitService.upSert(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.getCategorie());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("{produitId}")
-    public ResponseEntity<Produit> updateProduct(@PathVariable UUID produitId, @RequestBody Produit produit){
-        this.produitService.update(produit);
+    public ResponseEntity<Produit> updateProduct(@PathVariable UUID produitId, @RequestBody ProduitPostDTO produitPostDTO){
+        Produit produit = produitMapper.produitPostDTOToProduit(produitPostDTO);
+        produit.setId(produitId);
+        this.produitService.upSert(produit, produitPostDTO.getCategorie());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

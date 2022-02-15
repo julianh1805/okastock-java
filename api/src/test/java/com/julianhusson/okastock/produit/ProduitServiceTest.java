@@ -3,28 +3,43 @@ package com.julianhusson.okastock.produit;
 import com.julianhusson.okastock.categorie.Categorie;
 import com.julianhusson.okastock.categorie.CategorieService;
 import com.julianhusson.okastock.exception.NotFoundException;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.*;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
 class ProduitServiceTest {
 
     @InjectMocks private ProduitService underTest;
     @Mock private ProduitRepository produitRepository;
     @Mock private CategorieService categorieService;
+    @Autowired private Validator validator;
+
+    @Before
+    public void setUp() {
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
+    }
 
     @Test
     void itShouldGetAll(){
@@ -41,7 +56,7 @@ class ProduitServiceTest {
         UUID produitId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
         given(produitRepository.findById(produitId)).willReturn(
                 Optional.of(new Produit(produitId, "Titre", "Petite description", 10.27, 8,
-                        new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles",new HashSet<>()))));
+                        new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), "meubles",new HashSet<>()))));
         //When
         Produit produit = underTest.getById(produitId);
         //Then
@@ -62,11 +77,11 @@ class ProduitServiceTest {
     @Test
     void itShouldAdd() {
         //Given
-        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>());
-        Produit produitToAdd = new Produit(UUID.randomUUID(), null, "Petite description", 10.27, 8,
-                categorie);
+        String categorieName = "meubles";
+        Produit produitToAdd = new Produit(null, "Titre", "Petite description", 10.27, 8,
+                null);
         //When
-        underTest.add(produitToAdd, categorie.getNom());
+        underTest.upSert(produitToAdd, categorieName);
         //Then
         ArgumentCaptor<Produit> produitArgumentCaptor =
                 ArgumentCaptor.forClass(Produit.class);
@@ -75,29 +90,14 @@ class ProduitServiceTest {
     }
 
     @Test
-    void itShouldThrowExceptionIfNotFindByCategorieWhenAdd() {
-        //Given
-        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meuble moisi", new HashSet<>());
-        Produit produitToAdd = new Produit(UUID.randomUUID(), null, "Petite description", 10.27, 8,
-                categorie);
-        given(categorieService.findByNom(produitToAdd.getCategorie().getNom())).willThrow(
-                new NotFoundException("Aucune catégorie " + produitToAdd.getCategorie().getNom() + " n'existe."));
-        //Then
-        assertThatThrownBy(() -> underTest.add(produitToAdd, categorie.getNom()))
-                .hasMessageContaining("Aucune catégorie " + produitToAdd.getCategorie().getNom() + " n'existe.")
-                .isInstanceOf(NotFoundException.class);
-        verify(produitRepository, never()).save(any());
-    }
-
-    @Test
     void itShouldUpdate() {
         //Given
         UUID productId = UUID.randomUUID();
-        Produit produitToUpdate = new Produit(productId, null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>()));
+        String categorieName = "meubles";
+        Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", 10.27, 8,null);
         given(produitRepository.existsById(productId)).willReturn(true);
         //When
-        underTest.update(produitToUpdate);
+        underTest.upSert(produitToUpdate, categorieName);
         //Then
         ArgumentCaptor<Produit> produitArgumentCaptor =
                 ArgumentCaptor.forClass(Produit.class);
@@ -109,29 +109,68 @@ class ProduitServiceTest {
     void itShouldThrownAnExeceptionIfNotGetByIdWhenUpdate() {
         //Given
         UUID fakeProduitId = UUID.randomUUID();
-        Produit produitToUpdate = new Produit(fakeProduitId, null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>()));
+        String categorieName = "meubles";
+        Produit produitToUpdate = new Produit(fakeProduitId, "Titre", "Petite description", 10.27, 8, null);
         given(produitRepository.existsById(fakeProduitId)).willThrow(
                 new NotFoundException("Aucun produit n'existe avec l'id " + fakeProduitId + "."));
         //Then
-        assertThatThrownBy(() -> underTest.update(produitToUpdate))
+        assertThatThrownBy(() -> underTest.upSert(produitToUpdate, categorieName))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("Aucun produit n'existe avec l'id " + fakeProduitId + ".");
     }
 
     @Test
-    void itShouldThrownAnExeceptionIfNotFindCategorieByNameWhenUpdate() {
+    void itShouldThrowExceptionIfNotFindByCategorieWhenUpSert() {
         //Given
         UUID productId = UUID.randomUUID();
-        Produit produitToUpdate = new Produit(productId, null, "Petite description", 10.27, 8,
-                new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meuble moisi",new HashSet<>()));
+        String categorieName = "meuble moisi";
+        Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", 10.27, 8, null);
         given(produitRepository.existsById(productId)).willReturn(true);
-        given(categorieService.findByNom(produitToUpdate.getCategorie().getNom())).willThrow(
-                new NotFoundException("Aucune catégorie " + produitToUpdate.getCategorie().getNom() + " n'existe."));
+        given(categorieService.findByNom(categorieName)).willThrow(
+                new NotFoundException("Aucune catégorie " + categorieName + " n'existe."));
         //Then
-        assertThatThrownBy(() -> underTest.update(produitToUpdate))
+        assertThatThrownBy(() -> underTest.upSert(produitToUpdate, categorieName))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Aucune catégorie " + produitToUpdate.getCategorie().getNom() + " n'existe.");
+                .hasMessageContaining("Aucune catégorie " + categorieName + " n'existe.");
+    }
+
+    @Test
+    void itShouldThrowExceptionIfTitreIsEmptyWhenUpsert() {
+        //Given
+        UUID productId = UUID.randomUUID();
+        String categorieName = "meubles";
+        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
+        Produit produitToUpSert = new Produit(productId, "", "Petite description", 10.27, 8, null);
+        produitToUpSert.setCategorie(categorie);
+        Set<ConstraintViolation<Produit>> violations = validator.validate(produitToUpSert);
+        assertFalse(violations.isEmpty());
+        assertThat(violations.stream().findFirst().get().getMessage()).isEqualTo("Un titre est obligatoire pour créer un produit.");
+    }
+
+    @Test
+    void itShouldThrowExceptionIfDescriptionIsEmptyWhenUpsert() {
+        //Given
+        UUID productId = UUID.randomUUID();
+        String categorieName = "meubles";
+        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
+        Produit produitToUpSert = new Produit(productId, "Titre", "", 10.27, 8, null);
+        produitToUpSert.setCategorie(categorie);
+        Set<ConstraintViolation<Produit>> violations = validator.validate(produitToUpSert);
+        assertFalse(violations.isEmpty());
+        assertThat(violations.stream().findFirst().get().getMessage()).isEqualTo("Une description est obligatoire pour créer un produit.");
+    }
+
+    @Test
+    void itShouldThrowExceptionIfPriceIsEmptyWhenUpsert() {
+        //Given
+        UUID productId = UUID.randomUUID();
+        String categorieName = "meubles";
+        Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
+        Produit produitToUpSert = new Produit(productId, "Titre", "Description", 0.0, 8, null);
+        produitToUpSert.setCategorie(categorie);
+        Set<ConstraintViolation<Produit>> violations = validator.validate(produitToUpSert);
+        assertFalse(violations.isEmpty());
+        assertThat(violations.stream().findFirst().get().getMessage()).isEqualTo("Le prix doit être égale ou supérieur à 1 centime.");
     }
 
     @Test
