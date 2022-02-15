@@ -16,10 +16,12 @@ import java.util.Date;
 public abstract class Auditable {
     @CreatedDate
     @Temporal(TemporalType.DATE)
+    @Column(updatable = false, nullable = false)
     private Date createdAt;
 
     @LastModifiedDate
     @Temporal(TemporalType.DATE)
+    @Column(insertable = false)
     private Date updatedAt;
 
     @PrePersist
@@ -28,7 +30,5 @@ public abstract class Auditable {
     }
 
     @PreUpdate
-    public void preUpdate(){
-        this.updatedAt = new Date();
-    }
+    public void preUpdate(){ this.updatedAt = new Date(); }
 }
