@@ -1,7 +1,7 @@
-package com.julianhusson.okastock.mapstruct.mappers;
+package com.julianhusson.okastock.mapstruct.mapper;
 
-import com.julianhusson.okastock.mapstruct.dtos.ProduitDTO;
-import com.julianhusson.okastock.mapstruct.dtos.ProduitPostDTO;
+import com.julianhusson.okastock.mapstruct.dto.ProduitDTO;
+import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
 import com.julianhusson.okastock.produit.Produit;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
