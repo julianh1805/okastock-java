@@ -10,8 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.UUID;
 
 @Entity
@@ -36,18 +35,22 @@ public class Utilisateur extends Auditable {
 
     @Column(unique = true, updatable = false)
     @NotNull(message = "Un SIRET est obligatoire pour s'inscrire.")
+    @Pattern(regexp = "[0-9]{8}$", message = "Le SIRET peut uniquement contenir des numéros et doit faire 14 caractères.")
     private Long siret;
 
     @Column
     @NotNull(message = "Un code postal est obligatoire pour s'inscrire.")
+    @Pattern(regexp = "[0-9]{5}$", message = "Le code postal peut uniquement contenir des numéros et doit faire 5 caractères.")
     private int codePostal;
 
     @Column
     @NotNull(message = "Un telephone est obligatoire pour s'inscrire.")
+    @Pattern(regexp = "[0-9]{9}$", message = "Le numéro de téléphone peut uniquement contenir des numéros et doit faire 9 caractères.")
     private Long telephone;
 
     @Column
     @NotBlank(message = "Un site est obligatoire pour s'inscrire.")
+    @Pattern(regexp = "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\\\+~#?&//=]{2,256}\\\\.[a-z]{2,6}\\\\b([-a-zA-Z0-9@:%._\\\\+~#?&//=]*)\"", message = "Le site web est invalide. Le format devrait être http://www.siteweb.com")
     private String site;
 
     @Column
@@ -59,6 +62,7 @@ public class Utilisateur extends Auditable {
 
     @Column(unique = true)
     @NotBlank(message = "Un email est obligatoire pour s'inscrire.")
+    @Email(message = "L'email est invalide")
     private String email;
 
     @Column(nullable = false)

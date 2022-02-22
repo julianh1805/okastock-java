@@ -31,7 +31,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         authenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/api/v1/products", "/api/v1/products/*", "/api/v1/auth/register").permitAll()
+                .antMatchers("/api/v1/products", "/api/v1/users/**", "/api/v1/products/*", "/api/v1/auth/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout()
