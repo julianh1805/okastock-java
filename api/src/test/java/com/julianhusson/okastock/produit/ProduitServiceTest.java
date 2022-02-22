@@ -177,7 +177,7 @@ class ProduitServiceTest {
     void itShouldDelete() {
         //Given
         UUID productId = UUID.randomUUID();
-        given(produitRepository.existsById(productId)).willReturn(true);
+        given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit()));
         //When
         underTest.delete(productId);
         //Then
