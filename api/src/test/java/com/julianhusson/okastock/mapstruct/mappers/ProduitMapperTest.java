@@ -34,32 +34,27 @@ class ProduitMapperTest {
         //When
         ProduitDTO produitDTO = underTest.produitToProduitDTO(produit);
         //Then
-        assertThat(produitDTO.getId()).isEqualTo(produit.getId());
-        assertThat(produitDTO.getTitre()).isEqualTo(produit.getTitre());
-        assertThat(produitDTO.getDescription()).isEqualTo(produit.getDescription());
-        assertThat(produitDTO.getPrix()).isEqualTo(produit.getPrix());
-        assertThat(produitDTO.getQuantite()).isEqualTo(produit.getQuantite());
-        assertThat(produitDTO.getCategorie()).isEqualTo(produit.getCategorie().getNom());
-        assertThat(produitDTO.getCreatedAt()).isEqualTo(produit.getCreatedAt());
-        assertThat(produitDTO.getUpdatedAt()).isEqualTo(produit.getUpdatedAt());
+        assertThat(produitDTO.id()).isEqualTo(produit.getId());
+        assertThat(produitDTO.titre()).isEqualTo(produit.getTitre());
+        assertThat(produitDTO.description()).isEqualTo(produit.getDescription());
+        assertThat(produitDTO.prix()).isEqualTo(produit.getPrix());
+        assertThat(produitDTO.quantite()).isEqualTo(produit.getQuantite());
+        assertThat(produitDTO.categorie()).isEqualTo(produit.getCategorie().getNom());
+        assertThat(produitDTO.createdAt()).isEqualTo(produit.getCreatedAt());
+        assertThat(produitDTO.updatedAt()).isEqualTo(produit.getUpdatedAt());
     }
 
     @Test
     void produitPostDTOToProduit() {
         //Given
-        ProduitPostDTO produitPostDTO = new ProduitPostDTO();
-        produitPostDTO.setTitre("Titre");
-        produitPostDTO.setDescription("Petite description");
-        produitPostDTO.setPrix(10.27);
-        produitPostDTO.setQuantite(8);
-        produitPostDTO.setCategorie("meubles");
+        ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre", "Petite description", 10.27, 8, "meubles");
         //When
         Produit produit = underTest.produitPostDTOToProduit(produitPostDTO);
         //Then
-        assertThat(produit.getTitre()).isEqualTo(produitPostDTO.getTitre());
-        assertThat(produit.getDescription()).isEqualTo(produitPostDTO.getDescription());
-        assertThat(produit.getPrix()).isEqualTo(produitPostDTO.getPrix());
-        assertThat(produit.getQuantite()).isEqualTo(produitPostDTO.getQuantite());
+        assertThat(produit.getTitre()).isEqualTo(produitPostDTO.titre());
+        assertThat(produit.getDescription()).isEqualTo(produitPostDTO.description());
+        assertThat(produit.getPrix()).isEqualTo(produitPostDTO.prix());
+        assertThat(produit.getQuantite()).isEqualTo(produitPostDTO.quantite());
         assertThat(produit.getCategorie()).isNull();
 
     }

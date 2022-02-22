@@ -1,9 +1,6 @@
 package com.julianhusson.okastock.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,7 +19,7 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now()
         );
-        return new ResponseEntity<>(apiException, apiException.getHttpStatus());
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
     @ExceptionHandler(value = NotFoundException.class)
@@ -32,7 +29,7 @@ public class ApiExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 ZonedDateTime.now()
         );
-        return new ResponseEntity<>(apiException, apiException.getHttpStatus());
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)
@@ -42,7 +39,7 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now()
         );
-        return new ResponseEntity<>(apiException, apiException.getHttpStatus());
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
     @ExceptionHandler(value = InvalidFormatException.class)
@@ -52,15 +49,8 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now()
         );
-        return new ResponseEntity<>(apiException, apiException.getHttpStatus());
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
-    @AllArgsConstructor
-    @Getter
-    @ToString
-    public static class ApiException {
-        private final String message;
-        private final HttpStatus httpStatus;
-        private final ZonedDateTime zonedDateTime;
-    }
+    public record ApiException(String message,  HttpStatus httpStatus, ZonedDateTime zonedDateTime) {}
 }

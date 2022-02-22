@@ -52,12 +52,7 @@ class ProduitControllerTest {
 
     @Test
     void itShouldAddProduct() throws Exception {
-        ProduitPostDTO produitPostDTO = new ProduitPostDTO();
-        produitPostDTO.setTitre("Titre");
-        produitPostDTO.setDescription("Description");
-        produitPostDTO.setPrix(0.1);
-        produitPostDTO.setQuantite(19);
-        produitPostDTO.setCategorie("meubles");
+        ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre", "Description", 0.1, 19, "meubles");
         String json = mapper.writeValueAsString(produitPostDTO);
         mockMvc.perform(post(URI).content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -66,12 +61,7 @@ class ProduitControllerTest {
     @Test
     void itShouldUpdateProduct() throws Exception {
         String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
-        ProduitPostDTO produitPostDTO = new ProduitPostDTO();
-        produitPostDTO.setTitre("Titre update");
-        produitPostDTO.setDescription("Description update");
-        produitPostDTO.setPrix(1);
-        produitPostDTO.setQuantite(13);
-        produitPostDTO.setCategorie("meubles");
+        ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre update", "Description update", 1, 13, "meubles");
         String json = mapper.writeValueAsString(produitPostDTO);
         mockMvc.perform(put(URI + "/" + produitId).content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
