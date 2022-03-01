@@ -31,26 +31,24 @@ public class Utilisateur extends Auditable {
 
     @Column
     @NotBlank(message = "Un nom d'entreprise est obligatoire pour s'inscrire.")
+    @Size(min = 3, max = 30, message = "Le nom d'entreprise doit faire entre 3 et 30 caractères.")
     private String nom;
 
     @Column(unique = true, updatable = false)
     @NotNull(message = "Un SIRET est obligatoire pour s'inscrire.")
-    @Pattern(regexp = "[0-9]{8}$", message = "Le SIRET peut uniquement contenir des numéros et doit faire 14 caractères.")
     private Long siret;
 
     @Column
     @NotNull(message = "Un code postal est obligatoire pour s'inscrire.")
-    @Pattern(regexp = "[0-9]{5}$", message = "Le code postal peut uniquement contenir des numéros et doit faire 5 caractères.")
     private int codePostal;
 
     @Column
     @NotNull(message = "Un telephone est obligatoire pour s'inscrire.")
-    @Pattern(regexp = "[0-9]{9}$", message = "Le numéro de téléphone peut uniquement contenir des numéros et doit faire 9 caractères.")
     private Long telephone;
 
     @Column
     @NotBlank(message = "Un site est obligatoire pour s'inscrire.")
-    @Pattern(regexp = "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\\\+~#?&//=]{2,256}\\\\.[a-z]{2,6}\\\\b([-a-zA-Z0-9@:%._\\\\+~#?&//=]*)\"", message = "Le site web est invalide. Le format devrait être http://www.siteweb.com")
+    @Pattern(regexp = "^(http:\\/\\/|https:\\/\\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}\\.([a-z]+)?$", message = "Le site web est invalide. Le format devrait être http://(www).siteweb.com")
     private String site;
 
     @Column
@@ -58,11 +56,11 @@ public class Utilisateur extends Auditable {
     private String logo;
 
     @Column
-    private boolean rgpd;
+    private boolean rgpd = false;
 
     @Column(unique = true)
     @NotBlank(message = "Un email est obligatoire pour s'inscrire.")
-    @Email(message = "L'email est invalide")
+    @Email(message = "L'email est invalide", regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
     private String email;
 
     @Column(nullable = false)
