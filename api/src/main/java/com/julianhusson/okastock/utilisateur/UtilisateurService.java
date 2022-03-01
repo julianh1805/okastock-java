@@ -1,7 +1,9 @@
 package com.julianhusson.okastock.utilisateur;
 
 import com.julianhusson.okastock.exception.NotFoundException;
+import com.julianhusson.okastock.utils.GenericUtil;
 import com.julianhusson.okastock.utils.Role;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,12 +32,15 @@ public record UtilisateurService(UtilisateurRepository utilisateurRepository, Pa
     }
 
     public void register(Utilisateur utilisateur){
-            utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
-        System.out.println(Validator.validateEmail(utilisateur.getEmail()));
-            utilisateurRepository.save(utilisateur);
+        GenericUtil.checkUtilisateur(utilisateur);
+        this.checkIfUnique(utilisateur.getSiret(), utilisateur.getEmail());
+        utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+        utilisateurRepository.save(utilisateur);
     }
 
     public void update(Utilisateur utilisateur){
+        GenericUtil.checkUtilisateur(utilisateur);
+        this.checkIfUnique(utilisateur.getSiret(), utilisateur.getEmail());
         Utilisateur utilisateurToUpdate = this.getById(utilisateur.getId());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
         utilisateurRepository.save(utilisateur);
@@ -44,5 +49,10 @@ public record UtilisateurService(UtilisateurRepository utilisateurRepository, Pa
     public void delete(UUID userId){
         this.getById(userId);
         utilisateurRepository.deleteById(userId);
+    }
+
+    private void checkIfUnique(Long siret, String email){
+        if(utilisateurRepository.existsBySiret(siret)) throw new DuplicateKeyException("Il existe déjà un compte avec ce SIRET.");
+        if(utilisateurRepository.existsByEmail(email)) throw new DuplicateKeyException("Il existe déjà un compte avec cet email.");
     }
 }
