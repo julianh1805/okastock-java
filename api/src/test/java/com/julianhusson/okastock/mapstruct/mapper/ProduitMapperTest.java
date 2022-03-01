@@ -1,8 +1,8 @@
-package com.julianhusson.okastock.mapstruct.mappers;
+package com.julianhusson.okastock.mapstruct.mapper;
 
 import com.julianhusson.okastock.categorie.Categorie;
-import com.julianhusson.okastock.mapstruct.dtos.ProduitDTO;
-import com.julianhusson.okastock.mapstruct.dtos.ProduitPostDTO;
+import com.julianhusson.okastock.mapstruct.dto.ProduitDTO;
+import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
 import com.julianhusson.okastock.produit.Produit;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,14 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
 class ProduitMapperTest {
 

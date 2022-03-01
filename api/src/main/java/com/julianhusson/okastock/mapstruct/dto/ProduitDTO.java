@@ -1,4 +1,4 @@
-package com.julianhusson.okastock.mapstruct.dtos;
+package com.julianhusson.okastock.mapstruct.dto;
 
 import java.util.Date;
 import java.util.UUID;

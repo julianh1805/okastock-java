@@ -1,6 +1,6 @@
 package com.julianhusson.okastock.produit;
 
-import com.julianhusson.okastock.mapstruct.dtos.ProduitPostDTO;
+import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
