@@ -29,11 +29,8 @@ public record ProduitService(ProduitRepository produitRepository, CategorieServi
     }
 
     public void delete(UUID productId) {
-        if(produitRepository.existsById(productId)){
-          produitRepository.deleteById(productId);
-        } else{
-            throw new NotFoundException(getNotFoundProduitError(productId));
-        }
+        this.getById(productId);
+        produitRepository.deleteById(productId);
     }
 
     private String getNotFoundProduitError(UUID productId){

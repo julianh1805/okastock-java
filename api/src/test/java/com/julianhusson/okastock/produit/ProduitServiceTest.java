@@ -78,8 +78,7 @@ class ProduitServiceTest {
     void itShouldAdd() {
         //Given
         String categorieName = "meubles";
-        Produit produitToAdd = new Produit(null, "Titre", "Petite description", 10.27, 8,
-                null);
+        Produit produitToAdd = new Produit(null, "Titre", "Petite description", 10.27, 8, null);
         //When
         underTest.upSert(produitToAdd, categorieName);
         //Then
@@ -177,7 +176,7 @@ class ProduitServiceTest {
     void itShouldDelete() {
         //Given
         UUID productId = UUID.randomUUID();
-        given(produitRepository.existsById(productId)).willReturn(true);
+        given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit()));
         //When
         underTest.delete(productId);
         //Then

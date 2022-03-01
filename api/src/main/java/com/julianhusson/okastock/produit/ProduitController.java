@@ -1,8 +1,8 @@
 package com.julianhusson.okastock.produit;
 
-import com.julianhusson.okastock.mapstruct.dtos.ProduitDTO;
-import com.julianhusson.okastock.mapstruct.dtos.ProduitPostDTO;
-import com.julianhusson.okastock.mapstruct.mappers.ProduitMapper;
+import com.julianhusson.okastock.mapstruct.dto.ProduitDTO;
+import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
+import com.julianhusson.okastock.mapstruct.mapper.ProduitMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
