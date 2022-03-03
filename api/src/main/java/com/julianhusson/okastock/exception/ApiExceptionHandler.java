@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 import java.time.ZonedDateTime;
-import java.util.regex.PatternSyntaxException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {

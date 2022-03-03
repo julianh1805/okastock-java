@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RequestMapping("api/v1/users")
 @RestController
+@RequestMapping("api/v1/users")
 public record UtilisateurController(UtilisateurService utilisateurService, UtilisateurMapper utilisateurMapper) {
 
     @GetMapping("{userId}")
