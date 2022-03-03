@@ -31,11 +31,11 @@ public record UtilisateurService(UtilisateurRepository utilisateurRepository, Pa
         return utilisateurRepository.findById(id).orElseThrow(() -> new NotFoundException("Aucun utilisateur n'existe avec l'id " + id + "."));
     }
 
-    public void register(Utilisateur utilisateur){
+    public Utilisateur register(Utilisateur utilisateur){
         GenericUtil.checkUtilisateur(utilisateur);
         this.checkIfUnique(utilisateur.getSiret(), utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
-        utilisateurRepository.save(utilisateur);
+        return utilisateurRepository.save(utilisateur);
     }
 
     public void update(Utilisateur utilisateur){
