@@ -337,7 +337,10 @@ class UtilisateurServiceTest {
     void itShouldThrowExceptionIfEmailAlreadyExistsWhenRegister() {
         //Given
         String email = "test@test.com";
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9"), "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, email, "1234AZER");
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
+        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, email, "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(
+                Optional.of(utilisateur));
         given(utilisateurRepository.existsByEmail(email)).willReturn(true);
         //When
         assertThatThrownBy(() -> underTest.register(utilisateur))
@@ -395,7 +398,9 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfSiretLenghIsNot14WhenUpdate() {
         //Given
-        Utilisateur utilisateur = new Utilisateur(null, "Test", 123456789101L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
+        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 123456789101L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
         assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
@@ -405,11 +410,13 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfSiretAlreadyExistsWhenUpdate() {
         //Given
-        Long siret = 12345678910111L;
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9"), "Test", siret, 44400, 666666656L, "http://www.test.com", "-", true, "test2@test.com", "1234AZER");
-        given(utilisateurRepository.existsBySiret(siret)).willReturn(true);
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        Utilisateur utilisateurToUpdate = new Utilisateur(utilisateurId, "Test", 12345678910112L, 44400, 666666656L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
+        given(utilisateurRepository.existsBySiret(12345678910112L)).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur))
+        assertThatThrownBy(() -> underTest.update(utilisateurToUpdate))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec ce SIRET.");
     }
@@ -417,11 +424,13 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfEmailAlreadyExistsWhenUpdate() {
         //Given
-        String email = "test@test.com";
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9"), "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, email, "1234AZER");
-        given(utilisateurRepository.existsByEmail(email)).willReturn(true);
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        Utilisateur utilisateurToUpdate = new Utilisateur(utilisateurId, "Test", 12345678910112L, 44400, 666666656L, "http://www.test.com", "-", true, "test2@test.com", "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
+        given(utilisateurRepository.existsByEmail("test2@test.com")).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur))
+        assertThatThrownBy(() -> underTest.register(utilisateurToUpdate))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec cet email.");
     }
@@ -429,7 +438,11 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfCodePostalLenghIsNot5WhenUpdate() {
         //Given
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9"), "Test", 12345678910111L, 443, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9");
+        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 443, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(
+                Optional.of(utilisateur));
+        given(utilisateurRepository.existsByEmail("test@test.com")).willReturn(true);
         //When
         assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
@@ -439,7 +452,9 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfTelephoneLengthIsNot9WhenUpdate() {
         //Given
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 63356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4");
+        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 63356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
         Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
         assertThatThrownBy(() -> underTest.update(utilisateur))
@@ -450,7 +465,9 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfTelephoneLengthItDoesntStartWith6Or7WhenUpdate() {
         //Given
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4");
+        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER");
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
         Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
         assertThatThrownBy(() -> underTest.update(utilisateur))
