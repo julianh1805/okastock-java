@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,7 +30,7 @@ class ProduitControllerTest {
     @Test
     void itShouldGetProducts() throws Exception {
         mockMvc.perform(get(URI))
-                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isNotEmpty());
     }
@@ -40,14 +39,14 @@ class ProduitControllerTest {
     void itShouldGetProduct() throws Exception {
         String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
         mockMvc.perform(get(URI + "/" + produitId))
-                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(produitId))
                 .andExpect(jsonPath("$.titre").value("Titre"))
                 .andExpect(jsonPath("$.description").value("Petite description"))
                 .andExpect(jsonPath("$.prix").value(10.27))
                 .andExpect(jsonPath("$.quantite").value(8))
                 .andExpect(jsonPath("$.categorie").value("meubles"))
-                .andExpect(jsonPath("$.createdAt").value("2022-02-01"));
+                .andExpect(jsonPath("$.createdAt").exists());
     }
 
     @Test
