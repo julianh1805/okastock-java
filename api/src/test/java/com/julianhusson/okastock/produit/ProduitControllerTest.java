@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,7 +46,7 @@ class ProduitControllerTest {
                 .andExpect(jsonPath("$.prix").value(10.27))
                 .andExpect(jsonPath("$.quantite").value(8))
                 .andExpect(jsonPath("$.categorie").value("meubles"))
-                .andExpect(jsonPath("$.createdAt").value("2022-02-01"));
+                .andExpect(jsonPath("$.createdAt").exists());
     }
 
     @Test

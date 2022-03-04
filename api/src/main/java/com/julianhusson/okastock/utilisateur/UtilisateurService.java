@@ -33,17 +33,19 @@ public record UtilisateurService(UtilisateurRepository utilisateurRepository, Pa
 
     public Utilisateur register(Utilisateur utilisateur){
         GenericUtil.checkUtilisateur(utilisateur);
-        this.checkIfUnique(utilisateur.getSiret(), utilisateur.getEmail());
+        this.isSiretUnique(utilisateur.getSiret());
+        this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         return utilisateurRepository.save(utilisateur);
     }
 
-    public void update(Utilisateur utilisateur){
-        GenericUtil.checkUtilisateur(utilisateur);
-        this.checkIfUnique(utilisateur.getSiret(), utilisateur.getEmail());
+    public Utilisateur update(Utilisateur utilisateur){
         Utilisateur utilisateurToUpdate = this.getById(utilisateur.getId());
+        GenericUtil.checkUtilisateur(utilisateur);
+        if(!utilisateur.getEmail().equals(utilisateurToUpdate.getEmail())) this.isEmailUnique(utilisateur.getEmail());
+        if(!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
-        utilisateurRepository.save(utilisateur);
+        return utilisateurRepository.save(utilisateur);
     }
 
     public void delete(UUID userId){
@@ -51,8 +53,11 @@ public record UtilisateurService(UtilisateurRepository utilisateurRepository, Pa
         utilisateurRepository.deleteById(userId);
     }
 
-    private void checkIfUnique(Long siret, String email){
+    private void isSiretUnique(Long siret){
         if(utilisateurRepository.existsBySiret(siret)) throw new DuplicateKeyException("Il existe déjà un compte avec ce SIRET.");
+    }
+
+    private void isEmailUnique(String email){
         if(utilisateurRepository.existsByEmail(email)) throw new DuplicateKeyException("Il existe déjà un compte avec cet email.");
     }
 }

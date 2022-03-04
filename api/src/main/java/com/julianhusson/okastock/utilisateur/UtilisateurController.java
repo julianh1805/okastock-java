@@ -20,11 +20,11 @@ public record UtilisateurController(UtilisateurService utilisateurService, Utili
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId){
+    public ResponseEntity<UtilisateurDTO> updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId){
         Utilisateur utilisateur = utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO);
         utilisateur.setId(userId);
-        utilisateurService.update(utilisateur);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        UtilisateurDTO utilisateurDTO = utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur));
+        return new ResponseEntity<>(utilisateurDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")
