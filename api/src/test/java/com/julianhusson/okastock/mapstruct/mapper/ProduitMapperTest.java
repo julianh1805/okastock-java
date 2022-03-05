@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -29,14 +30,14 @@ class ProduitMapperTest {
     void produitToProduitDTO() {
         //Given
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>());
-        Produit produit = new Produit(UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0"), "Titre", "Petite description", 10.27, 8, categorie);
+        Produit produit = new Produit(UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0"), "Titre", "Petite description", new BigDecimal("10.27"), 8, categorie);
         //When
         ProduitDTO produitDTO = underTest.produitToProduitDTO(produit);
         //Then
         assertThat(produitDTO.id()).isEqualTo(produit.getId());
         assertThat(produitDTO.titre()).isEqualTo(produit.getTitre());
         assertThat(produitDTO.description()).isEqualTo(produit.getDescription());
-        assertThat(produitDTO.prix()).isEqualTo(produit.getPrix());
+        assertThat(produitDTO.prix()).isEqualTo(produit.getPrix().doubleValue());
         assertThat(produitDTO.quantite()).isEqualTo(produit.getQuantite());
         assertThat(produitDTO.categorie()).isEqualTo(produit.getCategorie().getNom());
         assertThat(produitDTO.createdAt()).isEqualTo(produit.getCreatedAt());
@@ -52,7 +53,7 @@ class ProduitMapperTest {
         //Then
         assertThat(produit.getTitre()).isEqualTo(produitPostDTO.titre());
         assertThat(produit.getDescription()).isEqualTo(produitPostDTO.description());
-        assertThat(produit.getPrix()).isEqualTo(produitPostDTO.prix());
+        assertThat(produit.getPrix().doubleValue()).isEqualTo(produitPostDTO.prix());
         assertThat(produit.getQuantite()).isEqualTo(produitPostDTO.quantite());
         assertThat(produit.getCategorie()).isNull();
 
