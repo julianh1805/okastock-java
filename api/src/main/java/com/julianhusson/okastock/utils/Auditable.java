@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @MappedSuperclass
@@ -15,20 +16,22 @@ import java.util.Date;
 @Setter
 public abstract class Auditable {
     @CreatedDate
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false, nullable = false)
-    private Date createdAt;
+    private Timestamp createdAt;
 
     @LastModifiedDate
     @Temporal(TemporalType.DATE)
     @Column(insertable = false)
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @PrePersist
     public void prePersist(){
-        this.createdAt = new Date();
+        this.createdAt = new Timestamp(new Date().getTime());
     }
 
     @PreUpdate
-    public void preUpdate(){ this.updatedAt = new Date(); }
+    public void preUpdate(){
+        this.updatedAt = new Timestamp(new Date().getTime());
+    }
 }
