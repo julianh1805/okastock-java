@@ -13,6 +13,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -40,7 +41,7 @@ public class Produit extends Auditable implements Serializable{
 
     @Column
     @DecimalMin(value = "0.01", message = "Le prix doit être égale ou supérieur à 1 centime.")
-    private double prix;
+    private BigDecimal prix;
 
     @Column
     @ColumnDefault("0")

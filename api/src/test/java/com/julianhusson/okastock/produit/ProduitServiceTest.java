@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -55,7 +56,7 @@ class ProduitServiceTest {
         //Given
         UUID produitId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
         given(produitRepository.findById(produitId)).willReturn(
-                Optional.of(new Produit(produitId, "Titre", "Petite description", 10.27, 8,
+                Optional.of(new Produit(produitId, "Titre", "Petite description", new BigDecimal("10.27"), 8,
                         new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), "meubles",new HashSet<>()))));
         //When
         Produit produit = underTest.getById(produitId);
@@ -78,7 +79,7 @@ class ProduitServiceTest {
     void itShouldAdd() {
         //Given
         String categorieName = "meubles";
-        Produit produitToAdd = new Produit(null, "Titre", "Petite description", 10.27, 8, null);
+        Produit produitToAdd = new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, null);
         //When
         underTest.upSert(produitToAdd, categorieName);
         //Then
@@ -93,7 +94,7 @@ class ProduitServiceTest {
         //Given
         UUID productId = UUID.randomUUID();
         String categorieName = "meubles";
-        Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", 10.27, 8,null);
+        Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8,null);
         given(produitRepository.existsById(productId)).willReturn(true);
         //When
         underTest.upSert(produitToUpdate, categorieName);
@@ -109,7 +110,7 @@ class ProduitServiceTest {
         //Given
         UUID fakeProduitId = UUID.randomUUID();
         String categorieName = "meubles";
-        Produit produitToUpdate = new Produit(fakeProduitId, "Titre", "Petite description", 10.27, 8, null);
+        Produit produitToUpdate = new Produit(fakeProduitId, "Titre", "Petite description", new BigDecimal("10.27"), 8, null);
         given(produitRepository.existsById(fakeProduitId)).willThrow(
                 new NotFoundException("Aucun produit n'existe avec l'id " + fakeProduitId + "."));
         //Then
@@ -123,7 +124,7 @@ class ProduitServiceTest {
         //Given
         UUID productId = UUID.randomUUID();
         String categorieName = "meuble moisi";
-        Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", 10.27, 8, null);
+        Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8, null);
         given(produitRepository.existsById(productId)).willReturn(true);
         given(categorieService.findByNom(categorieName)).willThrow(
                 new NotFoundException("Aucune catégorie " + categorieName + " n'existe."));
@@ -139,7 +140,7 @@ class ProduitServiceTest {
         UUID productId = UUID.randomUUID();
         String categorieName = "meubles";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
-        Produit produitToUpSert = new Produit(productId, "", "Petite description", 10.27, 8, null);
+        Produit produitToUpSert = new Produit(productId, "", "Petite description", new BigDecimal("10.27"), 8, null);
         produitToUpSert.setCategorie(categorie);
         Set<ConstraintViolation<Produit>> violations = validator.validate(produitToUpSert);
         assertFalse(violations.isEmpty());
@@ -152,7 +153,7 @@ class ProduitServiceTest {
         UUID productId = UUID.randomUUID();
         String categorieName = "meubles";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
-        Produit produitToUpSert = new Produit(productId, "Titre", "", 10.27, 8, null);
+        Produit produitToUpSert = new Produit(productId, "Titre", "", new BigDecimal("10.27"), 8, null);
         produitToUpSert.setCategorie(categorie);
         Set<ConstraintViolation<Produit>> violations = validator.validate(produitToUpSert);
         assertFalse(violations.isEmpty());
@@ -165,7 +166,7 @@ class ProduitServiceTest {
         UUID productId = UUID.randomUUID();
         String categorieName = "meubles";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
-        Produit produitToUpSert = new Produit(productId, "Titre", "Description", 0.0, 8, null);
+        Produit produitToUpSert = new Produit(productId, "Titre", "Description", new BigDecimal("0.0"), 8, null);
         produitToUpSert.setCategorie(categorie);
         Set<ConstraintViolation<Produit>> violations = validator.validate(produitToUpSert);
         assertFalse(violations.isEmpty());
