@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: okastock
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: localhost
+    port: 1025
+    username: username
+    password: password
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connection-timeout: 5000
+          timeout: 3000
+          write-timeout: 5000
+        sender: husson.j@yahoo.com
+        url: http://localhost:8080
+jwt:
+  secret: 2fae0752b9ca693115d51e06bd8976e4c4f8e6cca9d5288ef30dd89408fe998aa83728a18bf27fe37c8b89955b5c0e858440fc211578b737115107ffabc0122e
+scaleway:
+  bucket:
+    endpoint-url: https://s3.fr-par.scw.cloud
+    name: okastock-files-dev
+    region: fr-par
+  access-key: SCW581RM8PZ8K9ECB4FA
+  secret-key: 0ea39210-e624-4453-b184-1f177fa93560
