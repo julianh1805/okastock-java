@@ -37,17 +37,8 @@ class AuthControllerTest {
         String json = mapper.writeValueAsString(utilisateurPostDTO);
         mockMvc.perform(post(URI + "/register").content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.updatedAt").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.nom").value("Test"))
-                .andExpect(jsonPath("$.siret").value(11110987654321L))
-                .andExpect(jsonPath("$.codePostal").value(44000))
-                .andExpect(jsonPath("$.telephone").value(685487966L))
-                .andExpect(jsonPath("$.site").value("http://www.testf.com"))
-                .andExpect(jsonPath("$.logo").value("-"))
-                .andExpect(jsonPath("$.rgpd").isBoolean())
-                .andExpect(jsonPath("$.email").value("testf@test.com"));
+                .andExpect(jsonPath("$.accessToken").exists())
+                .andExpect(jsonPath("$.refreshToken").exists());
     }
 
     @Test
