@@ -27,7 +27,7 @@ public class Produit extends Auditable implements Serializable{
     @GenericGenerator(
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     @Type(type="org.hibernate.type.UUIDCharType")
     private UUID id;
 

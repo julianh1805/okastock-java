@@ -6,14 +6,25 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.experimental.UtilityClass;
 
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @UtilityClass
 public class TokenGenerator {
 
+    public Map<String, String> generateTokens(String email, List<String> authorities, String issuer){
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken(email, authorities, issuer));
+        tokens.put("refreshToken", refreshToken(email, issuer));
+        return tokens;
+    }
+
     public String accessToken(String email, List<String> authorities, String issuer) {
         Algorithm algorithm = Algorithm.HMAC256("secret");
+        if(authorities == null){
+            authorities = new ArrayList<>();
+            authorities.add(Role.USER.toString());
+        }
         return JWT.create()
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
@@ -37,7 +48,6 @@ public class TokenGenerator {
     public DecodedJWT decodeToken(String token){
         Algorithm algorithm = Algorithm.HMAC256("secret");
         JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decodedToken = verifier.verify(token);
-        return decodedToken;
+        return verifier.verify(token);
     }
 }

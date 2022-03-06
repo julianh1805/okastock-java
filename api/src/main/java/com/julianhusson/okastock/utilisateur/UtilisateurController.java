@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -20,11 +22,11 @@ public record UtilisateurController(UtilisateurService utilisateurService, Utili
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<UtilisateurDTO> updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId){
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId, HttpServletRequest request){
         Utilisateur utilisateur = utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO);
         utilisateur.setId(userId);
-        UtilisateurDTO utilisateurDTO = utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur));
-        return new ResponseEntity<>(utilisateurDTO, HttpStatus.OK);
+        Map<String, String> tokens = utilisateurService.update(utilisateur, request.getRequestURL().toString());
+        return new ResponseEntity<>(tokens, HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")

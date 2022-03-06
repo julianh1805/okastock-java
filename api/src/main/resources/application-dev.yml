@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: okastock
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
