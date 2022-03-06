@@ -41,9 +41,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         User user = (User)authResult.getPrincipal();
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", TokenGenerator.accessToken(user.getUsername(), user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(), request.getRequestURL().toString()));
-        tokens.put("refreshToken", TokenGenerator.refreshToken(user.getUsername(), request.getRequestURL().toString()));
+        Map<String, String> tokens = TokenGenerator.generateTokens(user.getUsername(), user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(), request.getRequestURL().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }

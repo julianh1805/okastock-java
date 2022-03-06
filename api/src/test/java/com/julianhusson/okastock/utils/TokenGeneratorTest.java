@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -15,12 +13,26 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class TokenGeneratorTest {
 
     @Test
+    void itShouldGenerateTokens() {
+        //Given
+        String email = "test@test.com";
+        List<String> authorities = new ArrayList<>();
+        authorities.add(Role.USER.toString());
+        String issuer = "test/api/v1/auth/login";
+        //When
+        Map<String, String> tokens = TokenGenerator.generateTokens(email, authorities, issuer);
+        //Then
+        assertThat(tokens.get("accessToken")).isNotEmpty();
+        assertThat(tokens.get("refreshToken")).isNotEmpty();
+    }
+
+    @Test
     void itShouldGenerateAccessToken() {
         //Given
         String email = "test@test.com";
         List<String> authorities = new ArrayList<>();
         authorities.add(Role.USER.toString());
-        String issuer = "http://test/api/v1/auth/login";
+        String issuer = "test/api/v1/auth/login";
         Date date = new Date();
         Date expiresDate = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
         //When
@@ -36,7 +48,7 @@ class TokenGeneratorTest {
     @Test
     void itShouldGenerateRefreshToken() {
         String email = "test@test.com";
-        String issuer = "http://test/api/v1/auth/login";
+        String issuer = "test/api/v1/auth/login";
         Date date = new Date();
         Date expiresDate = new Date(System.currentTimeMillis() + 3600 * 60 * 1000);
         //When
