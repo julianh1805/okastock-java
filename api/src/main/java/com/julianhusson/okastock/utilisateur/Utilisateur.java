@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -20,13 +22,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Utilisateur extends Auditable implements Serializable {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     @Type(type="org.hibernate.type.UUIDCharType")
     private UUID id;
 

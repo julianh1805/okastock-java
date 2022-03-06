@@ -2,11 +2,13 @@ package com.julianhusson.okastock.utilisateur;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
+@EnableJpaAuditing
 @Sql( "/utilisateur-data.sql")
 @Transactional
 class UtilisateurControllerTest {
@@ -37,6 +40,8 @@ class UtilisateurControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(utilisateurId))
                 .andExpect(jsonPath("$.nom").value("Test"))
+                .andExpect(jsonPath("$.createdAt").exists())
+                .andExpect(jsonPath("$.updatedAt").value(IsNull.nullValue()))
                 .andExpect(jsonPath("$.siret").value(12345678910111L))
                 .andExpect(jsonPath("$.codePostal").value(44300L))
                 .andExpect(jsonPath("$.telephone").value(666666666L))
@@ -56,16 +61,8 @@ class UtilisateurControllerTest {
         mockMvc.perform(put(URI + "/" + utilisateurId).content(json).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(utilisateurId))
-                .andExpect(jsonPath("$.nom").value("Test 2"))
-                .andExpect(jsonPath("$.siret").value(22345678910111L))
-                .andExpect(jsonPath("$.codePostal").value(44200L))
-                .andExpect(jsonPath("$.telephone").value(666666662L))
-                .andExpect(jsonPath("$.site").value("http://www.test2.com"))
-                .andExpect(jsonPath("$.logo").value("-"))
-                .andExpect(jsonPath("$.rgpd").isBoolean())
-                .andExpect(jsonPath("$.email").value("test2@test.com"))
-                .andExpect(jsonPath("$.motDePasse").doesNotExist());
+                .andExpect(jsonPath("$.accessToken").exists())
+                .andExpect(jsonPath("$.refreshToken").exists());
     }
 
     @Test
