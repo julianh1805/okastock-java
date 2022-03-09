@@ -3,6 +3,7 @@ package com.julianhusson.okastock.utils;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
@@ -12,6 +13,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ExtendWith(SpringExtension.class)
 class TokenGeneratorTest {
 
+    @Autowired
+    private TokenGenerator underTest;
+
     @Test
     void itShouldGenerateTokens() {
         //Given
@@ -20,7 +24,7 @@ class TokenGeneratorTest {
         authorities.add(Role.USER.toString());
         String issuer = "test/api/v1/auth/login";
         //When
-        Map<String, String> tokens = TokenGenerator.generateTokens(email, authorities, issuer);
+        Map<String, String> tokens = underTest.generateTokens(email, authorities, issuer);
         //Then
         assertThat(tokens.get("accessToken")).isNotEmpty();
         assertThat(tokens.get("refreshToken")).isNotEmpty();
@@ -36,7 +40,7 @@ class TokenGeneratorTest {
         Date date = new Date();
         Date expiresDate = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
         //When
-        DecodedJWT decodedToken = TokenGenerator.decodeToken(TokenGenerator.accessToken(email, authorities, issuer));
+        DecodedJWT decodedToken = underTest.decodeToken(underTest.accessToken(email, authorities, issuer));
         //Then
         assertThat(decodedToken.getSubject()).isEqualTo(email);
         assertThat(decodedToken.getExpiresAt()).isCloseTo(expiresDate, 1000L);
@@ -52,7 +56,7 @@ class TokenGeneratorTest {
         Date date = new Date();
         Date expiresDate = new Date(System.currentTimeMillis() + 3600 * 60 * 1000);
         //When
-        DecodedJWT decodedToken = TokenGenerator.decodeToken(TokenGenerator.refreshToken(email, issuer));
+        DecodedJWT decodedToken = underTest.decodeToken(underTest.refreshToken(email, issuer));
         //Then
         assertThat(decodedToken.getSubject()).isEqualTo(email);
         assertThat(decodedToken.getExpiresAt()).isCloseTo(expiresDate, 1000L);

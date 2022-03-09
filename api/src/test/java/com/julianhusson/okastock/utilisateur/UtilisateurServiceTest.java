@@ -3,6 +3,7 @@ package com.julianhusson.okastock.utilisateur;
 import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.utils.Role;
+import com.julianhusson.okastock.utils.TokenGenerator;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,7 @@ class UtilisateurServiceTest {
     private UtilisateurService underTest;
     @Mock private UtilisateurRepository utilisateurRepository;
     @Mock private PasswordEncoder passwordEncoder;
+    @Mock private TokenGenerator tokenGenerator;
     @Autowired
     private Validator validator;
     private final String registerIssuer = "test/api/v1/auth/register";
