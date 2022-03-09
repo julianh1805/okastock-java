@@ -2,7 +2,6 @@ package com.julianhusson.okastock.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
