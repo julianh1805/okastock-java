@@ -12,3 +12,5 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
       show-sql: true
+jwt:
+  secret: test

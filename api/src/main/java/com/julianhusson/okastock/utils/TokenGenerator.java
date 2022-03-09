@@ -4,13 +4,16 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import lombok.experimental.UtilityClass;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@UtilityClass
+@Component
 public class TokenGenerator {
+
+    @Value("${jwt.secret}")
+    private String secret;
 
     public Map<String, String> generateTokens(String email, List<String> authorities, String issuer){
         Map<String, String> tokens = new HashMap<>();
@@ -20,7 +23,7 @@ public class TokenGenerator {
     }
 
     public String accessToken(String email, List<String> authorities, String issuer) {
-        Algorithm algorithm = Algorithm.HMAC256("secret");
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         if(authorities == null){
             authorities = new ArrayList<>();
             authorities.add(Role.USER.toString());
@@ -36,7 +39,7 @@ public class TokenGenerator {
     }
 
     public String refreshToken(String email, String issuer) {
-        Algorithm algorithm = Algorithm.HMAC256("secret");
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 60 * 1000))
@@ -46,7 +49,7 @@ public class TokenGenerator {
     }
 
     public DecodedJWT decodeToken(String token){
-        Algorithm algorithm = Algorithm.HMAC256("secret");
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         JWTVerifier verifier = JWT.require(algorithm).build();
         return verifier.verify(token);
     }
