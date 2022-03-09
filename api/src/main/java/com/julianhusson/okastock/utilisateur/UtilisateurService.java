@@ -6,7 +6,6 @@ import com.julianhusson.okastock.utils.Role;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +21,7 @@ import java.util.*;
 public class UtilisateurService implements UserDetailsService {
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenGenerator tokenGenerator;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -41,7 +41,7 @@ public class UtilisateurService implements UserDetailsService {
         this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateurRepository.save(utilisateur);
-        return TokenGenerator.generateTokens(utilisateur.getEmail(), null, issuer);
+        return tokenGenerator.generateTokens(utilisateur.getEmail(), null, issuer);
     }
 
     public Map<String, String> update(Utilisateur utilisateur, String issuer) {
@@ -51,7 +51,7 @@ public class UtilisateurService implements UserDetailsService {
         if (!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
         utilisateurRepository.save(utilisateur);
-        return TokenGenerator.generateTokens(utilisateur.getEmail(), null, issuer);
+        return tokenGenerator.generateTokens(utilisateur.getEmail(), null, issuer);
     }
 
     public void delete(UUID userId) {

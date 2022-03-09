@@ -1,6 +1,7 @@
 package com.julianhusson.okastock.security;
 
 import com.julianhusson.okastock.security.filter.AuthenticationFilter;
+import com.julianhusson.okastock.utils.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenGenerator tokenGenerator;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -27,7 +29,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean(), tokenGenerator);
         authenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
         http.csrf().disable();
         http.authorizeRequests()
