@@ -25,7 +25,7 @@ class TokenGeneratorTest {
         //Given
         String email = "test@test.com";
         List<String> authorities = new ArrayList<>();
-        authorities.add(Role.USER.toString());
+        authorities.add("ROLE_USER");
         String issuer = "test/api/v1/auth/login";
         //When
         Map<String, String> tokens = underTest.generateTokens(email, authorities, issuer);
@@ -39,7 +39,7 @@ class TokenGeneratorTest {
         //Given
         String email = "test@test.com";
         List<String> authorities = new ArrayList<>();
-        authorities.add(Role.USER.toString());
+        authorities.add("ROLE_USER");
         String issuer = "test/api/v1/auth/login";
         Date date = new Date();
         Date expiresDate = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
@@ -50,7 +50,7 @@ class TokenGeneratorTest {
         assertThat(decodedToken.getExpiresAt()).isCloseTo(expiresDate, 1000L);
         assertThat(decodedToken.getIssuedAt()).isCloseTo(date, 1000L);
         assertThat(decodedToken.getIssuer()).isEqualTo(issuer);
-        assertThat(decodedToken.getClaim("roles").asList(String.class).get(0)).isEqualTo(Role.USER.toString());
+        assertThat(decodedToken.getClaim("roles").asList(String.class).get(0)).isEqualTo("ROLE_USER");
     }
 
     @Test

@@ -24,10 +24,6 @@ public class TokenGenerator {
 
     public String accessToken(String email, List<String> authorities, String issuer) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
-        if(authorities == null){
-            authorities = new ArrayList<>();
-            authorities.add(Role.USER.toString());
-        }
         return JWT.create()
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
