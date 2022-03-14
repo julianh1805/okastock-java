@@ -12,6 +12,5 @@ public class GenericUtil {
         if(String.valueOf(utilisateur.getCodePostal()).length() != 5) throw new InvalidRegexException("Le code postal doit faire 5 caractères.");
         String telephone = String.valueOf(utilisateur.getTelephone());
         if(telephone.length() != 9 || !telephone.startsWith("6") && !telephone.startsWith("7")) throw new InvalidRegexException("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
-
     }
 }
