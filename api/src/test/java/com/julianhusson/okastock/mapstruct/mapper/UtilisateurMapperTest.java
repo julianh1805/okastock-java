@@ -47,7 +47,7 @@ class UtilisateurMapperTest {
     @Test
     void utilisateurToUtilisateurDTO() {
         //Given
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "https://test.com", "-", true, "test@test.com", "1234AZER");
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "https://test.com", "-", true, "test@test.com", "1234AZER", null);
         //When
         UtilisateurDTO utilisateurDTO = underTest.utilisateurToUtilisateurDTO(utilisateur);
         //Then

@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
+@Sql( "/role-data.sql")
 @Sql( "/utilisateur-data.sql")
 @Transactional
 class AuthControllerTest {
