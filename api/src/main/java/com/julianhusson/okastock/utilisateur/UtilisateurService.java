@@ -1,11 +1,13 @@
 package com.julianhusson.okastock.utilisateur;
 
 import com.julianhusson.okastock.exception.NotFoundException;
+import com.julianhusson.okastock.role.Role;
+import com.julianhusson.okastock.role.RoleRepository;
 import com.julianhusson.okastock.utils.GenericUtil;
-import com.julianhusson.okastock.utils.Role;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UtilisateurService implements UserDetailsService {
     private final UtilisateurRepository utilisateurRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenGenerator tokenGenerator;
 
@@ -27,7 +30,7 @@ public class UtilisateurService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur n'existe avec l'email " + email + "."));
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(Role.USER.toString()));
+        utilisateur.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getNom())));
         return new User(utilisateur.getEmail(), utilisateur.getMotDePasse(), authorities);
     }
 
@@ -40,8 +43,9 @@ public class UtilisateurService implements UserDetailsService {
         this.isSiretUnique(utilisateur.getSiret());
         this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+        utilisateur.getRoles().add(addRole("ROLE_USER"));
         utilisateurRepository.save(utilisateur);
-        return tokenGenerator.generateTokens(utilisateur.getEmail(), null, issuer);
+        return tokenGenerator.generateTokens(utilisateur.getEmail(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
     public Map<String, String> update(Utilisateur utilisateur, String issuer) {
@@ -56,7 +60,12 @@ public class UtilisateurService implements UserDetailsService {
 
     public void delete(UUID userId) {
         this.getById(userId);
+
         utilisateurRepository.deleteById(userId);
+    }
+
+    private Role addRole(String role) {
+        return roleRepository.findByNom(role).orElseThrow(() -> new NotFoundException("Aucun role " + role + " n'exsite."));
     }
 
     private void isSiretUnique(Long siret) {

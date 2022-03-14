@@ -1,6 +1,7 @@
 package com.julianhusson.okastock.utilisateur;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.utils.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -69,6 +73,9 @@ public class Utilisateur extends Auditable implements Serializable {
     @NotBlank(message = "Un mot de passe est obligatoire pour s'inscrire.")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String motDePasse;
+
+    @ManyToMany
+    private List<Role> roles = new ArrayList<>();
 
     //@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     //private List<Produit> produits;
