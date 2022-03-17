@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,7 @@ class ProduitControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test@test.com")
     void itShouldAddProduct() throws Exception {
         ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre", "Description", 0.1, 19, "meubles");
         String json = mapper.writeValueAsString(produitPostDTO);
@@ -58,6 +60,15 @@ class ProduitControllerTest {
     }
 
     @Test
+    void itShouldThrowForbiddenExceptionWhenAddProduct() throws Exception {
+        ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre", "Description", 0.1, 19, "meubles");
+        String json = mapper.writeValueAsString(produitPostDTO);
+        mockMvc.perform(post(URI).content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "test@test.com")
     void itShouldUpdateProduct() throws Exception {
         String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
         ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre update", "Description update", 1, 13, "meubles");
@@ -67,9 +78,26 @@ class ProduitControllerTest {
     }
 
     @Test
+    void itShouldThrowForbiddenExceptionWhenUpdateProduct() throws Exception {
+        String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
+        ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre update", "Description update", 1, 13, "meubles");
+        String json = mapper.writeValueAsString(produitPostDTO);
+        mockMvc.perform(put(URI + "/" + produitId).content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "test@test.com")
     void itShouldDeleteProduct() throws Exception {
         String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
         mockMvc.perform(delete(URI + "/" + produitId))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void itShouldThrowForbiddenExceptionWhenDeleteProduct() throws Exception {
+        String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
+        mockMvc.perform(delete(URI + "/" + produitId))
+                .andExpect(status().isUnauthorized());
     }
 }
