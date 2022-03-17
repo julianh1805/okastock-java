@@ -15,17 +15,17 @@ public class TokenGenerator {
     @Value("${jwt.secret}")
     private String secret;
 
-    public Map<String, String> generateTokens(String email, List<String> authorities, String issuer){
+    public Map<String, String> generateTokens(String id, List<String> authorities, String issuer){
         Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken(email, authorities, issuer));
-        tokens.put("refreshToken", refreshToken(email, issuer));
+        tokens.put("accessToken", accessToken(id, authorities, issuer));
+        tokens.put("refreshToken", refreshToken(id, issuer));
         return tokens;
     }
 
-    public String accessToken(String email, List<String> authorities, String issuer) {
+    public String accessToken(String id, List<String> authorities, String issuer) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
-                .withSubject(email)
+                .withSubject(id)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .withIssuedAt(new Date())
                 .withIssuer(issuer)
@@ -34,10 +34,10 @@ public class TokenGenerator {
 
     }
 
-    public String refreshToken(String email, String issuer) {
+    public String refreshToken(String id, String issuer) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
-                .withSubject(email)
+                .withSubject(id)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 60 * 1000))
                 .withIssuer(issuer)
                 .withIssuedAt(new Date())

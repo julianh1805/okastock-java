@@ -31,7 +31,7 @@ public class UtilisateurService implements UserDetailsService {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur n'existe avec l'email " + email + "."));
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         utilisateur.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getNom())));
-        return new User(utilisateur.getEmail(), utilisateur.getMotDePasse(), authorities);
+        return new User(utilisateur.getId().toString(), utilisateur.getMotDePasse(), authorities);
     }
 
     public Utilisateur getById(UUID id) {
@@ -45,17 +45,17 @@ public class UtilisateurService implements UserDetailsService {
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
         utilisateurRepository.save(utilisateur);
-        return tokenGenerator.generateTokens(utilisateur.getEmail(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
+        return tokenGenerator.generateTokens(utilisateur.getId().toString(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
-    public Map<String, String> update(Utilisateur utilisateur, String issuer) {
+    public Utilisateur update(Utilisateur utilisateur) {
         Utilisateur utilisateurToUpdate = this.getById(utilisateur.getId());
         GenericUtil.checkUtilisateur(utilisateur);
         if (!utilisateur.getEmail().equals(utilisateurToUpdate.getEmail())) this.isEmailUnique(utilisateur.getEmail());
         if (!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
-        utilisateurRepository.save(utilisateur);
-        return tokenGenerator.generateTokens(utilisateur.getEmail(), null, issuer);
+        utilisateur.setCreatedAt(utilisateurToUpdate.getCreatedAt());
+        return utilisateurRepository.save(utilisateur);
     }
 
     public void delete(UUID userId) {

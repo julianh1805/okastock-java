@@ -67,7 +67,7 @@ class UtilisateurServiceTest {
         //When
         UserDetails userDetails = underTest.loadUserByUsername(email);
         //Then
-        assertThat(userDetails.getUsername()).isEqualTo(email);
+        assertThat(userDetails.getUsername()).isEqualTo("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
         assertThat(userDetails.getPassword()).isEqualTo(motDePasse);
         assertThat(userDetails.getAuthorities().stream().findFirst().get().getAuthority()).isEqualTo("ROLE_USER");
     }
@@ -405,7 +405,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(
                 Optional.of(new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 666666666L, "https://test.com", "-", true, "test@test.com", "1234AZER", null)));
         //When
-        underTest.update(utilisateurToUpdate, updateIssuer);
+        underTest.update(utilisateurToUpdate);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToUpdate);
 
@@ -418,7 +418,7 @@ class UtilisateurServiceTest {
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 123456789101L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null);
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur, updateIssuer))
+        assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le SIRET doit faire 14 caracteres.");
     }
@@ -432,7 +432,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         given(utilisateurRepository.existsBySiret(12345678910112L)).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateurToUpdate, updateIssuer))
+        assertThatThrownBy(() -> underTest.update(utilisateurToUpdate))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec ce SIRET.");
     }
@@ -460,7 +460,7 @@ class UtilisateurServiceTest {
                 Optional.of(utilisateur));
         given(utilisateurRepository.existsByEmail("test@test.com")).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur, updateIssuer))
+        assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le code postal doit faire 5 caractères.");
     }
@@ -473,7 +473,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
         Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
-        assertThatThrownBy(() -> underTest.update(utilisateur, updateIssuer))
+        assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
@@ -486,7 +486,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
         Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
-        assertThatThrownBy(() -> underTest.update(utilisateur, updateIssuer))
+        assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }

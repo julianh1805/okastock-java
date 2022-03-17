@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,6 @@ class UtilisateurControllerTest {
     void itShouldGetUser() throws Exception {
         String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
         mockMvc.perform(get(URI + "/" + utilisateurId))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(utilisateurId))
                 .andExpect(jsonPath("$.nom").value("Test"))
@@ -53,22 +53,50 @@ class UtilisateurControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test@test.com")
     void itShouldUpdateUser() throws Exception {
         String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
         UtilisateurPostDTO utilisateurPostDTO =
                 new UtilisateurPostDTO("Test 2", 22345678910111L, 44200, 666666662L, "http://www.test2.com", "-", true, "test2@test.com", null);
         String json = mapper.writeValueAsString(utilisateurPostDTO);
         mockMvc.perform(put(URI + "/" + utilisateurId).content(json).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").exists())
-                .andExpect(jsonPath("$.refreshToken").exists());
+                .andExpect(jsonPath("$.id").value(utilisateurId))
+                .andExpect(jsonPath("$.nom").value("Test 2"))
+                .andExpect(jsonPath("$.createdAt").exists())
+                .andExpect(jsonPath("$.siret").value(22345678910111L))
+                .andExpect(jsonPath("$.codePostal").value(44200))
+                .andExpect(jsonPath("$.telephone").value(666666662))
+                .andExpect(jsonPath("$.site").value("http://www.test2.com"))
+                .andExpect(jsonPath("$.logo").value("-"))
+                .andExpect(jsonPath("$.rgpd").isBoolean())
+                .andExpect(jsonPath("$.email").value("test2@test.com"))
+                .andExpect(jsonPath("$.motDePasse").doesNotExist());
     }
 
     @Test
+    void itShouldThrowForbiddenExceptionWhenUpdateUser() throws Exception {
+        String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
+        UtilisateurPostDTO utilisateurPostDTO =
+                new UtilisateurPostDTO("Test 2", 22345678910111L, 44200, 666666662L, "http://www.test2.com", "-", true, "test2@test.com", null);
+        String json = mapper.writeValueAsString(utilisateurPostDTO);
+        mockMvc.perform(put(URI + "/" + utilisateurId).content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
+    @WithMockUser(username = "test@test.com")
     void itShouldDeleteUser() throws Exception {
             String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
             mockMvc.perform(delete(URI + "/" + utilisateurId))
                     .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void itShouldThrowForbiddenExceptionWhenDeleteUser() throws Exception {
+        String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
+        mockMvc.perform(delete(URI + "/" + utilisateurId))
+                .andExpect(status().isUnauthorized());
     }
 }
