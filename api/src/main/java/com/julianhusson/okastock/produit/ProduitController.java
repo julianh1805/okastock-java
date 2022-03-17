@@ -44,7 +44,7 @@ public record ProduitController(ProduitService produitService, ProduitMapper pro
     }
 
     @DeleteMapping("{produitId}")
-    public ResponseEntity updateProduct(@PathVariable UUID produitId){
+    public ResponseEntity deleteProduct(@PathVariable UUID produitId){
         this.produitService.delete(produitId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

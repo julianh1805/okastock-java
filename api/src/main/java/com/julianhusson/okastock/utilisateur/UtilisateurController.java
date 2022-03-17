@@ -22,11 +22,11 @@ public record UtilisateurController(UtilisateurService utilisateurService, Utili
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId, HttpServletRequest request){
+    public ResponseEntity<UtilisateurDTO> updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId){
         Utilisateur utilisateur = utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO);
         utilisateur.setId(userId);
-        Map<String, String> tokens = utilisateurService.update(utilisateur, request.getRequestURL().toString());
-        return new ResponseEntity<>(tokens, HttpStatus.OK);
+        UtilisateurDTO utilisateurDTO = utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur));
+        return new ResponseEntity<>(utilisateurDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")
