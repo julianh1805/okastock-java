@@ -4,6 +4,7 @@ import com.julianhusson.okastock.categorie.Categorie;
 import com.julianhusson.okastock.mapstruct.dto.ProduitDTO;
 import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
 import com.julianhusson.okastock.produit.Produit;
+import com.julianhusson.okastock.utilisateur.Utilisateur;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ class ProduitMapperTest {
     void produitToProduitDTO() {
         //Given
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df0"), "meubles", new HashSet<>());
-        Produit produit = new Produit(UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0"), "Titre", "Petite description", new BigDecimal("10.27"), 8, categorie);
+        Produit produit = new Produit(UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0"), "Titre", "Petite description", new BigDecimal("10.27"), 8, categorie, new Utilisateur());
         //When
         ProduitDTO produitDTO = underTest.produitToProduitDTO(produit);
         //Then

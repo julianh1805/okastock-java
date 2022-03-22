@@ -2,13 +2,15 @@ package com.julianhusson.okastock.produit;
 
 import com.julianhusson.okastock.categorie.CategorieService;
 import com.julianhusson.okastock.exception.NotFoundException;
+import com.julianhusson.okastock.security.AuthenticationFacade;
+import com.julianhusson.okastock.utilisateur.UtilisateurService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public record ProduitService(ProduitRepository produitRepository, CategorieService categorieService) {
+public record ProduitService(ProduitRepository produitRepository, CategorieService categorieService, UtilisateurService utilisateurService, AuthenticationFacade authenticationFacade) {
 
     public List<Produit> getAll() {
         return produitRepository.findAll();
@@ -19,12 +21,18 @@ public record ProduitService(ProduitRepository produitRepository, CategorieServi
                 new NotFoundException(getNotFoundProduitError(productId)));
     }
 
-    public void upSert(Produit produit, String categorieName) {
-        if(produit.getId() == null || produitRepository.existsById(produit.getId())){
+    public void create(Produit produit, String categorieName) {
+            produit.setUtilisateur(authenticationFacade.getAuthenticatedUser());
+            produit.setCategorie(categorieService.findByNom(categorieName));
+            produitRepository.save(produit);
+    }
+
+    public void update(Produit produit, String categorieName) {
+        if(produitRepository.existsById(produit.getId())){
             produit.setCategorie(categorieService.findByNom(categorieName));
             produitRepository.save(produit);
         } else {
-                throw new NotFoundException(getNotFoundProduitError(produit.getId()));
+            throw new NotFoundException(getNotFoundProduitError(produit.getId()));
         }
     }
 
