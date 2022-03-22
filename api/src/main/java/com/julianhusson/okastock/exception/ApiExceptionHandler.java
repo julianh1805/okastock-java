@@ -74,16 +74,5 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
-    @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e){
-        ApiException apiException = new ApiException(
-                e.getMessage(),
-                HttpStatus.FORBIDDEN,
-                ZonedDateTime.now()
-        );
-        return new ResponseEntity<>(apiException, apiException.httpStatus());
-    }
-
-
     public record ApiException(String message,  HttpStatus httpStatus, ZonedDateTime zonedDateTime) {}
 }

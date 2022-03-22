@@ -31,7 +31,7 @@ public record ProduitController(ProduitService produitService, ProduitMapper pro
 
     @PostMapping
     public ResponseEntity addProduct(@RequestBody ProduitPostDTO produitPostDTO){
-        this.produitService.upSert(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.categorie());
+        this.produitService.create(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.categorie());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -39,7 +39,7 @@ public record ProduitController(ProduitService produitService, ProduitMapper pro
     public ResponseEntity<Produit> updateProduct(@PathVariable UUID produitId, @RequestBody ProduitPostDTO produitPostDTO){
         Produit produit = produitMapper.produitPostDTOToProduit(produitPostDTO);
         produit.setId(produitId);
-        this.produitService.upSert(produit, produitPostDTO.categorie());
+        this.produitService.update(produit, produitPostDTO.categorie());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

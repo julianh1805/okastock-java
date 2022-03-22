@@ -2,6 +2,7 @@ package com.julianhusson.okastock.produit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.julianhusson.okastock.categorie.Categorie;
+import com.julianhusson.okastock.utilisateur.Utilisateur;
 import com.julianhusson.okastock.utils.Auditable;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -48,7 +49,11 @@ public class Produit extends Auditable implements Serializable{
     private int quantite;
 
     @ManyToOne
-    @JoinColumn(name = "categorie_id")
+    @JoinColumn(name = "categorie_id", nullable = false)
     @JsonIgnoreProperties("produits")
     private Categorie categorie;
+
+    @ManyToOne
+    @JoinColumn(name = "utilisateur_id", nullable = false, updatable = false)
+    private Utilisateur utilisateur;
 }
