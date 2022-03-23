@@ -74,5 +74,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
+    @ExceptionHandler(value = BadUserException.class)
+    public ResponseEntity<Object> handleBadUserException(BadUserException e){
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                HttpStatus.FORBIDDEN,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
+    }
+
     public record ApiException(String message,  HttpStatus httpStatus, ZonedDateTime zonedDateTime) {}
 }

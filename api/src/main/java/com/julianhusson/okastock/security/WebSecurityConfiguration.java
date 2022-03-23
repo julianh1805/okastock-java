@@ -51,8 +51,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .httpBasic();
-        http.addFilter(authenticationFilter);
         http.addFilterBefore(new AuthorizationFilter(tokenGenerator), UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(authenticationFilter);
     }
 
     @Bean

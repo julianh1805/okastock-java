@@ -13,7 +13,7 @@ import java.util.UUID;
 public record AuthenticationFacade(UtilisateurService utilisateurService) {
 
     public Utilisateur getAuthenticatedUser() {
-        User utilisateur = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return utilisateurService.getById(UUID.fromString(utilisateur.getUsername()));
+        String utilisateurId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return utilisateurService.getById(UUID.fromString(utilisateurId));
     }
 }
