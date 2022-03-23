@@ -1,8 +1,10 @@
 package com.julianhusson.okastock.produit;
 
 import com.julianhusson.okastock.categorie.CategorieService;
+import com.julianhusson.okastock.exception.BadUserException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.security.AuthenticationFacade;
+import com.julianhusson.okastock.utilisateur.Utilisateur;
 import com.julianhusson.okastock.utilisateur.UtilisateurService;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,9 @@ public record ProduitService(ProduitRepository produitRepository, CategorieServi
         return produitRepository.findAll();
     }
 
-    public Produit getById(UUID productId) {
-        return produitRepository.findById(productId).orElseThrow(() ->
-                new NotFoundException(getNotFoundProduitError(productId)));
+    public Produit getById(UUID produitId) {
+        return produitRepository.findById(produitId).orElseThrow(() ->
+                new NotFoundException("Aucun produit n'existe avec l'id " + produitId + "."));
     }
 
     public void create(Produit produit, String categorieName) {
@@ -28,21 +30,22 @@ public record ProduitService(ProduitRepository produitRepository, CategorieServi
     }
 
     public void update(Produit produit, String categorieName) {
-        if(produitRepository.existsById(produit.getId())){
-            produit.setCategorie(categorieService.findByNom(categorieName));
-            produitRepository.save(produit);
-        } else {
-            throw new NotFoundException(getNotFoundProduitError(produit.getId()));
+        Produit produitToUpdate = this.getById(produit.getId());
+        this.checkUser(produitToUpdate.getUtilisateur().getId());
+        produit.setCategorie(categorieService.findByNom(categorieName));
+        produitRepository.save(produit);
+    }
+
+    public void delete(UUID produitId) {
+        Produit produit = this.getById(produitId);
+        this.checkUser(produit.getUtilisateur().getId());
+        produitRepository.deleteById(produitId);
+    }
+
+    private void checkUser(UUID utilisateurId){
+        if(!utilisateurId.equals(authenticationFacade.getAuthenticatedUser().getId())){
+            throw new BadUserException("Vous n'avez pas les droits pour modifier ce produit.");
         }
-    }
-
-    public void delete(UUID productId) {
-        this.getById(productId);
-        produitRepository.deleteById(productId);
-    }
-
-    private String getNotFoundProduitError(UUID productId){
-        return "Aucun produit n'existe avec l'id " + productId + ".";
     }
 
 }

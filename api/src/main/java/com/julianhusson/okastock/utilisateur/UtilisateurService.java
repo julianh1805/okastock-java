@@ -65,7 +65,7 @@ public class UtilisateurService implements UserDetailsService {
     }
 
     private Role addRole(String role) {
-        return roleRepository.findByNom(role).orElseThrow(() -> new NotFoundException("Aucun role " + role + " n'exsite."));
+        return roleRepository.findByNom(role).orElseThrow(() -> new NotFoundException("Aucun role " + role + " n'existe."));
     }
 
     private void isSiretUnique(Long siret) {
