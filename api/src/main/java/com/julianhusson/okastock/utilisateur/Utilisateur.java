@@ -74,7 +74,7 @@ public class Utilisateur extends Auditable implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String motDePasse;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     //@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
