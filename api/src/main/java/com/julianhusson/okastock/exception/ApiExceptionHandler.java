@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -73,6 +74,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
+    @ExceptionHandler(value = BadUserException.class)
+    public ResponseEntity<Object> handleBadUserException(BadUserException e){
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                HttpStatus.FORBIDDEN,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
+    }
 
     public record ApiException(String message,  HttpStatus httpStatus, ZonedDateTime zonedDateTime) {}
 }
