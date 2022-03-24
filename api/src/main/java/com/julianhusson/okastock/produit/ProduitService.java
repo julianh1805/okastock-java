@@ -4,7 +4,6 @@ import com.julianhusson.okastock.categorie.CategorieService;
 import com.julianhusson.okastock.exception.BadUserException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.security.AuthenticationFacade;
-import com.julianhusson.okastock.utilisateur.Utilisateur;
 import com.julianhusson.okastock.utilisateur.UtilisateurService;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public record ProduitService(ProduitRepository produitRepository, CategorieServi
     public void update(Produit produit, String categorieName) {
         Produit produitToUpdate = this.getById(produit.getId());
         this.checkUser(produitToUpdate.getUtilisateur().getId());
-        produit.setCategorie(categorieService.findByNom(categorieName));
+        if(!produitToUpdate.getCategorie().getNom().equals(categorieName)) { produit.setCategorie(categorieService.findByNom(categorieName)); }
         produitRepository.save(produit);
     }
 

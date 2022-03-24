@@ -5,7 +5,6 @@ import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.role.RoleRepository;
 import com.julianhusson.okastock.utils.TokenGenerator;
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
