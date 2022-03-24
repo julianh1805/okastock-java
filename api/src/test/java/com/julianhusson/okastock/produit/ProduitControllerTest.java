@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-@Sql({"/categorie-data.sql", "/utilisateur-data.sql", "/produit-data.sql"})
+@Sql({"/categorie-data.sql", "/utilisateur-data.sql", "/produit-data.sql", "/role-data.sql", "/utilisateur-roles-data.sql"})
 @Transactional
 class ProduitControllerTest {
 
@@ -52,7 +54,7 @@ class ProduitControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe")
+    @WithMockUser(value = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe")
     void itShouldAddProduct() throws Exception {
         ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre", "Description", 0.1, 19, "meubles");
         String json = mapper.writeValueAsString(produitPostDTO);

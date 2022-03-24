@@ -1,0 +1,1 @@
+INSERT INTO utilisateur_roles VALUES ('e59ed17d-db7c-4d24-af6c-5154b3f72dfe', 'e59ed17d-db7c-4d24-af3c-5154b3f72dff');
