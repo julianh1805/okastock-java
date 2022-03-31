@@ -1,6 +1,8 @@
 package com.julianhusson.okastock.utilisateur;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.julianhusson.okastock.produit.Produit;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.utils.Auditable;
 import lombok.AllArgsConstructor;
@@ -77,6 +79,7 @@ public class Utilisateur extends Auditable implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
-    //@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
-    //private List<Produit> produits;
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("produits")
+    private List<Produit> produits;
 }
