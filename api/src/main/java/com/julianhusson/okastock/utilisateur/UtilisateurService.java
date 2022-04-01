@@ -1,13 +1,13 @@
 package com.julianhusson.okastock.utilisateur;
 
+import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.role.RoleRepository;
-import com.julianhusson.okastock.utils.GenericUtil;
 import com.julianhusson.okastock.utils.TokenGenerator;
+import com.julianhusson.okastock.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +39,7 @@ public class UtilisateurService implements UserDetailsService {
     }
 
     public Map<String, String> register(Utilisateur utilisateur, String issuer) {
-        GenericUtil.checkUtilisateur(utilisateur);
+        this.checkUtilisateur(utilisateur);
         this.isSiretUnique(utilisateur.getSiret());
         this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
@@ -50,7 +50,8 @@ public class UtilisateurService implements UserDetailsService {
 
     public Utilisateur update(Utilisateur utilisateur) {
         Utilisateur utilisateurToUpdate = this.getById(utilisateur.getId());
-        GenericUtil.checkUtilisateur(utilisateur);
+        Utils.checkAuthUser(utilisateurToUpdate.getId());
+        this.checkUtilisateur(utilisateur);
         if (!utilisateur.getEmail().equals(utilisateurToUpdate.getEmail())) this.isEmailUnique(utilisateur.getEmail());
         if (!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
@@ -60,7 +61,7 @@ public class UtilisateurService implements UserDetailsService {
 
     public void delete(UUID userId) {
         this.getById(userId);
-
+        Utils.checkAuthUser(userId);
         utilisateurRepository.deleteById(userId);
     }
 
@@ -76,6 +77,13 @@ public class UtilisateurService implements UserDetailsService {
     private void isEmailUnique(String email) {
         if (utilisateurRepository.existsByEmail(email))
             throw new DuplicateKeyException("Il existe déjà un compte avec cet email.");
+    }
+
+    private void checkUtilisateur(Utilisateur utilisateur){
+        if(utilisateur.getSiret().toString().length() != 14) throw new InvalidRegexException("Le SIRET doit faire 14 caracteres.");
+        if(String.valueOf(utilisateur.getCodePostal()).length() != 5) throw new InvalidRegexException("Le code postal doit faire 5 caractères.");
+        String telephone = String.valueOf(utilisateur.getTelephone());
+        if(telephone.length() != 9 || !telephone.startsWith("6") && !telephone.startsWith("7")) throw new InvalidRegexException("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
 
 }

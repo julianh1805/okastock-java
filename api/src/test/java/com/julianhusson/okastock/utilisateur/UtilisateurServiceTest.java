@@ -1,5 +1,6 @@
 package com.julianhusson.okastock.utilisateur;
 
+import com.julianhusson.okastock.configuration.WithMockCustomUser;
 import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
@@ -47,6 +48,7 @@ class UtilisateurServiceTest {
     private final String registerIssuer = "test/api/v1/auth/register";
     private final String updateIssuer = "test/api/v1/auth/update";
     private final Role userRole = new Role(UUID.fromString("e59ed17d-db7c-4d24-af3c-5154b3f72dff"), "ROLE_USER");
+    private UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
 
     @Before
     public void setUp() {
@@ -392,7 +394,6 @@ class UtilisateurServiceTest {
         //Given
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 63356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         //When
-        Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
         assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
@@ -403,16 +404,15 @@ class UtilisateurServiceTest {
         //Given
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         //When
-        Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
         assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
         Utilisateur utilisateurToUpdate = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(passwordEncoder.encode(utilisateurToUpdate.getMotDePasse())).willReturn("1234AZER");
         given(utilisateurRepository.findById(utilisateurId)).willReturn(
@@ -425,9 +425,9 @@ class UtilisateurServiceTest {
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldThrowExceptionIfSiretLenghIsNot14WhenUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 123456789101L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
@@ -437,9 +437,9 @@ class UtilisateurServiceTest {
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldThrowExceptionIfSiretAlreadyExistsWhenUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         Utilisateur utilisateurToUpdate = new Utilisateur(utilisateurId, "Test", 12345678910112L, 44400, 666666656L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
@@ -453,7 +453,6 @@ class UtilisateurServiceTest {
     @Test
     void itShouldThrowExceptionIfEmailAlreadyExistsWhenUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44400, 666666656L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         Utilisateur utilisateurToUpdate = new Utilisateur(utilisateurId, "Test", 12345678910112L, 44400, 666666656L, "http://www.test.com", "-", true, "test2@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
@@ -465,9 +464,9 @@ class UtilisateurServiceTest {
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldThrowExceptionIfCodePostalLenghIsNot5WhenUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9");
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 443, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(
                 Optional.of(utilisateur));
@@ -479,51 +478,49 @@ class UtilisateurServiceTest {
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldThrowExceptionIfTelephoneLengthIsNot9WhenUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4");
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 63356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
-        Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
         assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldThrowExceptionIfTelephoneLengthItDoesntStartWith6Or7WhenUpdate() {
         //Given
-        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4");
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
-        Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
         assertThatThrownBy(() -> underTest.update(utilisateur))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
 
     @Test
+    @WithMockCustomUser
     void itShouldDelete() {
         //Given
-        UUID productId = UUID.randomUUID();
-        given(utilisateurRepository.findById(productId)).willReturn(Optional.of(new Utilisateur()));
+        given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(new Utilisateur()));
         //When
-        underTest.delete(productId);
+        underTest.delete(utilisateurId);
         //Then
-        verify(utilisateurRepository).deleteById(productId);
+        verify(utilisateurRepository).deleteById(utilisateurId);
     }
 
     @Test
     void itShouldThrownAnExeceptionIfIdNotExistsWhenDelete() {
         //Given
-        UUID fakeProductId = UUID.randomUUID();
-        given(utilisateurRepository.existsById(fakeProductId)).willReturn(false);
+        UUID fakeUtilisateurId = UUID.randomUUID();
+        given(utilisateurRepository.existsById(fakeUtilisateurId)).willReturn(false);
         //Then
-        assertThatThrownBy(() -> underTest.delete(fakeProductId))
+        assertThatThrownBy(() -> underTest.delete(fakeUtilisateurId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Aucun utilisateur n'existe avec l'id " + fakeProductId + ".");
+                .hasMessageContaining("Aucun utilisateur n'existe avec l'id " + fakeUtilisateurId + ".");
     }
 
 
