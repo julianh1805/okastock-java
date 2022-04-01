@@ -55,5 +55,6 @@ public class Produit extends Auditable implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false, updatable = false)
+    @JsonIgnoreProperties("produits")
     private Utilisateur utilisateur;
 }

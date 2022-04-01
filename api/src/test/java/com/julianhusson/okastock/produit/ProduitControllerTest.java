@@ -1,5 +1,6 @@
 package com.julianhusson.okastock.produit;
 
+import com.julianhusson.okastock.configuration.WithMockCustomUser;
 import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,11 +48,12 @@ class ProduitControllerTest {
                 .andExpect(jsonPath("$.quantite").value(8))
                 .andExpect(jsonPath("$.categorie").value("meubles"))
                 .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.utilisateur").exists());
+                .andExpect(jsonPath("$.utilisateur").exists())
+                .andExpect(jsonPath("$.utilisateur.produits").doesNotExist());
     }
 
     @Test
-    @WithMockUser(value = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe")
+    @WithMockCustomUser
     void itShouldAddProduct() throws Exception {
         ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre", "Description", 0.1, 19, "meubles");
         String json = mapper.writeValueAsString(produitPostDTO);
@@ -71,7 +70,7 @@ class ProduitControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe")
+    @WithMockCustomUser
     void itShouldUpdateProduct() throws Exception {
         String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
         ProduitPostDTO produitPostDTO = new ProduitPostDTO("Titre update", "Description update", 1, 13, "meubles");
@@ -90,7 +89,7 @@ class ProduitControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe")
+    @WithMockCustomUser
     void itShouldDeleteProduct() throws Exception {
         String produitId = "e59ed17d-db7d-4d24-af6c-5154b3f72df0";
         mockMvc.perform(delete(URI + "/" + produitId))
