@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 @EnableJpaAuditing
-@Sql( "/utilisateur-data.sql")
+@Sql( {"/utilisateur-data.sql", "/categorie-data.sql", "/produit-data.sql"})
 @Transactional
 class UtilisateurControllerTest {
 
@@ -48,6 +48,9 @@ class UtilisateurControllerTest {
                 .andExpect(jsonPath("$.logo").value("-"))
                 .andExpect(jsonPath("$.rgpd").isBoolean())
                 .andExpect(jsonPath("$.email").value("test@test.com"))
+                .andExpect(jsonPath("$.produits").exists())
+                .andExpect(jsonPath("$.produits[0]").exists())
+                .andExpect(jsonPath("$.produits[0].utilisateur").doesNotExist())
                 .andExpect(jsonPath("$.motDePasse").doesNotExist());
     }
 

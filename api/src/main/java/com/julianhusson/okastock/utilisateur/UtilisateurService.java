@@ -35,8 +35,7 @@ public class UtilisateurService implements UserDetailsService {
     }
 
     public Utilisateur getById(UUID id) {
-        Utilisateur utilisateur = utilisateurRepository.findById(id).orElseThrow(() -> new NotFoundException("Aucun utilisateur n'existe avec l'id " + id + "."));
-    return utilisateur;
+        return utilisateurRepository.findById(id).orElseThrow(() -> new NotFoundException("Aucun utilisateur n'existe avec l'id " + id + "."));
     }
 
     public Map<String, String> register(Utilisateur utilisateur, String issuer) {
