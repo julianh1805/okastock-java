@@ -47,7 +47,7 @@ class AuthenticationFacadeTest {
     void itShouldGetAuthenticatedUser() {
         ///Given
         UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
-        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 666666666L, "http://www.website.com", "-", true, "test@test.com", "1234AZER", null);
+        Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 666666666L, "http://www.website.com", "-", true, "test@test.com", "1234AZER", null, new ArrayList<>());
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(new User("e59ed17d-db7c-4d24-af6c-5154b3f72dfe", "password", new ArrayList<>()));

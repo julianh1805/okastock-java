@@ -50,7 +50,8 @@ class ProduitControllerTest {
                 .andExpect(jsonPath("$.quantite").value(8))
                 .andExpect(jsonPath("$.categorie").value("meubles"))
                 .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.utilisateur").exists());
+                .andExpect(jsonPath("$.utilisateur").exists())
+                .andExpect(jsonPath("$.utilisateur.produits").doesNotExist());
     }
 
     @Test
