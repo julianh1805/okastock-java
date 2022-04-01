@@ -1,6 +1,7 @@
 package com.julianhusson.okastock.utilisateur;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.julianhusson.okastock.configuration.WithMockCustomUser;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 @EnableJpaAuditing
-@Sql( "/utilisateur-data.sql")
+@Sql( {"/utilisateur-data.sql", "/categorie-data.sql", "/produit-data.sql"})
 @Transactional
 class UtilisateurControllerTest {
 
@@ -48,11 +48,14 @@ class UtilisateurControllerTest {
                 .andExpect(jsonPath("$.logo").value("-"))
                 .andExpect(jsonPath("$.rgpd").isBoolean())
                 .andExpect(jsonPath("$.email").value("test@test.com"))
+                .andExpect(jsonPath("$.produits").exists())
+                .andExpect(jsonPath("$.produits[0]").exists())
+                .andExpect(jsonPath("$.produits[0].utilisateur").doesNotExist())
                 .andExpect(jsonPath("$.motDePasse").doesNotExist());
     }
 
     @Test
-    @WithMockUser(username = "test@test.com")
+    @WithMockCustomUser
     void itShouldUpdateUser() throws Exception {
         String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
         UtilisateurPostDTO utilisateurPostDTO =
@@ -85,7 +88,7 @@ class UtilisateurControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@test.com")
+    @WithMockCustomUser
     void itShouldDeleteUser() throws Exception {
             String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
             mockMvc.perform(delete(URI + "/" + utilisateurId))

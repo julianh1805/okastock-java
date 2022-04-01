@@ -5,6 +5,7 @@ import com.julianhusson.okastock.mapstruct.dto.ProduitPostDTO;
 import com.julianhusson.okastock.mapstruct.mapper.ProduitMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public record ProduitController(ProduitService produitService, ProduitMapper pro
     }
 
     @PostMapping
-    public ResponseEntity addProduct(@RequestBody ProduitPostDTO produitPostDTO){
-        this.produitService.create(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.categorie());
+    public ResponseEntity addProduct(@RequestBody ProduitPostDTO produitPostDTO, Authentication authentication){
+        this.produitService.create(produitMapper.produitPostDTOToProduit(produitPostDTO), produitPostDTO.categorie(), authentication.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
