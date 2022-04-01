@@ -17,10 +17,6 @@ public interface UtilisateurMapper {
 
     UtilisateurDTO utilisateurToUtilisateurDTO(Utilisateur utilisateur);
 
-    List<ProduitUtilisateurDTO> produitsToProduitsUtilisateurDTO(List<Produit> produits);
-
     @Mapping(target = "categorie", source = "categorie.nom")
     ProduitUtilisateurDTO produitToProduitUtilisateurDTO(Produit produit);
-
-    String map(Categorie categorie);
 }

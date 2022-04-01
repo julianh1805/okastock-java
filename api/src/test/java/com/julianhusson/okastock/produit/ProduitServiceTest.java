@@ -96,7 +96,7 @@ class ProduitServiceTest {
         UUID productId = UUID.randomUUID();
         String categorieName = "meuble moisi";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), "meubles", new HashSet<>());
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateur);
         Produit produit = new Produit(productId, "Titre", "Description", new BigDecimal("10.27"), 8, categorie, utilisateur);
         given(produitRepository.findById(productId)).willReturn(Optional.of(produit));
@@ -152,7 +152,7 @@ class ProduitServiceTest {
         String categorieName = "meubles";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
         Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8,categorie, new Utilisateur());
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         given(authenticationFacade.getAuthenticatedUser()).willReturn(utilisateur);
         given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, categorie, utilisateur)));
         //When
@@ -168,8 +168,8 @@ class ProduitServiceTest {
     void itShouldThrownAnExeceptionIfUserIdNotEqualsWhenUpdate() {
         //Given
         UUID productId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
-        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
+        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         Produit produit = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateurProduit);
         given(authenticationFacade.getAuthenticatedUser()).willReturn(utilisateur);
         given(produitRepository.findById(productId)).willReturn(Optional.of(produit));
@@ -199,7 +199,7 @@ class ProduitServiceTest {
         UUID productId = UUID.randomUUID();
         String categorieName = "meuble moisi";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), "meuble", new HashSet<>());
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateur);
         Produit produit = new Produit(productId, "Titre", "Description", new BigDecimal("10.27"), 8, categorie, utilisateur);
         given(produitRepository.findById(productId)).willReturn(Optional.of(produit));
@@ -255,7 +255,7 @@ class ProduitServiceTest {
     void itShouldDelete() {
         //Given
         UUID productId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         given(authenticationFacade.getAuthenticatedUser()).willReturn(utilisateur);
         given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateur)));
         //When
@@ -268,8 +268,8 @@ class ProduitServiceTest {
     void itShouldThrownAnExeceptionIfUserIdNotEqualsWhenDelete() {
         //Given
         UUID productId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
-        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>());
+        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         given(authenticationFacade.getAuthenticatedUser()).willReturn(utilisateur);
         given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateurProduit)));
         //Then
