@@ -1,6 +1,7 @@
 package com.julianhusson.okastock.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.julianhusson.okastock.configuration.WithMockCustomUser;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,8 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-@Sql( "/role-data.sql")
-@Sql( "/utilisateur-data.sql")
+@Sql({"/role-data.sql", "/utilisateur-data.sql", "/validation-token-data.sql"})
 @Transactional
 class AuthControllerTest {
 
@@ -49,5 +52,13 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").exists())
                 .andExpect(jsonPath("$.refreshToken").exists());
+    }
+
+    @Test
+    @WithMockCustomUser
+    void itShouldConfirm() throws Exception {
+        this.mockMvc
+                .perform(get(URI + "/confirm?token=00b02bb5-0424-4251-8a23-d1030cb52754"))
+                .andExpect(status().isNoContent());
     }
 }
