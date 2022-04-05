@@ -4,6 +4,8 @@ import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.role.RoleRepository;
+import com.julianhusson.okastock.utilisateur.validation.ValidationService;
+import com.julianhusson.okastock.utilisateur.validation.ValidationToken;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import com.julianhusson.okastock.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +31,7 @@ public class UtilisateurService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenGenerator tokenGenerator;
+    private final ValidationService validationService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -38,6 +45,7 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.findById(id).orElseThrow(() -> new NotFoundException("Aucun utilisateur n'existe avec l'id " + id + "."));
     }
 
+    @Transactional
     public Map<String, String> register(Utilisateur utilisateur, String issuer) {
         this.checkUtilisateur(utilisateur);
         this.isSiretUnique(utilisateur.getSiret());
@@ -45,6 +53,7 @@ public class UtilisateurService implements UserDetailsService {
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
         utilisateurRepository.save(utilisateur);
+        validationService.createValidationToken(new ValidationToken(utilisateur));
         return tokenGenerator.generateTokens(utilisateur.getId().toString(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
@@ -63,6 +72,14 @@ public class UtilisateurService implements UserDetailsService {
         this.getById(userId);
         Utils.checkAuthUser(userId);
         utilisateurRepository.deleteById(userId);
+    }
+
+    @Transactional
+    public void validate(String token) {
+        UUID utilisateurId = validationService.confirmToken(token);
+        Utilisateur utilisateur = getById(utilisateurId);
+        utilisateur.setValid(true);
+        utilisateurRepository.save(utilisateur);
     }
 
     private Role addRole(String role) {

@@ -1,7 +1,6 @@
 package com.julianhusson.okastock.produit;
 
 import com.julianhusson.okastock.categorie.CategorieService;
-import com.julianhusson.okastock.exception.BadUserException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.utilisateur.UtilisateurService;
 import com.julianhusson.okastock.utils.Utils;
