@@ -1,5 +1,6 @@
 package com.julianhusson.okastock.utilisateur.validation;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.julianhusson.okastock.exception.ApiRequestException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.utilisateur.Utilisateur;
@@ -62,19 +63,19 @@ class ValidationServiceTest {
         //When
         assertThatThrownBy(() -> underTest.confirmToken(validationToken.getToken()))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Aucun token n'existe avec cet id.");
+                .hasMessageContaining("Le lien est indisponible.");
     }
 
     @Test
     void itShouldThrownExceptionIfTokenAlreadyConfirmedWhenConfirmToken() {
         //Given
         ValidationToken validationToken = new ValidationToken(utilisateur);
-        validationToken.setConfirmedAt(LocalDateTime.now());
+        validationToken.getUtilisateur().setValid(true);
         given(validationRepository.findByToken(validationToken.getToken())).willReturn(Optional.of(validationToken));
         //When
         assertThatThrownBy(() -> underTest.confirmToken(validationToken.getToken()))
                 .isInstanceOf(ApiRequestException.class)
-                .hasMessageContaining("Ce compte est déjà validé.");
+                .hasMessageContaining("Ce compte est déjà vérifié.");
     }
 
     @Test
@@ -85,7 +86,19 @@ class ValidationServiceTest {
         given(validationRepository.findByToken(validationToken.getToken())).willReturn(Optional.of(validationToken));
         //When
         assertThatThrownBy(() -> underTest.confirmToken(validationToken.getToken()))
-                .isInstanceOf(ApiRequestException.class)
-                .hasMessageContaining("Le token a expiré.");
+                .isInstanceOf(TokenExpiredException.class)
+                .hasMessageContaining("Ce lien a expiré.");
+    }
+
+    @Test
+    void itShouldDeleteAllByUtilisateurId() {
+        //Given
+        ValidationToken validationToken = new ValidationToken(utilisateur);
+        validationToken.getUtilisateur().setValid(true);
+        //When
+        underTest.deleteAllByUtilisateurId(utilisateur.getId());
+        //Then
+        verify(validationRepository).deleteAllByUtilisateurId(utilisateur.getId());
+
     }
 }

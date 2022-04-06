@@ -29,8 +29,6 @@ public class ValidationToken {
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    private LocalDateTime confirmedAt;
-
     @ManyToOne
     @JoinColumn(nullable = false, name = "utilisateur_id")
     private Utilisateur utilisateur;
@@ -39,7 +37,6 @@ public class ValidationToken {
         this.token = UUID.randomUUID().toString();
         this.createdAt = LocalDateTime.now();
         this.expiresAt = LocalDateTime.now().plusMinutes(15);
-        this.confirmedAt = null;
         this.utilisateur = utilisateur;
     }
 }

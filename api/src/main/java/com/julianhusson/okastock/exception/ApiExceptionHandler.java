@@ -1,5 +1,6 @@
 package com.julianhusson.okastock.exception;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -79,6 +80,16 @@ public class ApiExceptionHandler {
         ApiException apiException = new ApiException(
                 e.getMessage(),
                 HttpStatus.FORBIDDEN,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
+    }
+
+    @ExceptionHandler(value = TokenExpiredException.class)
+    public ResponseEntity<Object> handleTokenExpiredException(TokenExpiredException e){
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now()
         );
         return new ResponseEntity<>(apiException, apiException.httpStatus());
