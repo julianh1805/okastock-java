@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface ValidationRepository extends JpaRepository<ValidationToken, UUID> {
     Optional<ValidationToken> findByToken(String token);
+    void deleteAllByUtilisateurId(UUID userId);
 }
