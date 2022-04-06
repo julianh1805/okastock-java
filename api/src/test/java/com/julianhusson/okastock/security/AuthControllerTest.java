@@ -1,19 +1,36 @@
 package com.julianhusson.okastock.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import com.julianhusson.okastock.configuration.SmtpServerRule;
+import com.julianhusson.okastock.configuration.WithMockCustomUser;
+import com.julianhusson.okastock.email.EmailService;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,14 +38,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-@Sql( "/role-data.sql")
-@Sql( "/utilisateur-data.sql")
+@Sql({"/role-data.sql", "/utilisateur-data.sql", "/validation-token-data.sql"})
 @Transactional
 class AuthControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper mapper;
     private final String URI = "/api/v1/auth";
+
+    @BeforeAll
+    public static void setUp() {
+        GreenMail smtpServer;
+        smtpServer = new GreenMail(new ServerSetup(1025, null, "smtp"));
+        smtpServer.setUser("username", "password");
+        smtpServer.start();
+    }
 
     @Test
     void itShouldRegister() throws Exception {
@@ -49,5 +73,13 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").exists())
                 .andExpect(jsonPath("$.refreshToken").exists());
+    }
+
+    @Test
+    @WithMockCustomUser
+    void itShouldConfirm() throws Exception {
+        this.mockMvc
+                .perform(get(URI + "/confirm?token=00b02bb5-0424-4251-8a23-d1030cb52754"))
+                .andExpect(status().isNoContent());
     }
 }

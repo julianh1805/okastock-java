@@ -1,12 +1,16 @@
 package com.julianhusson.okastock.utilisateur;
 
+import com.julianhusson.okastock.email.EmailService;
 import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.role.RoleRepository;
+import com.julianhusson.okastock.utilisateur.validation.ValidationService;
+import com.julianhusson.okastock.utilisateur.validation.ValidationToken;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import com.julianhusson.okastock.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,8 +19,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +33,8 @@ public class UtilisateurService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenGenerator tokenGenerator;
+    private final ValidationService validationService;
+    private final EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -38,6 +48,7 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.findById(id).orElseThrow(() -> new NotFoundException("Aucun utilisateur n'existe avec l'id " + id + "."));
     }
 
+    @Transactional
     public Map<String, String> register(Utilisateur utilisateur, String issuer) {
         this.checkUtilisateur(utilisateur);
         this.isSiretUnique(utilisateur.getSiret());
@@ -45,6 +56,9 @@ public class UtilisateurService implements UserDetailsService {
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
         utilisateurRepository.save(utilisateur);
+        ValidationToken validationToken = new ValidationToken(utilisateur);
+        validationService.createValidationToken(validationToken);
+        emailService.send(utilisateur.getEmail(), utilisateur.getNom(),  validationToken.getToken());
         return tokenGenerator.generateTokens(utilisateur.getId().toString(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
@@ -59,10 +73,20 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.save(utilisateur);
     }
 
-    public void delete(UUID userId) {
-        this.getById(userId);
-        Utils.checkAuthUser(userId);
-        utilisateurRepository.deleteById(userId);
+    @Transactional
+    public void delete(UUID utilisateurId) {
+        this.getById(utilisateurId);
+        Utils.checkAuthUser(utilisateurId);
+        validationService.deleteAllByUtilisateurId(utilisateurId);
+        utilisateurRepository.deleteById(utilisateurId);
+    }
+
+    @Transactional
+    public void validate(String token) {
+        UUID utilisateurId = validationService.confirmToken(token);
+        Utilisateur utilisateur = getById(utilisateurId);
+        utilisateur.setValid(true);
+        utilisateurRepository.save(utilisateur);
     }
 
     private Role addRole(String role) {

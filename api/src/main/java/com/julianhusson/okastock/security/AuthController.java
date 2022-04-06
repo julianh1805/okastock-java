@@ -5,10 +5,7 @@ import com.julianhusson.okastock.mapstruct.mapper.UtilisateurMapper;
 import com.julianhusson.okastock.utilisateur.UtilisateurService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -21,5 +18,11 @@ public record AuthController(UtilisateurService utilisateurService, UtilisateurM
     public ResponseEntity<Map<String, String>> register(@RequestBody UtilisateurPostDTO utilisateurPostDTO, HttpServletRequest request){
         Map<String, String> tokens = this.utilisateurService.register(utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO), request.getRequestURL().toString());
         return new ResponseEntity<>(tokens, HttpStatus.CREATED);
+    }
+
+    @GetMapping("confirm")
+    public ResponseEntity confirm(@RequestParam String token){
+        this.utilisateurService.validate(token);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
