@@ -9,17 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -66,6 +63,9 @@ public class Utilisateur extends Auditable implements Serializable {
     @Column
     private boolean rgpd = false;
 
+    @Column
+    private boolean valid = false;
+
     @Column(unique = true)
     @NotBlank(message = "Un email est obligatoire pour s'inscrire.")
     @Email(message = "L'email est invalide", regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
@@ -77,9 +77,9 @@ public class Utilisateur extends Auditable implements Serializable {
     private String motDePasse;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    private Collection<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("produits")
-    private List<Produit> produits;
+    private Collection<Produit> produits;
 }

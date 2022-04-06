@@ -8,9 +8,16 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -31,5 +38,5 @@ public class Categorie implements Serializable {
 
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("categorie")
-    private Set<Produit> produits = new HashSet<>();
+    private Collection<Produit> produits = new HashSet<>();
 }
