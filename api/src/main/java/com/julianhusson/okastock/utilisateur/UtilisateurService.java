@@ -1,5 +1,6 @@
 package com.julianhusson.okastock.utilisateur;
 
+import com.julianhusson.okastock.email.EmailService;
 import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
@@ -9,6 +10,7 @@ import com.julianhusson.okastock.utilisateur.validation.ValidationToken;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import com.julianhusson.okastock.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -32,6 +34,7 @@ public class UtilisateurService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TokenGenerator tokenGenerator;
     private final ValidationService validationService;
+    private final EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -53,7 +56,9 @@ public class UtilisateurService implements UserDetailsService {
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
         utilisateurRepository.save(utilisateur);
-        validationService.createValidationToken(new ValidationToken(utilisateur));
+        ValidationToken validationToken = new ValidationToken(utilisateur);
+        validationService.createValidationToken(validationToken);
+        emailService.send(utilisateur.getEmail(), utilisateur.getNom(),  validationToken.getToken());
         return tokenGenerator.generateTokens(utilisateur.getId().toString(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
