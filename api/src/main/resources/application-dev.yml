@@ -10,5 +10,25 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: localhost
+    port: 1025
+    username: username
+    password: password
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+        sender: husson.j@yahoo.com
+        url: http://localhost:8080
 jwt:
   secret: 2fae0752b9ca693115d51e06bd8976e4c4f8e6cca9d5288ef30dd89408fe998aa83728a18bf27fe37c8b89955b5c0e858440fc211578b737115107ffabc0122e

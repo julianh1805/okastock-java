@@ -95,5 +95,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
+    @ExceptionHandler(value = MailSenderException.class)
+    public ResponseEntity<Object> handleMailSenderException(MailSenderException e){
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                HttpStatus.BAD_GATEWAY,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
+    }
+
     public record ApiException(String message,  HttpStatus httpStatus, ZonedDateTime zonedDateTime) {}
 }

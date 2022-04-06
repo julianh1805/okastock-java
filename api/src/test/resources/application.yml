@@ -12,5 +12,25 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
       show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    default-encoding: UTF-8
+    host: localhost
+    jndi-name:
+    username: username
+    password: password
+    port: 1025
+    properties:
+      mail:
+        debug: false
+        smtp:
+          debug: false
+          auth: true
+          starttls: true
+        sender: husson.j@yahoo.com
+        url: http://www.test.com
+    protocol: smtp
+    test-connection: false
 jwt:
   secret: test
