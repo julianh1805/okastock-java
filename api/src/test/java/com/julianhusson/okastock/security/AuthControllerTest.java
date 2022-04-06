@@ -1,19 +1,27 @@
 package com.julianhusson.okastock.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import com.julianhusson.okastock.configuration.SmtpServerRule;
 import com.julianhusson.okastock.configuration.WithMockCustomUser;
+import com.julianhusson.okastock.email.EmailService;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,7 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 @Sql({"/role-data.sql", "/utilisateur-data.sql", "/validation-token-data.sql"})
@@ -39,9 +46,12 @@ class AuthControllerTest {
     @Autowired private ObjectMapper mapper;
     private final String URI = "/api/v1/auth";
 
-    @Before
-    public void setUp() {
-        SmtpServerRule smtpServerRule = new SmtpServerRule(1025);
+    @BeforeAll
+    public static void setUp() {
+        GreenMail smtpServer;
+        smtpServer = new GreenMail(new ServerSetup(1025, null, "smtp"));
+        smtpServer.setUser("username", "password");
+        smtpServer.start();
     }
 
     @Test

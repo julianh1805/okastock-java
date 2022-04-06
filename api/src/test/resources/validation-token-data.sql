@@ -1,2 +1,2 @@
 INSERT INTO validation_token (id, created_at, expires_at, token, utilisateur_id)
-VALUES (random_uuid(), CURRENT_TIME(), DATEADD(Minute ,+15, current_time), '00b02bb5-0424-4251-8a23-d1030cb52754', 'e59ed17d-db7c-4d24-af6c-5154b3f72dfe');
+VALUES (random_uuid(), CURRENT_TIME(), DATEADD(day ,1, CURRENT_DATE()), '00b02bb5-0424-4251-8a23-d1030cb52754', 'e59ed17d-db7c-4d24-af6c-5154b3f72dfe');
