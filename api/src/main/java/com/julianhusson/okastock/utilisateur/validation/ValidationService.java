@@ -1,5 +1,6 @@
 package com.julianhusson.okastock.utilisateur.validation;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.julianhusson.okastock.exception.ApiRequestException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,18 @@ public record ValidationService(ValidationRepository validationRepository){
 
     public UUID confirmToken(String token) {
         ValidationToken validationToken = this.validationRepository.findByToken(token).orElseThrow(() ->
-                new NotFoundException("Aucun token n'existe avec cet id."));
-        if(validationToken.getConfirmedAt() != null){
-            throw new ApiRequestException("Ce compte est déjà validé.");
+                new NotFoundException("Le lien est indisponible."));
+        if(validationToken.getUtilisateur().isValid()){
+            throw new ApiRequestException("Ce compte est déjà vérifié.");
         }
         if(validationToken.getExpiresAt().isBefore(LocalDateTime.now())){
-            throw new ApiRequestException("Le token a expiré.");
+            throw new TokenExpiredException("Ce lien a expiré.");
         }
-        validationToken.setConfirmedAt(LocalDateTime.now());
-        validationRepository.save(validationToken);
+        validationRepository.deleteAllByUtilisateurId(validationToken.getUtilisateur().getId());
         return validationToken.getUtilisateur().getId();
+    }
+
+    public void deleteAllByUtilisateurId(UUID utilisateurId){
+        validationRepository.deleteAllByUtilisateurId(utilisateurId);
     }
 }

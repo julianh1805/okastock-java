@@ -68,10 +68,12 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.save(utilisateur);
     }
 
-    public void delete(UUID userId) {
-        this.getById(userId);
-        Utils.checkAuthUser(userId);
-        utilisateurRepository.deleteById(userId);
+    @Transactional
+    public void delete(UUID utilisateurId) {
+        this.getById(utilisateurId);
+        Utils.checkAuthUser(utilisateurId);
+        validationService.deleteAllByUtilisateurId(utilisateurId);
+        utilisateurRepository.deleteById(utilisateurId);
     }
 
     @Transactional

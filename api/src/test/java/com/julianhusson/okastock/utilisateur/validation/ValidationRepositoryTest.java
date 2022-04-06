@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,8 +17,6 @@ class ValidationRepositoryTest {
 
     @Autowired
     private ValidationRepository underTest;
-    private final UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
-    private final Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true,  false, "test@test.com", "1234AZER", null, new ArrayList<>());
 
     @Test
     void itShouldFindByToken() {
@@ -30,7 +27,7 @@ class ValidationRepositoryTest {
         //Then
         assertThat(validation).isPresent();
         assertThat(validation.get().getToken()).isEqualTo(token);
-        assertThat(validation.get().getUtilisateur().getId()).isEqualTo(utilisateurId);
+        assertThat(validation.get().getUtilisateur().getId()).isEqualTo(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"));
     }
 
     @Test
@@ -41,5 +38,15 @@ class ValidationRepositoryTest {
         Optional<ValidationToken> validation = underTest.findByToken(UUID.randomUUID().toString());
         //Then
         assertThat(validation).isEmpty();
+    }
+
+    @Test
+    void itShouldDeleteAllByUtilisateurId() {
+        //Given
+        UUID utilisateurId = UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe");
+        //When
+        underTest.deleteAllByUtilisateurId(utilisateurId);
+        //Then
+        assertThat(underTest.count()).isEqualTo(0);
     }
 }
