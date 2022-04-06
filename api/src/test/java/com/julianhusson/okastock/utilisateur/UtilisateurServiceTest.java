@@ -1,6 +1,7 @@
 package com.julianhusson.okastock.utilisateur;
 
 import com.julianhusson.okastock.configuration.WithMockCustomUser;
+import com.julianhusson.okastock.email.EmailService;
 import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
@@ -42,6 +43,7 @@ class UtilisateurServiceTest {
     private UtilisateurService underTest;
     @Mock private UtilisateurRepository utilisateurRepository;
     @Mock private ValidationService validationService;
+    @Mock private EmailService emailService;
     @Mock private RoleRepository roleRepository;
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private TokenGenerator tokenGenerator;
