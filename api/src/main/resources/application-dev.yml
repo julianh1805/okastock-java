@@ -25,9 +25,9 @@ spring:
           auth: true
           starttls:
             enable: true
-          connectiontimeout: 5000
+          connection-timeout: 5000
           timeout: 3000
-          writetimeout: 5000
+          write-timeout: 5000
         sender: husson.j@yahoo.com
         url: http://localhost:8080
 jwt:
