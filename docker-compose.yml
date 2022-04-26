@@ -12,6 +12,12 @@ services:
     networks:
       - postgres_dev
     restart: unless-stopped
+  maildev:
+    image: maildev/maildev
+    container_name: maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
     #pgadmin:
     #image: dpage/pgadmin4
     #container_name: pgadmin
