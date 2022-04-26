@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -29,8 +28,7 @@ public class EmailServiceTest {
     @Autowired
     private EmailService underTest;
 
-    @Rule
-    public SmtpServerRule smtpServerRule = new SmtpServerRule(1025);
+    @Rule public SmtpServerRule smtpServerRule = new SmtpServerRule(1025);
 
     @Value("${spring.mail.properties.mail.sender}")
     private String from;
