@@ -105,5 +105,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, apiException.httpStatus());
     }
 
+    @ExceptionHandler(StorageFileException.class)
+    public ResponseEntity<Object> handleStorageFileException(StorageFileException e){
+        ApiException apiException = new ApiException(
+                "Une erreur est survenue pendant le traitement de(s) image(s).",
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, apiException.httpStatus());
+    }
+
     public record ApiException(String message,  HttpStatus httpStatus, LocalDateTime localDateTime) {}
 }
