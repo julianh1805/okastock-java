@@ -6,6 +6,7 @@ import com.julianhusson.okastock.utilisateur.UtilisateurService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -15,8 +16,8 @@ import java.util.Map;
 public record AuthController(UtilisateurService utilisateurService, UtilisateurMapper utilisateurMapper) {
 
     @PostMapping("register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody UtilisateurPostDTO utilisateurPostDTO, HttpServletRequest request){
-        Map<String, String> tokens = this.utilisateurService.register(utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO), request.getRequestURL().toString());
+    public ResponseEntity<Map<String, String>> register(@ModelAttribute UtilisateurPostDTO utilisateurPostDTO, @RequestPart("logo") MultipartFile logo, HttpServletRequest request){
+        Map<String, String> tokens = this.utilisateurService.register(utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO), logo, request.getRequestURL().toString());
         return new ResponseEntity<>(tokens, HttpStatus.CREATED);
     }
 

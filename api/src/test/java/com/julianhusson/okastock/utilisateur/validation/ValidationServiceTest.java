@@ -30,7 +30,7 @@ class ValidationServiceTest {
 
     @InjectMocks private ValidationService underTest;
     @Mock private ValidationRepository validationRepository;
-    private final Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true,  false, "test@test.com", "1234AZER", null, new ArrayList<>());
+    private final Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", UUID.randomUUID().toString(), true,  false, "test@test.com", "1234AZER", null, new ArrayList<>());
 
     @Test
     void itShouldCreateValidationToken() {

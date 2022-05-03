@@ -45,7 +45,7 @@ class UtilisateurControllerTest {
                 .andExpect(jsonPath("$.codePostal").value(44300L))
                 .andExpect(jsonPath("$.telephone").value(666666666L))
                 .andExpect(jsonPath("$.site").value("http://www.test.com"))
-                .andExpect(jsonPath("$.logo").value("-"))
+                .andExpect(jsonPath("$.logo").value("e59ed17d-db7c-4d24-af6c-5154b3f72def"))
                 .andExpect(jsonPath("$.rgpd").isBoolean())
                 .andExpect(jsonPath("$.email").value("test@test.com"))
                 .andExpect(jsonPath("$.produits").exists())
