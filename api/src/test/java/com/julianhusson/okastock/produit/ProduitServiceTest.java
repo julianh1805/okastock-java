@@ -40,7 +40,7 @@ class ProduitServiceTest {
     @Autowired private Validator validator;
 
     private String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
-    private Utilisateur utilisateur = new Utilisateur(UUID.fromString(utilisateurId), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true, true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+    private Utilisateur utilisateur = new Utilisateur(UUID.fromString(utilisateurId), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", UUID.randomUUID().toString(), true, true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
 
 
     @Before
@@ -157,7 +157,7 @@ class ProduitServiceTest {
         String categorieName = "meubles";
         Categorie categorie = new Categorie(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dff"), categorieName, new HashSet<>());
         Produit produitToUpdate = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8,categorie, new Utilisateur());
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", UUID.randomUUID().toString(), true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, categorie, utilisateur)));
         //When
         underTest.update(produitToUpdate, categorieName);
@@ -173,7 +173,7 @@ class ProduitServiceTest {
     void itShouldThrownAnExeceptionIfUserIdNotEqualsWhenUpdate() {
         //Given
         UUID productId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
-        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", UUID.randomUUID().toString(), true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         Produit produit = new Produit(productId, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateurProduit);
         given(produitRepository.findById(productId)).willReturn(Optional.of(produit));
         //Then
@@ -258,7 +258,7 @@ class ProduitServiceTest {
     void itShouldDelete() {
         //Given
         UUID productId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
-        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", UUID.randomUUID().toString(), true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateur)));
         //When
         underTest.delete(productId);
@@ -271,7 +271,7 @@ class ProduitServiceTest {
     void itShouldThrownAnExeceptionIfUserIdNotEqualsWhenDelete() {
         //Given
         UUID productId = UUID.fromString("e59ed17d-db7d-4d24-af6c-5154b3f72df0");
-        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
+        Utilisateur utilisateurProduit = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72dfe"), "Test", 12345678910111L, 44300, 666666666L, "http://www.test.com", UUID.randomUUID().toString(), true,  true, "test@test.com", "1234AZER", new ArrayList<>(), new ArrayList<>());
         given(produitRepository.findById(productId)).willReturn(Optional.of(new Produit(null, "Titre", "Petite description", new BigDecimal("10.27"), 8, null, utilisateurProduit)));
         //Then
         assertThatThrownBy(() -> underTest.delete(productId))

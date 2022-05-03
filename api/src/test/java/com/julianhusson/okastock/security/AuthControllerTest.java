@@ -8,6 +8,8 @@ import com.julianhusson.okastock.configuration.SmtpServerRule;
 import com.julianhusson.okastock.configuration.WithMockCustomUser;
 import com.julianhusson.okastock.email.EmailService;
 import com.julianhusson.okastock.mapstruct.dto.UtilisateurPostDTO;
+import com.julianhusson.okastock.storage.StorageService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,21 +19,28 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import java.util.Map;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +53,8 @@ class AuthControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper mapper;
+
+    @MockBean private StorageService storageService;
     private final String URI = "/api/v1/auth";
 
     @BeforeAll
@@ -56,10 +67,13 @@ class AuthControllerTest {
 
     @Test
     void itShouldRegister() throws Exception {
+        MockMultipartFile logo = new MockMultipartFile("logo", "logo.txt", "text/plain", "some xml".getBytes());
         UtilisateurPostDTO utilisateurPostDTO =
-                new UtilisateurPostDTO("Test", 11110987654321L, 44000, 685487966L, "http://www.testf.com", "-", true, "testf@test.com", "1234AZER");
-        String json = mapper.writeValueAsString(utilisateurPostDTO);
-        mockMvc.perform(post(URI + "/register").content(json).contentType(MediaType.APPLICATION_JSON))
+                new UtilisateurPostDTO("Test", 11110987654321L, 44000, 685487966L, "http://www.testf.com", "e59ed17d-db7c-4d24-af6c-5154b3f72def", true, "testf@test.com", "1234AZER");
+        when(storageService.postLogo(logo)).thenReturn("e59ed17d-db7c-4d24-af6c-5154b3f72def");
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(URI + "/register").file(logo).contentType(MediaType.MULTIPART_FORM_DATA)
+                .flashAttr("utilisateurPostDTO", utilisateurPostDTO);
+        mockMvc.perform(builder)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accessToken").exists())
                 .andExpect(jsonPath("$.refreshToken").exists());

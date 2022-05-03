@@ -34,3 +34,10 @@ spring:
     test-connection: false
 jwt:
   secret: test
+scaleway:
+  bucket:
+    endpoint-url: https://test
+    name: okastock-files-test
+    region: fr-par
+  access-key: test
+  secret-key: test
