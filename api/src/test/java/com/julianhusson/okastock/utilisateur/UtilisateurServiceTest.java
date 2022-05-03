@@ -6,6 +6,7 @@ import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.role.RoleRepository;
+import com.julianhusson.okastock.storage.StorageService;
 import com.julianhusson.okastock.utilisateur.validation.ValidationService;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import org.junit.Before;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,10 +45,12 @@ class UtilisateurServiceTest {
     private UtilisateurService underTest;
     @Mock private UtilisateurRepository utilisateurRepository;
     @Mock private ValidationService validationService;
+    @Mock private StorageService storageService;
     @Mock private EmailService emailService;
     @Mock private RoleRepository roleRepository;
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private TokenGenerator tokenGenerator;
+    MockMultipartFile logo = new MockMultipartFile("logo", "logo.txt", "text/plain", "some xml".getBytes());
     @Autowired
     private Validator validator;
     private final String registerIssuer = "test/api/v1/auth/register";
@@ -157,6 +161,15 @@ class UtilisateurServiceTest {
     }
 
     @Test
+    void itShouldThrowExceptionIfLogoIsNullWhenSave() {
+        //Given
+        Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 666666666L, "http://www.siteweb.com", null, true, true,  "test@test.com", "1234AZER", null, new ArrayList<>());
+        //When
+        Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
+        this.assertViolation(violations, "Un logo est obligatoire pour s'inscrire.");
+    }
+
+    @Test
     void itShouldValidateWebsiteRegex1WhenSave() {
         //Given
         String website = "http://website.com";
@@ -166,7 +179,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -181,7 +194,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -196,7 +209,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -242,7 +255,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -257,7 +270,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -272,7 +285,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -341,7 +354,7 @@ class UtilisateurServiceTest {
         given(passwordEncoder.encode(utilisateurToAdd.getMotDePasse())).willReturn("1234AZER");
         given(roleRepository.findByNom("ROLE_USER")).willReturn(Optional.of(userRole));
         //When
-        underTest.register(utilisateurToAdd, registerIssuer);
+        underTest.register(utilisateurToAdd, logo, registerIssuer);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToAdd);
     }
@@ -351,7 +364,7 @@ class UtilisateurServiceTest {
         //Given
         Utilisateur utilisateur = new Utilisateur(null, "Test", 123456789101L, 44300, 666666666L, "http://www.test.com", "-", true, false, "test@test.com", "1234AZER", null, new ArrayList<>());
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateur, logo, registerIssuer))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le SIRET doit faire 14 caracteres.");
     }
@@ -363,7 +376,7 @@ class UtilisateurServiceTest {
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9"), "Test", siret, 44400, 666666656L, "http://www.test.com", "-", true, true, "test2@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.existsBySiret(siret)).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateur, logo, registerIssuer))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec ce SIRET.");
     }
@@ -378,7 +391,7 @@ class UtilisateurServiceTest {
                 Optional.of(utilisateur));
         given(utilisateurRepository.existsByEmail(email)).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateur, logo, registerIssuer))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec cet email.");
     }
@@ -388,7 +401,7 @@ class UtilisateurServiceTest {
         //Given
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72db9"), "Test", 12345678910111L, 443, 666666666L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>());
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateur, logo, registerIssuer))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le code postal doit faire 5 caractères.");
     }
@@ -398,7 +411,7 @@ class UtilisateurServiceTest {
         //Given
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 63356859L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>());
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateur, logo, registerIssuer))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
@@ -408,7 +421,7 @@ class UtilisateurServiceTest {
         //Given
         Utilisateur utilisateur = new Utilisateur(UUID.fromString("e59ed17d-db7c-4d24-af6c-5154b3f72df4"), "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>());
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateur, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateur, logo, registerIssuer))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
@@ -462,7 +475,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         given(utilisateurRepository.existsByEmail("test2@test.com")).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.register(utilisateurToUpdate, registerIssuer))
+        assertThatThrownBy(() -> underTest.register(utilisateurToUpdate, logo, registerIssuer))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec cet email.");
     }
