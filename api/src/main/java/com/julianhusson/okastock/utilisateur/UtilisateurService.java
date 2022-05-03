@@ -5,12 +5,12 @@ import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
 import com.julianhusson.okastock.role.RoleRepository;
+import com.julianhusson.okastock.storage.StorageService;
 import com.julianhusson.okastock.utilisateur.validation.ValidationService;
 import com.julianhusson.okastock.utilisateur.validation.ValidationToken;
 import com.julianhusson.okastock.utils.TokenGenerator;
 import com.julianhusson.okastock.utils.Utils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +35,7 @@ public class UtilisateurService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TokenGenerator tokenGenerator;
     private final ValidationService validationService;
+    private final StorageService storageService;
     private final EmailService emailService;
 
     @Override
@@ -49,12 +51,13 @@ public class UtilisateurService implements UserDetailsService {
     }
 
     @Transactional
-    public Map<String, String> register(Utilisateur utilisateur, String issuer) {
+    public Map<String, String> register(Utilisateur utilisateur, MultipartFile logo, String issuer) {
         this.checkUtilisateur(utilisateur);
         this.isSiretUnique(utilisateur.getSiret());
         this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
+        utilisateur.setLogo(storageService.postLogo(logo));
         utilisateurRepository.save(utilisateur);
         ValidationToken validationToken = new ValidationToken(utilisateur);
         validationService.createValidationToken(validationToken);
