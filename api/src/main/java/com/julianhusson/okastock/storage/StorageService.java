@@ -9,7 +9,6 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -52,20 +51,6 @@ public class StorageService {
             client.putObject(objectRequest, RequestBody.fromBytes(bytes));
             return logoURI;
         } catch (IOException e) {
-            throw new StorageFileException("Une erreur s'est produite pendant le traitement de votre image.");
-        }
-    }
-
-    public void deleteLogo(String logo) {
-        final DeleteObjectRequest objectRequest =
-                DeleteObjectRequest
-                        .builder()
-                        .key("images/profils/" + logo)
-                        .bucket(SCALEWAY_BUCKET_NAME)
-                        .build();
-        try {
-            client.deleteObject(objectRequest);
-        } catch (UnsupportedOperationException e) {
             throw new StorageFileException("Une erreur s'est produite pendant le traitement de votre image.");
         }
     }

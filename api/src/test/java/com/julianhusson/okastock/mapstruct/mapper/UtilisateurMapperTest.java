@@ -32,7 +32,7 @@ class UtilisateurMapperTest {
     @Test
     void utilisateurPostDTOToUtilisateur() {
         //Given
-        UtilisateurPostDTO utilisateurPostDTO = new UtilisateurPostDTO("Test", 12345678910111L, 44300, 666666666L, "https://test.com", true, "test@test.com", "1234AZER");
+        UtilisateurPostDTO utilisateurPostDTO = new UtilisateurPostDTO("Test", 12345678910111L, 44300, 666666666L, "https://test.com", UUID.randomUUID().toString(), true, "test@test.com", "1234AZER");
         //When
         Utilisateur utilisateur = underTest.utilisateurPostDTOToUtilisateur(utilisateurPostDTO);
         //Then
@@ -41,6 +41,7 @@ class UtilisateurMapperTest {
         assertThat(utilisateur.getCodePostal()).isEqualTo(utilisateurPostDTO.codePostal());
         assertThat(utilisateur.getTelephone()).isEqualTo(utilisateurPostDTO.telephone());
         assertThat(utilisateur.getSite()).isEqualTo(utilisateurPostDTO.site());
+        assertThat(utilisateur.getLogo()).isEqualTo(utilisateurPostDTO.logo());
         assertThat(utilisateur.isRgpd()).isEqualTo(utilisateurPostDTO.rgpd());
         assertThat(utilisateur.getEmail()).isEqualTo(utilisateurPostDTO.email());
         assertThat(utilisateur.getMotDePasse()).isEqualTo(utilisateurPostDTO.motDePasse());

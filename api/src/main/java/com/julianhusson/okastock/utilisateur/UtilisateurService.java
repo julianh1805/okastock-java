@@ -78,9 +78,8 @@ public class UtilisateurService implements UserDetailsService {
 
     @Transactional
     public void delete(UUID utilisateurId) {
-        Utilisateur utilisateur = this.getById(utilisateurId);
+        this.getById(utilisateurId);
         Utils.checkAuthUser(utilisateurId);
-        storageService.deleteLogo(utilisateur.getLogo());
         validationService.deleteAllByUtilisateurId(utilisateurId);
         utilisateurRepository.deleteById(utilisateurId);
     }
