@@ -69,7 +69,7 @@ class AuthControllerTest {
     void itShouldRegister() throws Exception {
         MockMultipartFile logo = new MockMultipartFile("logo", "logo.txt", "text/plain", "some xml".getBytes());
         UtilisateurPostDTO utilisateurPostDTO =
-                new UtilisateurPostDTO("Test", 11110987654321L, 44000, 685487966L, "http://www.testf.com", "e59ed17d-db7c-4d24-af6c-5154b3f72def", true, "testf@test.com", "1234AZER");
+                new UtilisateurPostDTO("Test", 11110987654321L, 44000, 685487966L, "http://www.testf.com", true, "testf@test.com", "1234AZER");
         when(storageService.postLogo(logo)).thenReturn("e59ed17d-db7c-4d24-af6c-5154b3f72def");
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(URI + "/register").file(logo).contentType(MediaType.MULTIPART_FORM_DATA)
                 .flashAttr("utilisateurPostDTO", utilisateurPostDTO);
