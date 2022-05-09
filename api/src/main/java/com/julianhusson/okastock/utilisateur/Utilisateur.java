@@ -56,7 +56,7 @@ public class Utilisateur extends Auditable implements Serializable {
     @Pattern(regexp = "^(http:\\/\\/|https:\\/\\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}\\.([a-z]+)?$", message = "Le site web est invalide. Le format devrait être http://(www).siteweb.com")
     private String site;
 
-    @Column
+    @Column(unique = true, updatable = false)
     @NotBlank(message = "Un logo est obligatoire pour s'inscrire.")
     private String logo;
 

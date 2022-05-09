@@ -14,6 +14,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -38,8 +39,8 @@ public class StorageService {
                 .build();
     }
 
-    public String postLogo(MultipartFile logo) {
-        String logoURI = UUID.randomUUID().toString();
+    public String upsertLogo(MultipartFile logo, Optional<String> logoId) {
+        String logoURI = logoId.orElseGet(() -> UUID.randomUUID().toString());
         final PutObjectRequest objectRequest =
                 PutObjectRequest
                         .builder()
@@ -69,4 +70,5 @@ public class StorageService {
             throw new StorageFileException("Une erreur s'est produite pendant le traitement de votre image.");
         }
     }
+
 }

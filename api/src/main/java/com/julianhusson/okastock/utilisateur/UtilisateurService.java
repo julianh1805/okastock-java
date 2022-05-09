@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +54,7 @@ public class UtilisateurService implements UserDetailsService {
         this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
-        utilisateur.setLogo(storageService.postLogo(logo));
+        utilisateur.setLogo(storageService.upsertLogo(logo, Optional.empty()));
         utilisateurRepository.save(utilisateur);
         ValidationToken validationToken = new ValidationToken(utilisateur);
         validationService.createValidationToken(validationToken);
@@ -65,7 +62,7 @@ public class UtilisateurService implements UserDetailsService {
         return tokenGenerator.generateTokens(utilisateur.getId().toString(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
-    public Utilisateur update(Utilisateur utilisateur) {
+    public Utilisateur update(Utilisateur utilisateur, MultipartFile logo) {
         Utilisateur utilisateurToUpdate = this.getById(utilisateur.getId());
         Utils.checkAuthUser(utilisateurToUpdate.getId());
         this.checkUtilisateur(utilisateur);
@@ -73,6 +70,7 @@ public class UtilisateurService implements UserDetailsService {
         if (!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
         utilisateur.setCreatedAt(utilisateurToUpdate.getCreatedAt());
+        storageService.upsertLogo(logo, Optional.ofNullable(utilisateur.getLogo()));
         return utilisateurRepository.save(utilisateur);
     }
 
