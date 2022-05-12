@@ -70,7 +70,8 @@ public class UtilisateurService implements UserDetailsService {
         if (!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
         utilisateur.setCreatedAt(utilisateurToUpdate.getCreatedAt());
-        storageService.upsertLogo(logo, Optional.ofNullable(utilisateur.getLogo()));
+        utilisateur.setLogo(utilisateurToUpdate.getLogo());
+        storageService.upsertLogo(logo, Optional.ofNullable(utilisateurToUpdate.getLogo()));
         return utilisateurRepository.save(utilisateur);
     }
 

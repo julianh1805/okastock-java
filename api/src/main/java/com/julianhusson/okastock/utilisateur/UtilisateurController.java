@@ -26,8 +26,7 @@ public record UtilisateurController(UtilisateurService utilisateurService, Utili
     public ResponseEntity<UtilisateurDTO> updateUser(@ModelAttribute UtilisateurPostDTO utilisateurPostDTO, @RequestPart(required = false) MultipartFile logo, @PathVariable UUID userId){
         Utilisateur utilisateur = utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO);
         utilisateur.setId(userId);
-        UtilisateurDTO utilisateurDTO = utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur, logo));
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur, logo)), HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")

@@ -41,6 +41,7 @@ public class StorageService {
 
     public String upsertLogo(MultipartFile logo, Optional<String> logoId) {
         String logoURI = logoId.orElseGet(() -> UUID.randomUUID().toString());
+        System.out.println(logoURI);
         final PutObjectRequest objectRequest =
                 PutObjectRequest
                         .builder()
