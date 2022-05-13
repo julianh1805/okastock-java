@@ -9,7 +9,7 @@ on:
 jobs:
   build-angular:
     name: Build front (Angular app)
-    runs-on: ubuntu latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node_version: [12.x]
