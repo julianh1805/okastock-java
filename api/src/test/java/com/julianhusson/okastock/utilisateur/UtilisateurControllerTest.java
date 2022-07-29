@@ -12,10 +12,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -63,11 +71,21 @@ class UtilisateurControllerTest {
     @WithMockCustomUser
     void itShouldUpdateUser() throws Exception {
         String utilisateurId = "e59ed17d-db7c-4d24-af6c-5154b3f72dfe";
+        String logoId = "e59ed17d-db7c-4d24-af6c-5154b3f72def";
         UtilisateurPostDTO utilisateurPostDTO =
                 new UtilisateurPostDTO("Test 2", 22345678910111L, 44200, 666666662L, "http://www.test2.com", true, "test2@test.com", null);
         String json = mapper.writeValueAsString(utilisateurPostDTO);
-
-        mockMvc.perform(put(URI + "/" + utilisateurId).content(json).contentType(MediaType.APPLICATION_JSON))
+        MockMultipartFile logo = new MockMultipartFile("logo", "logo.txt", "text/plain", "some xml".getBytes());
+        when(storageService.upsertLogo(logo, Optional.ofNullable(logoId))).thenReturn(logoId);
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(URI + "/" + utilisateurId).file(logo).contentType(MediaType.MULTIPART_FORM_DATA).with(new RequestPostProcessor() {
+                    @Override
+                    public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                        request.setMethod("PUT");
+                        return request;
+                    }
+                })
+                .flashAttr("utilisateurPostDTO", utilisateurPostDTO);
+        mockMvc.perform(builder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(utilisateurId))
                 .andExpect(jsonPath("$.nom").value("Test 2"))
@@ -76,7 +94,7 @@ class UtilisateurControllerTest {
                 .andExpect(jsonPath("$.codePostal").value(44200))
                 .andExpect(jsonPath("$.telephone").value(666666662))
                 .andExpect(jsonPath("$.site").value("http://www.test2.com"))
-                //.andExpect(jsonPath("$.logo").value("-"))
+                .andExpect(jsonPath("$.logo").value(logoId))
                 .andExpect(jsonPath("$.rgpd").isBoolean())
                 .andExpect(jsonPath("$.email").value("test2@test.com"))
                 .andExpect(jsonPath("$.motDePasse").doesNotExist());

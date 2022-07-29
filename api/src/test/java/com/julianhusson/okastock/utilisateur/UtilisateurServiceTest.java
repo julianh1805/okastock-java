@@ -435,7 +435,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(
                 Optional.of(new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 666666666L, "https://test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>())));
         //When
-        underTest.update(utilisateurToUpdate);
+        underTest.update(utilisateurToUpdate, logo);
         //Then
         this.assertSave(ArgumentCaptor.forClass(Utilisateur.class), utilisateurToUpdate);
 
@@ -448,7 +448,7 @@ class UtilisateurServiceTest {
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 123456789101L, 44300, 666666666L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur))
+        assertThatThrownBy(() -> underTest.update(utilisateur, logo))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le SIRET doit faire 14 caracteres.");
     }
@@ -462,7 +462,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         given(utilisateurRepository.existsBySiret(12345678910112L)).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateurToUpdate))
+        assertThatThrownBy(() -> underTest.update(utilisateurToUpdate, logo))
                 .isInstanceOf(DuplicateKeyException.class)
                 .hasMessageContaining("Il existe déjà un compte avec ce SIRET.");
     }
@@ -489,7 +489,7 @@ class UtilisateurServiceTest {
                 Optional.of(utilisateur));
         given(utilisateurRepository.existsByEmail("test@test.com")).willReturn(true);
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur))
+        assertThatThrownBy(() -> underTest.update(utilisateur, logo))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le code postal doit faire 5 caractères.");
     }
@@ -501,7 +501,7 @@ class UtilisateurServiceTest {
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 63356859L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur))
+        assertThatThrownBy(() -> underTest.update(utilisateur, logo))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
@@ -513,7 +513,7 @@ class UtilisateurServiceTest {
         Utilisateur utilisateur = new Utilisateur(utilisateurId, "Test", 12345678910111L, 44300, 843356859L, "http://www.test.com", "-", true,  true, "test@test.com", "1234AZER", null, new ArrayList<>());
         given(utilisateurRepository.findById(utilisateurId)).willReturn(Optional.of(utilisateur));
         //When
-        assertThatThrownBy(() -> underTest.update(utilisateur))
+        assertThatThrownBy(() -> underTest.update(utilisateur, logo))
                 .isInstanceOf(InvalidRegexException.class)
                 .hasMessageContaining("Le téléphone doit faire 9 chiffres et commencer par 6 ou 7.");
     }
