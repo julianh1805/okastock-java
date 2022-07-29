@@ -6,9 +6,8 @@ import com.julianhusson.okastock.mapstruct.mapper.UtilisateurMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -22,11 +21,10 @@ public record UtilisateurController(UtilisateurService utilisateurService, Utili
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<UtilisateurDTO> updateUser(@RequestBody UtilisateurPostDTO utilisateurPostDTO, @PathVariable UUID userId){
+    public ResponseEntity<UtilisateurDTO> updateUser(@ModelAttribute UtilisateurPostDTO utilisateurPostDTO, @RequestPart(required = false) MultipartFile logo, @PathVariable UUID userId){
         Utilisateur utilisateur = utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO);
         utilisateur.setId(userId);
-        UtilisateurDTO utilisateurDTO = utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur));
-        return new ResponseEntity<>(utilisateurDTO, HttpStatus.OK);
+        return new ResponseEntity<>(utilisateurMapper.utilisateurToUtilisateurDTO(utilisateurService.update(utilisateur, logo)), HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")

@@ -1,6 +1,7 @@
 package com.julianhusson.okastock.utilisateur;
 
 import com.julianhusson.okastock.email.EmailService;
+import com.julianhusson.okastock.exception.ApiRequestException;
 import com.julianhusson.okastock.exception.InvalidRegexException;
 import com.julianhusson.okastock.exception.NotFoundException;
 import com.julianhusson.okastock.role.Role;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -52,12 +50,12 @@ public class UtilisateurService implements UserDetailsService {
 
     @Transactional
     public Map<String, String> register(Utilisateur utilisateur, MultipartFile logo, String issuer) {
-        this.checkUtilisateur(utilisateur);
+        this.checkUtilisateur(utilisateur, logo, true);
         this.isSiretUnique(utilisateur.getSiret());
         this.isEmailUnique(utilisateur.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         utilisateur.getRoles().add(addRole("ROLE_USER"));
-        utilisateur.setLogo(storageService.postLogo(logo));
+        utilisateur.setLogo(storageService.upsertLogo(logo, Optional.empty()));
         utilisateurRepository.save(utilisateur);
         ValidationToken validationToken = new ValidationToken(utilisateur);
         validationService.createValidationToken(validationToken);
@@ -65,14 +63,18 @@ public class UtilisateurService implements UserDetailsService {
         return tokenGenerator.generateTokens(utilisateur.getId().toString(), utilisateur.getRoles().stream().map(Role::getNom).toList(), issuer);
     }
 
-    public Utilisateur update(Utilisateur utilisateur) {
+    public Utilisateur update(Utilisateur utilisateur, MultipartFile logo) {
         Utilisateur utilisateurToUpdate = this.getById(utilisateur.getId());
         Utils.checkAuthUser(utilisateurToUpdate.getId());
-        this.checkUtilisateur(utilisateur);
+        this.checkUtilisateur(utilisateur, logo, false);
         if (!utilisateur.getEmail().equals(utilisateurToUpdate.getEmail())) this.isEmailUnique(utilisateur.getEmail());
         if (!utilisateur.getSiret().equals(utilisateurToUpdate.getSiret())) this.isSiretUnique(utilisateur.getSiret());
         utilisateur.setMotDePasse(utilisateurToUpdate.getMotDePasse());
         utilisateur.setCreatedAt(utilisateurToUpdate.getCreatedAt());
+        utilisateur.setLogo(utilisateurToUpdate.getLogo());
+        if(!logo.isEmpty()){
+            storageService.upsertLogo(logo, Optional.ofNullable(utilisateurToUpdate.getLogo()));
+        }
         return utilisateurRepository.save(utilisateur);
     }
 
@@ -107,7 +109,8 @@ public class UtilisateurService implements UserDetailsService {
             throw new DuplicateKeyException("Il existe déjà un compte avec cet email.");
     }
 
-    private void checkUtilisateur(Utilisateur utilisateur){
+    private void checkUtilisateur(Utilisateur utilisateur, MultipartFile logo, boolean register){
+        if(logo.isEmpty() && register) throw new ApiRequestException("Un logo est obligatoire pour créer un utilisateur.");
         if(utilisateur.getSiret().toString().length() != 14) throw new InvalidRegexException("Le SIRET doit faire 14 caracteres.");
         if(String.valueOf(utilisateur.getCodePostal()).length() != 5) throw new InvalidRegexException("Le code postal doit faire 5 caractères.");
         String telephone = String.valueOf(utilisateur.getTelephone());

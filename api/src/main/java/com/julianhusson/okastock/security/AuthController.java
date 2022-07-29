@@ -16,7 +16,7 @@ import java.util.Map;
 public record AuthController(UtilisateurService utilisateurService, UtilisateurMapper utilisateurMapper) {
 
     @PostMapping("register")
-    public ResponseEntity<Map<String, String>> register(@ModelAttribute UtilisateurPostDTO utilisateurPostDTO, @RequestPart("logo") MultipartFile logo, HttpServletRequest request){
+    public ResponseEntity<Map<String, String>> register(@ModelAttribute UtilisateurPostDTO utilisateurPostDTO, @RequestPart MultipartFile logo, HttpServletRequest request){
         Map<String, String> tokens = this.utilisateurService.register(utilisateurMapper.utilisateurPostDTOToUtilisateur(utilisateurPostDTO), logo, request.getRequestURL().toString());
         return new ResponseEntity<>(tokens, HttpStatus.CREATED);
     }
